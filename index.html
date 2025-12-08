@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Caro Flower Art – Flores de Papel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #faf6f8;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #ffe4ec;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin-top: 0.5rem;
+    }
+
+    .section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid #ff8fb0;
+      font-size: 0.9rem;
+    }
+
+    .btn-main {
+      background: #ff8fb0;
+      color: white;
+    }
+
+    .btn-outline {
+      background: white;
+      color: #ff8fb0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Caro Flower Art</h1>
+    <p>Flores de papel hechas a mano, con amor y mucho detalle 💐</p>
+    <a class="btn btn-main" href="https://www.instagram.com/TU_INSTAGRAM" target="_blank">
+      Ver mi Instagram
+    </a>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>Mis ramos</h2>
+      <p>Haz clic para ver cada ramo directamente en mi Instagram.</p>
+      <div class="gallery">
+        <article class="card">
+          <h3>Ramo de claveles rojos</h3>
+          <p>Claveles de papel con tonos intensos, perfectos para un regalo romántico.</p>
+          <a class="btn btn-outline" href="https://www.instagram.com/p/URL_DE_TU_POST_1" target="_blank">
+            Ver en Instagram
+          </a>
+        </article>
+
+        <article class="card">
+          <h3>Hortensias rosadas</h3>
+          <p>Flores voluminosas y delicadas, llenas de textura para decorar cualquier rincón.</p>
+          <a class="btn btn-outline" href="https://www.instagram.com/p/URL_DE_TU_POST_2" target="_blank">
+            Ver en Instagram
+          </a>
+        </article>
+
+        <article class="card">
+          <h3>Ramo mixto primavera</h3>
+          <p>Combinación de rosas, claveles y hojas verdes para una sensación fresca y alegre.</p>
+          <a class="btn btn-outline" href="https://www.instagram.com/p/URL_DE_TU_POST_3" target="_blank">
+            Ver en Instagram
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Cómo encargar un ramo</h2>
+      <p>
+        Si te enamoraste de alguna de estas flores o quieres algo personalizado,
+        puedes escribirme:
+      </p>
+      <p>
+        <a class="btn btn-main" href="https://wa.me/TU_NUMERO_CON_CODIGO" target="_blank">
+          Escribirme por WhatsApp
+        </a>
+        <a class="btn btn-outline" href="https://www.instagram.com/TU_INSTAGRAM" target="_blank">
+          Mandarme mensaje en Instagram
+        </a>
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Sobre mí</h2>
+      <p>
+        Soy Caro, una artista de flores de papel que ama los detalles, los colores suaves
+        y los ramos que cuentan historias. Cada flor está cortada, moldeada y pintada a mano.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Caro Flower Art – Hecho a mano en Colombia
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
