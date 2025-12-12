@@ -1,586 +1,236 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Caro Flower Art – Handmade Paper Flowers</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
-    :root {
-      --pink-light: #fff5fb;
-      --pink-medium: #ffe7f3;
-      --pink-strong: #ff8fb0;
-      --text-main: #333333;
-      --text-soft: #666666;
-      --card-radius: 16px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text-main);
-      background: linear-gradient(180deg, var(--pink-light), var(--pink-medium));
-    }
-
-    a {
-      color: inherit;
+      background: linear-gradient(180deg, #fff6fb, #ffeef6);
+      color: #333;
     }
 
     header {
       text-align: center;
-      padding: 2.5rem 1.5rem 2rem;
-      position: relative;
-      overflow: hidden;
+      padding: 3rem 1rem 2rem;
+      background: #ffe4ec;
     }
 
-    header::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.8), transparent 60%);
-      opacity: 0.9;
-      pointer-events: none;
+    header h1 {
+      margin: 0;
+      font-size: 2.4rem;
     }
 
-    header > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .logo-text {
-      font-size: 2.1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    .logo-subtitle {
-      margin-top: 0.3rem;
-      font-size: 0.95rem;
-      color: var(--text-soft);
-    }
-
-    .tagline {
-      margin-top: 0.8rem;
-      font-size: 0.95rem;
-      font-style: italic;
-      color: var(--text-soft);
-    }
-
-    nav {
-      margin-top: 1.3rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .nav-link {
-      font-size: 0.85rem;
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,143,176,0.4);
-      background: rgba(255,255,255,0.9);
-      text-decoration: none;
-      backdrop-filter: blur(4px);
-    }
-
-    .nav-link:hover {
-      border-color: var(--pink-strong);
-    }
-
-    .cta-row {
-      margin-top: 1.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
+    header p {
+      margin: 0.5rem 0 1.2rem;
+      font-size: 1rem;
     }
 
     .btn {
       display: inline-block;
-      padding: 0.6rem 1.3rem;
+      padding: 0.55rem 1.3rem;
       border-radius: 999px;
       text-decoration: none;
-      border: 1px solid var(--pink-strong);
       font-size: 0.9rem;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
-      white-space: nowrap;
+      border: 1px solid #ff8fb0;
     }
 
     .btn-main {
-      background: var(--pink-strong);
-      color: #ffffff;
-      box-shadow: 0 6px 14px rgba(255,143,176,0.5);
-    }
-
-    .btn-main:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 9px 20px rgba(255,143,176,0.55);
+      background: #ff8fb0;
+      color: white;
     }
 
     .btn-outline {
-      background: rgba(255,255,255,0.9);
-      color: var(--pink-strong);
-    }
-
-    .btn-outline:hover {
-      background: #ffffff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
-
-    main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem 3rem;
+      background: white;
+      color: #ff8fb0;
     }
 
     .section {
-      background: rgba(255,255,255,0.96);
-      border-radius: 24px;
-      padding: 2rem 1.3rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1rem;
     }
 
-    @media (min-width: 768px) {
-      .section {
-        padding: 2.3rem 2rem;
-        margin-bottom: 2rem;
-      }
-    }
-
-    .section-title {
+    h2 {
       text-align: center;
-      margin-top: 0;
-      margin-bottom: 0.75rem;
-      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
     }
 
     .section-subtitle {
       text-align: center;
-      margin-top: 0;
-      margin-bottom: 1.8rem;
+      margin-bottom: 2rem;
       font-size: 0.95rem;
-      color: var(--text-soft);
+      color: #666;
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.1rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
     }
 
     .card {
-      background: #ffffff;
-      border-radius: var(--card-radius);
-      padding: 1.15rem 1rem 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-      border: 1px solid rgba(255,255,255,0.7);
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-      background: #fff9fc;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
     }
 
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 0.35rem;
-      font-size: 1.02rem;
-    }
-
-    .card p {
-      margin-top: 0;
+    .card-img {
+      width: 100%;
+      border-radius: 12px;
       margin-bottom: 0.6rem;
-      font-size: 0.9rem;
-      color: var(--text-soft);
-      line-height: 1.5;
-    }
-
-    .card .btn {
-      margin-top: 0.2rem;
-    }
-
-    .two-columns {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    @media (min-width: 768px) {
-      .two-columns {
-        grid-template-columns: 1.1fr 1fr;
-      }
-    }
-
-    .list-pill {
-      display: inline-block;
-      padding: 0.35rem 0.8rem;
-      margin: 0.2rem;
-      border-radius: 999px;
-      background: #fff5fb;
-      font-size: 0.85rem;
-    }
-
-    .steps {
-      display: grid;
-      gap: 1rem;
-    }
-
-    @media (min-width: 768px) {
-      .steps {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .step {
-      background: #ffffff;
-      border-radius: var(--card-radius);
-      padding: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-      font-size: 0.9rem;
-    }
-
-    .step-number {
-      font-weight: 600;
-      color: var(--pink-strong);
-      margin-bottom: 0.3rem;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .quote-grid {
-      display: grid;
-      gap: 1rem;
-    }
-
-    @media (min-width: 768px) {
-      .quote-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .quote-card {
-      background: #ffffff;
-      border-radius: var(--card-radius);
-      padding: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-      font-size: 0.9rem;
-      position: relative;
-    }
-
-    .quote-mark {
-      position: absolute;
-      font-size: 2rem;
-      color: rgba(255,143,176,0.25);
-      top: 0.2rem;
-      left: 0.6rem;
-    }
-
-    .quote-text {
-      margin-top: 1.5rem;
-      margin-bottom: 0.6rem;
-      color: var(--text-soft);
-    }
-
-    .quote-author {
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-
-    .contact-center {
-      text-align: center;
-    }
-
-    .contact-center p {
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-      color: var(--text-soft);
-    }
-
-    .about-text {
-      font-size: 0.95rem;
-      color: var(--text-soft);
-      line-height: 1.7;
+      display: block;
+      object-fit: cover;
     }
 
     footer {
       text-align: center;
-      padding: 1.5rem 1rem 2rem;
+      padding: 2rem 1rem;
       font-size: 0.85rem;
       color: #777;
-    }
-
-    .back-to-top {
-      display: inline-block;
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-      text-decoration: none;
-      opacity: 0.7;
     }
   </style>
 </head>
 
 <body>
-  <header id="top">
-    <div class="logo-text">Caro Flower Art</div>
-    <div class="logo-subtitle">Handmade paper flowers • Flores de papel hechas a mano</div>
-    <div class="tagline">
-      Soft colors, delicate petals, and bouquets that tell a story.  
-      Colores suaves, pétalos delicados y ramos que cuentan historias.
+
+<header>
+  <h1>Caro Flower Art</h1>
+  <p>Handmade paper flowers • Flores de papel hechas a mano 🌸</p>
+
+  <a class="btn btn-main" href="https://www.instagram.com/caroflowerart" target="_blank">
+    Visit my Instagram
+  </a>
+</header>
+
+<main>
+
+  <!-- BOUQUETS -->
+  <section class="section">
+    <h2>My Bouquets • Mis Ramos</h2>
+    <p class="section-subtitle">
+      Click the image to open each bouquet on Instagram.  
+      Haz clic en la imagen para ver cada ramo en Instagram.
+    </p>
+
+    <div class="gallery">
+
+      <!-- Tulips -->
+      <article class="card">
+        <a href="https://www.instagram.com/p/DQoi1vLkc8P/" target="_blank">
+          <img class="card-img" src="Tulips_bouquets.png" alt="Handmade pink paper tulips" />
+        </a>
+        <h3>Tulips • Tulipanes</h3>
+        <p>Elegant handmade tulips with soft curves. • Tulipanes elegantes con curvas suaves.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/p/DQoi1vLkc8P/" target="_blank">View on Instagram</a>
+      </article>
+
+      <!-- Special Occasion -->
+      <article class="card">
+        <a href="https://www.instagram.com/p/DR2pEHGEX5t/" target="_blank">
+          <img class="card-img" src="Paper_flowers_bouquets.png" alt="Colorful paper flower bouquet" />
+        </a>
+        <h3>Special Occasion Bouquet • Ramos especiales</h3>
+        <p>Bright, joyful flowers made for celebrations. • Flores alegres hechas para celebrar.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/p/DR2pEHGEX5t/" target="_blank">View on Instagram</a>
+      </article>
+
+      <!-- Bridal -->
+      <article class="card">
+        <a href="https://www.instagram.com/p/DR4V17mkXyo/" target="_blank">
+          <img class="card-img" src="Wedding_paper_flowers_bouquet.png" alt="Bridal paper flower bouquet" />
+        </a>
+        <h3>Bridal Bouquet • Ramo de novia</h3>
+        <p>Soft romantic tones for weddings. • Tonos suaves y románticos para bodas.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/p/DR4V17mkXyo/" target="_blank">View on Instagram</a>
+      </article>
+
+      <!-- Mini -->
+      <article class="card">
+        <a href="https://www.instagram.com/p/DRkqBB6D0-S/" target="_blank">
+          <img class="card-img" src="mini_paper_flower_bouquets.png" alt="Mini paper flower bouquet" />
+        </a>
+        <h3>Mini Bouquets • Mini ramos</h3>
+        <p>Small handmade bouquets for any moment. • Ramos pequeños para cualquier ocasión.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/p/DRkqBB6D0-S/" target="_blank">View on Instagram</a>
+      </article>
+
+      <!-- Carnations -->
+      <article class="card">
+        <a href="https://www.instagram.com/p/DRewKuNEUsf/" target="_blank">
+          <img class="card-img" src="Carnations_bouquets_2.png" alt="Paper carnations bouquet" />
+        </a>
+        <h3>Carnations • Claveles</h3>
+        <p>Detailed ruffled petals inspired by real flowers. • Pétalos rizados con gran detalle.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/p/DRewKuNEUsf/" target="_blank">View on Instagram</a>
+      </article>
+
+      <!-- Yellow Roses -->
+      <article class="card">
+        <a href="https://www.instagram.com/reel/DRE8QfDkZpi/" target="_blank">
+          <img class="card-img" src="Yellow_roses_bouquet.png" alt="Yellow paper roses bouquet" />
+        </a>
+        <h3>Yellow Roses • Rosas amarillas</h3>
+        <p>Warm, bright handmade roses. • Rosas amarillas hechas a mano llenas de luz.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/reel/DRE8QfDkZpi/" target="_blank">View on Instagram</a>
+      </article>
+
+      <!-- Purple & Pink Roses -->
+      <article class="card">
+        <a href="https://www.instagram.com/caroflowerart" target="_blank">
+          <img class="card-img" src="Purple-flowers.png" alt="Purple and pink paper roses bouquet" />
+        </a>
+        <h3>Purple & Pink Roses • Rosas púrpura y rosadas</h3>
+        <p>Soft romantic roses with rich tones. • Rosas suaves y románticas en tonos profundos.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/caroflowerart" target="_blank">View on Instagram</a>
+      </article>
+
+      <!-- Hydrangeas -->
+      <article class="card">
+        <a href="https://www.instagram.com/caroflowerart" target="_blank">
+          <img class="card-img" src="Hydrangeas_bouquets.png" alt="Paper hydrangeas bouquet" />
+        </a>
+        <h3>Hydrangeas • Hortensias</h3>
+        <p>Delicate clusters with soft texture. • Ramilletes delicados de textura suave.</p>
+        <a class="btn btn-outline" href="https://www.instagram.com/caroflowerart" target="_blank">View on Instagram</a>
+      </article>
+
     </div>
+  </section>
 
-    <nav>
-      <a class="nav-link" href="#bouquets">Bouquets</a>
-      <a class="nav-link" href="#services">Services / Servicios</a>
-      <a class="nav-link" href="#process">Process / Proceso</a>
-      <a class="nav-link" href="#testimonials">Kind words</a>
-      <a class="nav-link" href="#contact">Contact / Contacto</a>
-    </nav>
+  <!-- CONTACT -->
+  <section class="section">
+    <h2>Order a Bouquet • Encargar un ramo</h2>
+    <p class="section-subtitle">
+      Message me for custom bouquets or questions.  
+      Escríbeme para ramos personalizados o preguntas.
+    </p>
 
-    <div class="cta-row">
-      <a class="btn btn-main" href="https://www.instagram.com/caroflowerart" target="_blank">
-        Visit my Instagram
-      </a>
-      <a class="btn btn-outline" href="https://wa.me/573209781661" target="_blank">
-        WhatsApp
-      </a>
+    <div style="text-align:center;">
+      <a class="btn btn-main" href="https://wa.me/573209781661" target="_blank">WhatsApp</a>
+      <a class="btn btn-outline" href="https://www.instagram.com/caroflowerart" target="_blank">Instagram DM</a>
     </div>
-  </header>
+  </section>
 
-  <main>
+</main>
 
-    <!-- SECTION: BOUQUETS -->
-    <section class="section" id="bouquets">
-      <h2 class="section-title">My Bouquets • Mis Ramos</h2>
-      <p class="section-subtitle">
-        Click to open each bouquet directly on Instagram.  
-        Haz clic para ver cada ramo directamente en Instagram.
-      </p>
+<footer>
+  © <span id="year"></span> Caro Flower Art — Handmade in Colombia 🇨🇴
+</footer>
 
-      <div class="gallery">
-
-        <!-- Bridal Bouquet -->
-        <article class="card">
-          <h3>Bridal Bouquet • Ramo de novia</h3>
-          <p>Soft, romantic tones perfect for weddings. • Tonos suaves y románticos ideales para bodas.</p>
-          <a class="btn btn-outline" href="https://www.instagram.com/p/DR4V17mkXyo/?igsh=MXFucnJsYjBiMDdrdQ==" target="_blank">
-            View on Instagram
-          </a>
-        </article>
-
-        <!-- Birthday / Special Occasion Bouquet -->
-        <article class="card">
-          <h3>Special Occasion Bouquet • Ramo para cumpleaños u ocasiones</h3>
-          <p>Bright, joyful flowers made for celebrations. • Flores alegres y coloridas hechas para celebrar.</p>
-          <a class="btn btn-outline" href="https://www.instagram.com/p/DR2pEHGEX5t/?igsh=MWZ3ZjMwNWhnZzU2cg==" target="_blank">
-            View on Instagram
-          </a>
-        </article>
-
-        <!-- Mini Bouquets -->
-        <article class="card">
-          <h3>Mini Bouquets • Mini Ramos</h3>
-          <p>Small, cute arrangements for any moment. • Arreglos pequeños y hermosos para cualquier ocasión.</p>
-          <a class="btn btn-outline" href="https://www.instagram.com/p/DRkqBB6D0-S/?igsh=bDkydXR1amwycmhh" target="_blank">
-            View on Instagram
-          </a>
-        </article>
-
-        <!-- Carnations -->
-        <article class="card">
-          <h3>Carnations • Claveles</h3>
-          <p>Detailed ruffled petals inspired by real carnations. • Pétalos rizados con mucho detalle y realismo.</p>
-          <a class="btn btn-outline" href="https://www.instagram.com/p/DRewKuNEUsf/?igsh=cDB6cW9xdjVxdGc3" target="_blank">
-            View on Instagram
-          </a>
-        </article>
-
-        <!-- Yellow Roses -->
-        <article class="card">
-          <h3>Yellow Roses • Rosas amarillas</h3>
-          <p>Bright, sunny roses full of warmth. • Rosas luminosas y cálidas que alegran cualquier espacio.</p>
-          <a class="btn btn-outline" href="https://www.instagram.com/reel/DRE8QfDkZpi/?igsh=aWMxbGNvYWcwZDd0" target="_blank">
-            View on Instagram
-          </a>
-        </article>
-
-        <!-- Tulips -->
-        <article class="card">
-          <h3>Tulips • Tulipanes</h3>
-          <p>Elegant handmade tulips with soft curves. • Tulipanes elegantes con curvas suaves y naturales.</p>
-          <a class="btn btn-outline" href="https://www.instagram.com/p/DQoi1vLkc8P/?igsh=MWpxNGZsZnF4MWN0NQ==" target="_blank">
-            View on Instagram
-          </a>
-        </article>
-
-        <!-- Rose Bouquet -->
-        <article class="card">
-          <h3>Rose Bouquet • Ramo de rosas</h3>
-          <p>Classic roses crafted petal by petal. • Rosas clásicas hechas pétalo por pétalo con dedicación.</p>
-          <a class="btn btn-outline" href="https://www.instagram.com/p/DQ1efIgEW9Y/?img_index=8&igsh=cWlhZGFzcnV1YXAy" target="_blank">
-            View on Instagram
-          </a>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- SECTION: SERVICES -->
-    <section class="section" id="services">
-      <h2 class="section-title">What I Create • Lo que hago</h2>
-      <p class="section-subtitle">
-        Handmade paper flowers for different moments and people.  
-        Flores de papel hechas a mano para diferentes momentos y personas.
-      </p>
-
-      <div class="two-columns">
-        <div>
-          <div class="list-pill">Bridal bouquets • Ramos de novia</div>
-          <div class="list-pill">Birthday bouquets • Ramos de cumpleaños</div>
-          <div class="list-pill">Mini bouquets • Mini ramos</div>
-          <div class="list-pill">Home decor • Decoración para el hogar</div>
-          <div class="list-pill">Photo props • Accesorios para fotos</div>
-          <div class="list-pill">Custom color palettes • Paletas de color personalizadas</div>
-        </div>
-        <div class="about-text">
-          Cada flor está cortada, moldeada y armada a mano.  
-          Trabajo con tonos suaves, degradados delicados y combinaciones que se sienten
-          románticas y naturales.  
-          <br/><br/>
-          Every piece is made slowly and with intention, so your bouquet feels unique and
-          personal, whether it’s for a wedding, a birthday, or simply to brighten a corner
-          of your home.
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: PROCESS -->
-    <section class="section" id="process">
-      <h2 class="section-title">My Process • Mi proceso</h2>
-      <p class="section-subtitle">
-        From an idea to a bouquet that can last for years.  
-        De una idea a un ramo que puede durar años.
-      </p>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">Step 1 • Paso 1</div>
-          <strong>Inspiration & colors • Inspiración y colores</strong>
-          <p>
-            We talk about the occasion, the style you love and the colors you have in mind.
-            Hablamos de la ocasión, el estilo que te gusta y los colores que imaginas.
-          </p>
-        </div>
-        <div class="step">
-          <div class="step-number">Step 2 • Paso 2</div>
-          <strong>Flower selection • Selección de flores</strong>
-          <p>
-            I design the bouquet using roses, tulips, carnations or mini bouquets that fit
-            your idea.  
-            Diseño el ramo usando rosas, tulipanes, claveles o mini ramos según tu idea.
-          </p>
-        </div>
-        <div class="step">
-          <div class="step-number">Step 3 • Paso 3</div>
-          <strong>Handmade creation • Creación a mano</strong>
-          <p>
-            Each petal is cut, shaped and assembled by hand, until the bouquet feels balanced,
-            soft and full of life.  
-            Cada pétalo se corta, moldea y arma a mano hasta que el ramo se vea lleno de vida.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: TESTIMONIALS -->
-    <section class="section" id="testimonials">
-      <h2 class="section-title">Kind Words • Palabras bonitas</h2>
-      <p class="section-subtitle">
-        A few words that describe how my flowers feel.  
-        Algunas palabras que describen cómo se sienten mis flores.
-      </p>
-
-      <div class="quote-grid">
-        <div class="quote-card">
-          <div class="quote-mark">“</div>
-          <div class="quote-text">
-            Caro’s flowers look like they were picked from a dream.  
-            Las flores de Caro parecen sacadas de un sueño.
-          </div>
-          <div class="quote-author">— Client comment</div>
-        </div>
-
-        <div class="quote-card">
-          <div class="quote-mark">“</div>
-          <div class="quote-text">
-            Every bouquet feels thoughtful, soft and full of small details.  
-            Cada ramo se siente cuidado, suave y lleno de pequeños detalles.
-          </div>
-          <div class="quote-author">— Bouquet love</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: CONTACT -->
-    <section class="section" id="contact">
-      <h2 class="section-title">Order a Bouquet • Encargar un ramo</h2>
-      <div class="contact-center">
-        <p>
-          Send me a message if you want a bouquet or a custom flower.  
-          Escríbeme si quieres un ramo o una flor personalizada.
-        </p>
-
-        <div class="cta-row" style="justify-content:center;">
-          <a class="btn btn-main" href="https://wa.me/573209781661" target="_blank">
-            WhatsApp
-          </a>
-
-          <a class="btn btn-outline" href="https://www.instagram.com/caroflowerart" target="_blank">
-            Instagram DM
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION: ABOUT -->
-    <section class="section" id="about">
-      <h2 class="section-title">About Me • Sobre mí</h2>
-      <div class="about-text">
-        I'm Caro, an artist who creates handmade paper flowers one petal at a time.  
-        Soy Caro, una artista que crea flores de papel pétalo por pétalo.  
-        <br/><br/>
-        I love soft colors, delicate gradients and bouquets that feel romantic, calm and a
-        little bit magical.  
-        Amo los colores suaves, los degradados delicados y los ramos que se sienten
-        románticos, tranquilos y un poquito mágicos.  
-        <br/><br/>
-        This little website is a home for my flowers and a way to connect with people who
-        love details as much as I do.  
-        Esta pequeña página es un hogar para mis flores y una forma de conectar con personas
-        que aman los detalles tanto como yo.
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    © <span id="year"></span> Caro Flower Art — Handmade in Colombia 🇨🇴
-    <br/>
-    <a class="back-to-top" href="#top">Back to top • Volver arriba ↑</a>
-  </footer>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 
 </body>
 </html>
