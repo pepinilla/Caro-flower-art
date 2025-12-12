@@ -1,17 +1,3 @@
-Caro-flower-art/
-├── index.html                              # Main HTML file
-├── README.md                               # This file
-├── Wedding_paper_flowers_bouquets.webp    # Image files
-├── Paper_flowers_bouquets.webp
-├── mini_paper_flower_bouquets.webp
-├── Carnations_bouquets_2.webp
-├── Hydrangeas_bouquets.webp
-├── Yellow_roses_bouquet.webp
-├── Purple-flowers.webp
-├── Tulips_bouquets.webp
-├── Paper_flower_bouquets.webp
-└── Paper_roses_bouquet.webp
-```
 
 ## 🚀 Deployment to GitHub Pages
 
