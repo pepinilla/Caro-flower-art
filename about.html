@@ -124,6 +124,54 @@
       box-shadow: 0 5px 15px rgba(232, 154, 166, 0.4);
     }
 
+
+    /* ================= MOBILE MENU FIX ================= */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: white;
+
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 1.5rem;
+    padding-top: 2rem;
+
+    transform: translateY(-120%);
+    transition: transform 0.35s ease-in-out;
+
+    z-index: 999;
+  }
+
+  .nav-menu.active {
+    transform: translateY(0);
+  }
+
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-menu a {
+    font-size: 1.2rem;
+    padding: 0.8rem 0;
+    display: block;
+  }
+
+  .btn-contact {
+    margin-top: 1rem;
+  }
+}
     /* ============ MAIN CONTENT ============ */
     .container {
       max-width: 1200px;
