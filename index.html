@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+u<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -57,6 +57,10 @@
       z-index: 1000;
       transition: all 0.3s ease;
     }
+    header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+    }
 
     nav {
       display: flex;
@@ -75,10 +79,20 @@
     }
 
     .logo img {
-      height: 50px;
+      height: 58px;
       width: auto;
       object-fit: contain;
       transition: transform 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+  .logo img {
+    height: 64px;
+  }
+
+  nav {
+    padding: 1rem 1.2rem;
+  }
     }
 
     .logo:hover img {
@@ -305,9 +319,9 @@
 
 .es {
   display: block;
-  font-size: 0.9em;
-  opacity: 0.8;
-  margin-top: 0.3rem;
+  font-size: 0.85em;
+  opacity: 0.75;
+  margin-top: 0.25rem;
   font-style: italic;
 }
 
@@ -316,7 +330,14 @@
   opacity: 0.75;
     }
 
-    
+    .hero .es {
+  font-size: 0.7em;
+  opacity: 0.7;
+}
+
+.hero h1 .es {
+  font-size: 0.6em;
+}
     
     /* ============ ANIMATIONS ============ */
     @keyframes fadeInDown {
@@ -535,6 +556,11 @@
       color: white;
     }
 
+    .card .es {
+  font-size: 0.8em;
+  opacity: 0.75;
+    }
+    
     /* ============ ABOUT SECTION ============ */
     .about {
       background: linear-gradient(135deg, #fff 0%, #fef5f7 100%);
