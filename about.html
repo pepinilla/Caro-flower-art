@@ -37,30 +37,53 @@
 
     /* ============ HEADER & NAVIGATION ============ */
     
-<header>
-  <nav>
-    <!-- Logo -->
-    <a href="index.html" class="logo">
-      <img src="logo.svg" alt="Caro Flower Art Logo">
-    </a>
+header {
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
 
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-      <a href="index.html">
-        Gallery
-        <span class="es">Galería</span>
-      </a>
+header nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-      <span>/</span>
+/* Logo */
+.logo img {
+  height: 50px;
+  width: auto;
+  display: block;
+}
 
-      <span>
-        About
-        <span class="es">Sobre mí</span>
-      </span>
-    </div>
-  </nav>
-</header>
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
 
+.breadcrumb a {
+  color: #d4949b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* Español oculto por defecto */
+.es {
+  display: none;
+}
 
     /* ============ MAIN CONTENT ============ */
     .container {
@@ -279,22 +302,7 @@
 </head>
 <body>
   <!-- Header -->
-  <header>
-    <nav>
-      <a href="index.html" class="logo"><img src="logo.svg" alt="Caro Flower Art Logo"></a>
-      <ul class="nav-menu">
-        <li><a href="index.html#gallery">Gallery</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
-        <li><a href="index.html#contact" class="btn-contact">Order Now</a></li>
-      </ul>
-      <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </nav>
-  </header>
+  
 
   <!-- Main Content -->
   <div class="container">
@@ -308,6 +316,29 @@
         </div>
         <div class="about-text">
           <h3>Hi, I'm Carolina</h3>
+        <header>
+  <nav>
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <img src="logo.svg" alt="Caro Flower Art Logo">
+    </a>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="index.html">
+        Gallery
+        <span class="es">Galería</span>
+      </a>
+
+      <span>/</span>
+
+      <span>
+        About
+        <span class="es">Sobre mí</span>
+      </span>
+    </div>
+  </nav>
+        </header>
           <p>
             I'm a mom and paper artist who creates handmade paper flowers with love and care. Inspired by nature and family, I craft each piece to bring beauty to your home, events, or gifts.
           </p>
