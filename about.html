@@ -41,18 +41,11 @@
   <nav>
     <!-- Logo -->
     <a href="index.html" class="logo">
-      <img src="logo.webp" alt="Caro Flower Art Logo">
+      <img src="logo.svg" alt="Caro Flower Art Logo">
     </a>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
-      <a href="about.html">
-        About
-        <span class="es">Sobre mí</span>
-      </a>
-
-      <span>/</span>
-
       <a href="index.html">
         Gallery
         <span class="es">Galería</span>
@@ -61,60 +54,14 @@
       <span>/</span>
 
       <span>
-        Flowers
-        <span class="es">Sobre mi</span>
+        About
+        <span class="es">Sobre mí</span>
       </span>
     </div>
   </nav>
 </header>
 
-    /* ================= MOBILE MENU FIX ================= */
-@media (max-width: 768px) {
 
-  .hamburger {
-    display: flex;
-  }
-
-  .nav-menu {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 70px);
-    background: white;
-
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-
-    gap: 1.5rem;
-    padding-top: 2rem;
-
-    transform: translateY(-120%);
-    transition: transform 0.35s ease-in-out;
-
-    z-index: 999;
-  }
-
-  .nav-menu.active {
-    transform: translateY(0);
-  }
-
-  .nav-menu li {
-    width: 100%;
-    text-align: center;
-  }
-
-  .nav-menu a {
-    font-size: 1.2rem;
-    padding: 0.8rem 0;
-    display: block;
-  }
-
-  .btn-contact {
-    margin-top: 1rem;
-  }
-}
     /* ============ MAIN CONTENT ============ */
     .container {
       max-width: 1200px;
@@ -124,7 +71,7 @@
 
     .about-section {
       padding: 4rem 0;
-      text-align: center;
+      text-align: cnter;
     }
 
     .about-content {
@@ -334,7 +281,7 @@
   <!-- Header -->
   <header>
     <nav>
-      <a href="index.html" class="logo"><img src="logo.webp" alt="Caro Flower Art Logo"></a>
+      <a href="index.html" class="logo"><img src="logo.svg" alt="Caro Flower Art Logo"></a>
       <ul class="nav-menu">
         <li><a href="index.html#gallery">Gallery</a></li>
         <li><a href="about.html">About</a></li>
