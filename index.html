@@ -1,4 +1,4 @@
-u<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -78,22 +78,22 @@ u<!DOCTYPE html>
       gap: 0.5rem;
     }
 
-    .logo img {
-      height: 58px;
-      width: auto;
-      object-fit: contain;
-      transition: transform 0.3s ease;
-    }
+    ..logo img {
+  height: 80px;          /* desktop */
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
 
-    @media (max-width: 768px) {
+@media (max-width: 768px) {
   .logo img {
-    height: 64px;
+    height: 60px;        /* mobile */
   }
 
   nav {
-    padding: 1rem 1.2rem;
+    padding: 0.8rem 1.2rem;
   }
-    }
+}
 
     .logo:hover img {
       transform: scale(1.05);
