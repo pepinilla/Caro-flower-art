@@ -303,6 +303,18 @@
       transform: translateY(-3px);
     }
 
+.es {
+  display: block;
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+    .filter-btn .es {
+  font-size: 0.75em;
+  opacity: 0.75;
+    }
     /* ============ ANIMATIONS ============ */
     @keyframes fadeInDown {
       from {
@@ -1030,7 +1042,7 @@
 <header>
   <nav>
     <a href="#home" class="logo">
-      <img src="logo.webp" alt="Caro Flower Art Logo">
+      <img src="logo.svg" alt="Caro Flower Art Logo">
     </a>
     <ul class="nav-menu">
       <li><a href="#gallery">Gallery</a></li>
@@ -1049,12 +1061,22 @@
 <!-- ============ HERO SECTION ============ -->
 <section class="hero" id="home">
   <div class="hero-content">
-    <div class="hero-subtitle">Welcome to Caro Flower Art</div>
-    <h1>Handmade Paper Flowers</h1>
-    <p>
-      Flores de papel hechas a mano para momentos especiales.<br>
-      Beautiful, sustainable, and timeless creations for your special moments.
-    </p>
+    <div class="hero-subtitle">
+  Welcome to Caro Flower Art <br>
+  <span class="es">Bienvenidos a Caro Flower Art</span>
+</div>
+
+<h1>
+  Handmade Paper Flowers <br>
+  <span class="es">Flores de papel hechas a mano</span>
+</h1>
+
+<p>
+  Beautiful, sustainable, and timeless creations for your special moments.<br>
+  <span class="es">
+    Creaciones hermosas, sostenibles y atemporales para tus momentos especiales.
+  </span>
+</p>
     <div class="hero-buttons">
       <a href="#gallery" class="btn-primary">Explore Gallery</a>
       <a href="#contact" class="btn-secondary">Get in Touch</a>
@@ -1064,15 +1086,33 @@
 
 <!-- ============ GALLERY SECTION ============ -->
 <section class="gallery" id="gallery">
-  <h2>Our Collections</h2>
-  <p class="section-subtitle">Explore our beautiful handmade flower arrangements</p>
-  
+  <h2>
+  Our Collections
+  <span class="es">Nuestras colecciones</span>
+</h2>
+
+<p class="section-subtitle">
+  Explore our beautiful handmade flower arrangements
+  <span class="es">Explora nuestros hermosos arreglos de flores hechas a mano</span>
+</p>
   <div class="filter-buttons">
-    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn active" data-filter="all">
+  All
+  <span class="es">Todas</span>
+    </button>
     <a href="flowers.html" class="filter-btn" style="text-decoration: none; color: inherit;">Flowers</a>
-    <button class="filter-btn" data-filter="wedding">Wedding</button>
-    <button class="filter-btn" data-filter="special">Special Occasion</button>
-    <button class="filter-btn" data-filter="mini">Mini Bouquets</button>
+    <button class="filter-btn" data-filter="wedding">
+  Wedding
+  <span class="es">Bodas</span>
+    </button>
+    <button class="filter-btn" data-filter="special">
+  Special Occasions
+  <span class="es">Ocasiones especiales</span>
+    </button>
+    <button class="filter-btn" data-filter="mini">
+  Mini Bouquets
+  <span class="es">Mini ramos</span>
+    </button>
   </div>
 
   <div class="grid">
@@ -1080,15 +1120,37 @@
     <div class="card" data-category="special">
       <div class="card-image-wrapper">
         <img src="Paper_roses_bouquet.webp" alt="All Flowers" loading="lazy">
-        <span class="card-badge">Explore</span>
-      </div>
-      <div class="card-content">
-        <div class="category">Flowers</div>
-        <h3>Explore All Flowers</h3>
-        <p>Descubre todos nuestros tipos de flores disponibles. Browse all our beautiful handmade flower types.</p>
-        <div class="card-footer">
-          <a href="flowers.html" style="flex: 2; background: #333; border-color: #333;">View All Flowers</a>
-          <a href="#contact">Inquire</a>
+        <span class="card-badge">
+  Explore
+  <span class="es">Explorar</span>
+</span>
+
+<div class="category">
+  Flowers
+  <span class="es">Flores</span>
+</div>
+
+<h3>
+  Explore All Flowers
+  <span class="es">Explorar todas las flores</span>
+</h3>
+
+<p>
+  Browse all our beautiful handmade flower types.
+  <span class="es">
+    Descubre todos nuestros hermosos tipos de flores hechas a mano.
+  </span>
+</p>
+
+<a href="flowers.html">
+  View All Flowers
+  <span class="es">Ver todas las flores</span>
+</a>
+
+<a href="#contact">
+  Inquire
+  <span class="es">Consultar</span>
+</a>
         </div>
       </div>
     </div>
@@ -1100,8 +1162,16 @@
       </div>
       <div class="card-content">
         <div class="category">Wedding</div>
-        <h3>Bridal Bouquet</h3>
-        <p>Tonos suaves y románticos para bodas. Soft and romantic tones for your special day.</p>
+        <h3>
+  Bridal Bouquet
+  <span class="es">Ramo de novia</span>
+        </h3>
+        <p>
+  Soft and romantic tones for your special day.
+  <span class="es">
+    Tonos suaves y románticos para tu día especial.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="https://www.instagram.com/p/DR4V17mkXyo/" target="_blank">View on Instagram</a>
           <a href="#contact">Inquire</a>
@@ -1117,8 +1187,16 @@
       </div>
       <div class="card-content">
         <div class="category">Special Occasion</div>
-        <h3>Special Occasion</h3>
-        <p>Flores alegres hechas para celebrar. Cheerful flowers made to celebrate your moments.</p>
+        <h3>
+  Special Occasion
+  <span class="es">Ocasión especial</span>
+        </h3>
+        <p>
+  Cheerful flowers made to celebrate your moments.
+  <span class="es">
+    Flores alegres hechas para celebrar tus momentos.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="https://www.instagram.com/p/DR2pEHGEX5t/" target="_blank">View on Instagram</a>
           <a href="#contact">Inquire</a>
@@ -1134,8 +1212,16 @@
       </div>
       <div class="card-content">
         <div class="category">Mini Bouquets</div>
-        <h3>Mini Bouquets</h3>
-        <p>Perfectos para regalos y pequeños detalles. Perfect for gifts and small special touches.</p>
+        <h3>
+  Mini Bouquets
+  <span class="es">Mini ramos</span>
+        </h3>
+        <p>
+  Perfect for gifts and small special touches.
+  <span class="es">
+    Perfectos para regalos y pequeños detalles especiales.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="https://www.instagram.com/p/DRkqBB6D0-S/" target="_blank">View on Instagram</a>
           <a href="#contact">Inquire</a>
@@ -1146,13 +1232,21 @@
     <!-- Carnations -->
     <div class="card" data-category="special">
       <div class="card-image-wrapper">
-        <img src="Carnations_bouquets_2.webp" alt="Carnations - Claveles" loading="lazy">
+        <img src="Carnations_bouquets.webp" alt="Carnations - Claveles" loading="lazy">
         <span class="card-badge">Flowers</span>
       </div>
       <div class="card-content">
         <div class="category">Flowers</div>
-        <h3>Carnations</h3>
-        <p>Claveles clásicos hechos a mano. Classic handmade carnations with vibrant colors.</p>
+        <h3>
+  Carnations
+  <span class="es">Claveles</span>
+        </h3>
+        <p>
+  Classic handmade carnations with vibrant colors.
+  <span class="es">
+    Claveles clásicos hechos a mano con colores vibrantes.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="https://www.instagram.com/p/DRewKuNEUsf/" target="_blank">View on Instagram</a>
           <a href="#contact">Inquire</a>
@@ -1168,8 +1262,16 @@
       </div>
       <div class="card-content">
         <div class="category">Flowers</div>
-        <h3>Hydrangeas</h3>
-        <p>Hortensias delicadas y voluminosas. Delicate and voluminous hydrangeas for any occasion.</p>
+        <h3>
+  Hydrangeas
+  <span class="es">Hortensias</span>
+        </h3>
+        <p>
+  Delicate and voluminous hydrangeas for any occasion.
+  <span class="es">
+    Hortensias delicadas y voluminosas para cualquier ocasión.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="https://www.instagram.com/p/DRu1KihEaID/" target="_blank">View on Instagram</a>
           <a href="#contact">Inquire</a>
@@ -1185,8 +1287,16 @@
       </div>
       <div class="card-content">
         <div class="category">Flowers</div>
-        <h3>Yellow Roses</h3>
-        <p>Rosas amarillas llenas de alegría. Yellow roses full of joy and brightness.</p>
+        <h3>
+  Yellow Roses
+  <span class="es">Rosas amarillas</span>
+        </h3>
+        <p>
+  Yellow roses full of joy and brightness.
+  <span class="es">
+    Rosas amarillas llenas de alegría y luminosidad.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="https://www.instagram.com/p/DSGDyzLETsi/?igsh=eXd3YnU3NWdwaGN3" target="_blank">View on Instagram</a>
           <a href="#contact">Inquire</a>
@@ -1202,8 +1312,16 @@
       </div>
       <div class="card-content">
         <div class="category">Wedding</div>
-        <h3>Pink & Purple Roses</h3>
-        <p>Rosas elegantes en tonos rosados y púrpura. Elegant roses in pink and purple tones.</p>
+        <h3>
+  Pink & Purple Roses
+  <span class="es">Rosas rosadas y moradas</span>
+</h3>
+        <p>
+  Elegant roses in pink and purple tones.
+  <span class="es">
+    Rosas elegantes en tonos rosados y púrpura.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="https://www.instagram.com/p/DSHxCR_EXBd/?igsh=MTl4MDBoNThkcWgxcA==" target="_blank">View on Instagram</a>
           <a href="#contact">Inquire</a>
@@ -1219,8 +1337,16 @@
       </div>
       <div class="card-content">
         <div class="category">Flowers</div>
-        <h3>Tulips</h3>
-        <p>Tulipanes elegantes y coloridos. Elegant and colorful tulips for any celebration.</p>
+        <h3>
+  Tulips
+  <span class="es">Tulipanes</span>
+        </h3>
+        <p>
+  Elegant and colorful tulips for any celebration.
+  <span class="es">
+    Tulipanes elegantes y coloridos para cualquier celebración.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="#contact">Inquire</a>
           <a href="#contact">Order</a>
@@ -1236,8 +1362,16 @@
       </div>
       <div class="card-content">
         <div class="category">Bouquets</div>
-        <h3>Paper Flower Bouquets</h3>
-        <p>Ramos variados de flores de papel. Beautiful mixed paper flower arrangements.</p>
+        <h3>
+  Paper Flower Bouquets
+  <span class="es">Ramos de flores de papel</span>
+        </h3>
+        <p>
+  Beautiful mixed paper flower arrangements.
+  <span class="es">
+    Hermosos arreglos mixtos de flores de papel.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="#contact">Inquire</a>
           <a href="#contact">Order</a>
@@ -1253,8 +1387,16 @@
       </div>
       <div class="card-content">
         <div class="category">Wedding</div>
-        <h3>Paper Roses Bouquet</h3>
-        <p>Ramo de rosas de papel elegantes. Elegant paper rose arrangements for weddings.</p>
+        <h3>
+  Paper Roses Bouquet
+  <span class="es">Ramo de rosas de papel</span>
+        </h3>
+        <p>
+  Elegant paper rose arrangements for weddings.
+  <span class="es">
+    Elegantes arreglos de rosas de papel para bodas.
+  </span>
+        </p>
         <div class="card-footer">
           <a href="#contact">Inquire</a>
           <a href="#contact">Order</a>
@@ -1268,8 +1410,15 @@
 
 <!-- ============ TESTIMONIALS SECTION ============ -->
 <section class="testimonials">
-  <h2>What Our Customers Say</h2>
-  <p class="section-subtitle">Real reviews from happy clients</p>
+  <h2>
+  What Our Customers Say
+  <span class="es">Lo que dicen nuestros clientes</span>
+</h2>
+
+<p class="section-subtitle">
+  Real reviews from happy clients
+  <span class="es">Reseñas reales de clientes felices</span>
+</p>
   
   <div class="testimonials-grid">
     <div class="testimonial-card">
