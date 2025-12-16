@@ -17,36 +17,43 @@
       color: #333;
       line-height: 1.6;
     }
+<header>
+  <nav>
+    <a href="index.html" class="logo">
+      <img src="logo.webp" alt="Caro Flower Art Logo">
+    </a>
+<header>
+  <nav>
+    <a href="index.html" class="logo">
+      <img src="logo.svg" alt="Caro Flower Art Logo">
+    </a>
 
-    header {
-      background: white;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
 
-    .logo {
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    <ul class="nav-menu">
+      <li><a href="index.html">Home<span class="es">Inicio</span></a></li>
+      <li><a href="#gallery">Gallery<span class="es">Galería</span></a></li>
+      <li><a href="#contact" class="btn-contact">Contact<span class="es">Contacto</span></a></li>
+    </ul>
+  </nav>
+</header>
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
 
-    .logo img {
-      height: 50px;
-      width: auto;
-      object-fit: contain;
-      transition: transform 0.3s ease;
-    }
-
-    .logo:hover img {
-      transform: scale(1.05);
-    }
+    <ul class="nav-menu">
+      <li><a href="index.html">Home<span class="es">Inicio</span></a></li>
+      <li><a href="#gallery">Gallery<span class="es">Galería</span></a></li>
+      <li><a href="#contact" class="btn-contact">Contact<span class="es">Contacto</span></a></li>
+    </ul>
+  </nav>
+</header>
 
     .breadcrumb {
       display: flex;
@@ -264,11 +271,24 @@
   <header>
     <a href="index.html" class="logo"><img src="logo.webp" alt="Caro Flower Art Logo"></a>
     <div class="breadcrumb">
-      <a href="about.html">About</a>
-      <span>/</span>
-      <a href="index.html">Gallery</a>
-      <span>/</span>
-      <span>Flowers</span>
+  <a href="about.html">
+    About
+    <span class="es">Sobre mí</span>
+  </a>
+
+  <span>/</span>
+
+  <a href="index.html">
+    Gallery
+    <span class="es">Galería</span>
+  </a>
+
+  <span>/</span>
+
+  <span>
+    Flowers
+    <span class="es">Flores</span>
+  </span>
     </div>
   </header>
 
@@ -276,13 +296,23 @@
   <div class="container">
     <!-- Page Header -->
     <div class="page-header">
-      <h1>Flower Collection</h1>
-      <p>Explore our beautiful handmade paper flowers in various types and colors</p>
+      <h1>
+  Flower Collection
+  <span class="es">Colección de flores</span>
+</h1>
+
+<p>
+  Explore our beautiful handmade paper flowers in various types and styles.
+  <span class="es">Explora nuestras hermosas flores de papel hechas a mano en distintos estilos.</span>
+</p>
     </div>
 
     <!-- Back to Gallery Button -->
     <div style="text-align: center; margin-bottom: 2rem;">
-      <a href="index.html" class="back-btn">← Back to Gallery</a>
+     <a href="index.html" class="back-btn">
+  ← Back to Gallery
+  <span class="es">← Volver a la galería</span>
+     </a> 
     </div>
 
     <!-- Flowers Grid -->
@@ -295,14 +325,17 @@
         <div class="flower-card-content">
           <h3>Roses</h3>
           <p>Elegant paper roses available in multiple stunning colors. Perfect for weddings and special occasions.</p>
-          <a href="roses.html" class="flower-card-link">View Colors</a>
+          <a href="roses.html" class="flower-card-link">
+  View Colors
+  <span class="es">Ver colores</span>
+          </a>
         </div>
       </div>
 
       <!-- Carnations -->
       <div class="flower-card">
         <div class="flower-card-image">
-          <img src="Carnations.webp" alt="Carnations">
+          <img src="Carnations_bouquets.webp" alt="Carnations">
         </div>
         <div class="flower-card-content">
           <h3>Carnations</h3>
