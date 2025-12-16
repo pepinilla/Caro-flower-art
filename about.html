@@ -24,7 +24,7 @@
     * {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+     box-sizing: border-box;
     }
 
     body {
@@ -36,94 +36,37 @@
     }
 
     /* ============ HEADER & NAVIGATION ============ */
-    header {
-      background: white;
-      box-shadow: var(--shadow-light);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
+    
+<header>
+  <nav>
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <img src="logo.webp" alt="Caro Flower Art Logo">
+    </a>
 
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="about.html">
+        About
+        <span class="es">Sobre mí</span>
+      </a>
 
-    .logo {
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+      <span>/</span>
 
-    .logo img {
-      height: 50px;
-      width: auto;
-      object-fit: contain;
-      transition: transform 0.3s ease;
-    }
+      <a href="index.html">
+        Gallery
+        <span class="es">Galería</span>
+      </a>
 
-    .logo:hover img {
-      transform: scale(1.05);
-    }
+      <span>/</span>
 
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .hamburger span {
-      width: 25px;
-      height: 3px;
-      background: var(--dark-color);
-      margin: 5px 0;
-      transition: all 0.3s ease;
-    }
-
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .nav-menu a {
-      color: var(--dark-color);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-      position: relative;
-    }
-
-    .nav-menu a:hover {
-      color: var(--primary-color);
-    }
-
-    .btn-contact {
-      background: var(--primary-color);
-      color: white;
-      padding: 0.7rem 1.5rem;
-      border-radius: 30px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      border: none;
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-    }
-
-    .btn-contact:hover {
-      background: #d97a87;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(232, 154, 166, 0.4);
-    }
-
+      <span>
+        Flowers
+        <span class="es">Sobre mi</span>
+      </span>
+    </div>
+  </nav>
+</header>
 
     /* ================= MOBILE MENU FIX ================= */
 @media (max-width: 768px) {
