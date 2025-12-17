@@ -37,7 +37,6 @@
 
     /* ============ HEADER & NAVIGATION ============ */
     
-header {
   background: white;
   position: sticky;
   top: 0;
@@ -84,6 +83,71 @@ header nav {
 .es {
   display: none;
 }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f0f0 0%, #fff5f7 100%);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .breadcrumb a {
+      color: #d4949b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .back-btn {
+      background: #d4949b;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #c17d85;
+      transform: translateY(-2px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+    
 
     /* ============ MAIN CONTENT ============ */
     .container {
@@ -302,8 +366,7 @@ header nav {
 </head>
 <body>
   <!-- Header -->
-  
-
+ 
   <!-- Main Content -->
   <div class="container">
     <section class="about-section">
