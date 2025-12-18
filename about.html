@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="site.css">
+  
   <style>
     :root {
       --primary-color: #e89aa6;
@@ -33,79 +35,6 @@
       color: var(--text-color);
       line-height: 1.6;
       overflow-x: hidden;
-    }
-
-    /* ============ HEADER & NAVIGATION ============ */
-    
-  background: white;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-header nav {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Logo */
-.logo img {
-  height: 50px;
-  width: auto;
-  display: block;
-}
-
-/* Breadcrumb */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.breadcrumb a {
-  color: #d4949b;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.breadcrumb a:hover {
-  text-decoration: underline;
-}
-
-/* Español oculto por defecto */
-.es {
-  display: none;
-}
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f5f0f0 0%, #fff5f7 100%);
-      color: #333;
-      line-height: 1.6;
-    }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .breadcrumb a {
-      color: #d4949b;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .breadcrumb a:hover {
-      text-decoration: underline;
     }
 
     .back-btn {
@@ -365,8 +294,10 @@ header nav {
   </style>
 </head>
 <body>
-  <!-- Header -->
+  
  
+  <div id="site-header"></div>
+  <script src="site.js"></script>
   <!-- Main Content -->
   <div class="container">
     <section class="about-section">
@@ -379,29 +310,6 @@ header nav {
         </div>
         <div class="about-text">
           <h3>Hi, I'm Carolina</h3>
-        <header>
-  <nav>
-    <!-- Logo -->
-    <a href="index.html" class="logo">
-      <img src="logo.svg" alt="Caro Flower Art Logo">
-    </a>
-
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-      <a href="index.html">
-        Gallery
-        <span class="es">Galería</span>
-      </a>
-
-      <span>/</span>
-
-      <span>
-        About
-        <span class="es">Sobre mí</span>
-      </span>
-    </div>
-  </nav>
-        </header>
           <p>
             I'm a mom and paper artist who creates handmade paper flowers with love and care. Inspired by nature and family, I craft each piece to bring beauty to your home, events, or gifts.
           </p>
