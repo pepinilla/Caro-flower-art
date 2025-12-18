@@ -1,0 +1,155 @@
+/* ================= RESET BÁSICO ================= */
+* {
+  box-sizing: border-box;
+}
+
+/* ================= HEADER ================= */
+header {
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= NAV ================= */
+nav {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ================= LOGO ================= */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo img {
+  height: 60px;        /* desktop */
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .logo img {
+    height: 40px;      /* mobile */
+  }
+}
+
+/* ================= MENU ================= */
+.nav-menu {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-menu a:hover {
+  color: #e89aa6;
+}
+
+/* línea elegante al hover */
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #e89aa6;
+  transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+/* ================= BOTÓN CONTACT ================= */
+.btn-contact {
+  background: #e89aa6;
+  color: white !important;
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  font-weight: 600;
+}
+
+.btn-contact:hover {
+  background: #d97a87;
+}
+
+/* ================= HAMBURGER ================= */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  margin: 4px 0;
+  transition: all 0.3s ease;
+}
+
+/* ================= MOBILE MENU ================= */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 70px;                     /* altura del header */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: white;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 1.5rem;
+    padding-top: 2rem;
+
+    transform: translateY(-120%);
+    transition: transform 0.35s ease-in-out;
+
+    z-index: 999;
+  }
+
+  .nav-menu.active {
+    transform: translateY(0);
+  }
+
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-menu a {
+    font-size: 1.2rem;
+    padding: 0.8rem 0;
+    display: block;
+  }
+
+  .nav-menu a::after {
+    display: none;
+  }
+}
