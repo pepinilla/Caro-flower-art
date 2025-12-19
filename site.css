@@ -281,7 +281,7 @@ nav {
 }
 
 .process-title{
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-title);
   font-size: 3rem;
   text-align: center;
   margin-bottom: 0.6rem;
