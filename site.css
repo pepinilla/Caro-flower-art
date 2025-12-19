@@ -390,7 +390,7 @@ nav {
 .about-text{
   max-width: 720px;
   margin: 0 auto;
-  text-align: left;
+  text-align: center;
   color: var(--text-color);
   line-height: 1.6;
   font-size: 1rem;
@@ -438,7 +438,7 @@ nav {
 .btn-contact{
   display: block;
   width: fit-content;
-  margin: 2rem auto 3rem;   /* auto centra */
+  margin: 2rem auto 3rem;   /* auto = centrado */
   padding: 0.85rem 1.4rem;
   border-radius: 999px;
   background: var(--primary-color);
@@ -446,33 +446,22 @@ nav {
   text-decoration: none;
   font-weight: 600;
   box-shadow: var(--shadow-light);
-  text-align: center;
 }
 
-.about-section{
-  text-align: center; /* centra elementos inline si los hay */
-}
-
-.about-section .btn-contact{
-  text-align: center;
-}
 
 .process-title{
-  font-family: var(--font-body);  /* usa la misma fuente del texto general */
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
-  font-size: 2.1rem;
+  font-size: 2.2rem;
   line-height: 1.15;
-  margin: 2.2rem 0 0.8rem;
+  margin: 2.2rem 0 0.6rem;
   text-align: left;
   color: var(--dark-color);
 }
 
-/* móvil */
 @media (max-width: 768px){
-  .process-title{
-    font-size: 1.9rem;
-  }
+  .process-title{ font-size: 1.9rem; }
 }
 
 /* Desktop */
