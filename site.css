@@ -230,3 +230,110 @@ nav {
   text-align: center;
   margin-bottom: 2rem;
 }
+
+/* ===============================
+   PROCESS / CAROUSEL (ABOUT)
+================================ */
+
+.process-section{
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.process-title{
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  margin-bottom: 0.6rem;
+  color: var(--dark-color);
+}
+
+.process-subtitle{
+  max-width: 720px;
+  margin: 0 auto 2rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.carousel{
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  background: white;
+}
+
+.carousel-track{
+  display: flex;
+  transition: transform 0.6s ease;
+}
+
+.carousel-item{
+  min-width: 100%;
+  margin: 0;
+  position: relative;
+}
+
+.carousel-item img{
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-item figcaption{
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  text-align: left;
+  backdrop-filter: blur(6px);
+}
+
+.carousel-item figcaption h3{
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.carousel-item figcaption p{
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+  opacity: 0.95;
+}
+
+.carousel-btn{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-size: 1.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.carousel-btn:hover{
+  background: rgba(0,0,0,0.75);
+}
+
+.carousel-btn.prev{ left: 12px; }
+.carousel-btn.next{ right: 12px; }
+
+@media (max-width: 768px){
+  .carousel-item img{ height: 420px; }
+  .process-title{ font-size: 2.3rem; }
+}
