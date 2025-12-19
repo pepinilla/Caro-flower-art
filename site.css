@@ -247,12 +247,10 @@ nav {
   backdrop-filter: blur(6px);
 }
 
-.carousel-item figcaption h3 {
-  margin: 0 0 6px;
-  font-size: 1.1rem;
+.carousel-item figcaption h3{
+  font-family: var(--font-body);
   font-weight: 700;
-  color: #fff;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+  letter-spacing: 0.01em;
 }
 
 .carousel-item figcaption p {
@@ -438,24 +436,42 @@ nav {
 
 /* Botón */
 .btn-contact{
-  display: inline-block;
-  margin: 2rem auto 3rem;
-  padding: 0.7rem 1.2rem;
+  display: block;
+  width: fit-content;
+  margin: 2rem auto 3rem;   /* auto centra */
+  padding: 0.85rem 1.4rem;
   border-radius: 999px;
   background: var(--primary-color);
   color: #fff !important;
   text-decoration: none;
   font-weight: 600;
   box-shadow: var(--shadow-light);
+  text-align: center;
 }
 
-.process-title {
+.about-section{
+  text-align: center; /* centra elementos inline si los hay */
+}
+
+.about-section .btn-contact{
+  text-align: center;
+}
+
+.process-title{
+  font-family: var(--font-body);  /* usa la misma fuente del texto general */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: 2.1rem;
   line-height: 1.15;
+  margin: 2.2rem 0 0.8rem;
+  text-align: left;
+  color: var(--dark-color);
 }
 
-@media (max-width: 768px) {
-  .process-title {
-    font-size: 2.2rem;
+/* móvil */
+@media (max-width: 768px){
+  .process-title{
+    font-size: 1.9rem;
   }
 }
 
