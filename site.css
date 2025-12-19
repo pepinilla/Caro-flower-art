@@ -340,4 +340,90 @@ nav {
   .process-title{ font-size: 2.3rem; }
 }
 
+/* ===== ABOUT PAGE (restore styles) ===== */
+.about-hero{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
 
+.about-image img{
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+/* Text under photo */
+.about-text{
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+  color: var(--text-color);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Social icons row */
+.social-links{
+  margin-top: 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-links a{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: #333;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+  background: rgba(255,255,255,0.7);
+  box-shadow: var(--shadow-light);
+}
+
+.social-links a:hover{
+  transform: translateY(-2px);
+  color: var(--primary-color);
+}
+
+/* Button under icons */
+.btn-contact{
+  display: inline-block;
+  margin: 1.2rem auto 0;
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  background: var(--primary-color);
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: var(--shadow-light);
+}
+
+/* Desktop layout */
+@media (min-width: 900px){
+  .about-hero{
+    grid-template-columns: 520px 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  .about-text{
+    margin: 0;
+    text-align: left;
+  }
+  .social-links{
+    justify-content: flex-start;
+  }
+}
