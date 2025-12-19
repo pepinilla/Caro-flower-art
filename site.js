@@ -21,26 +21,26 @@ async function loadHeader() {
   });
 }
 
-/* ===============================
-   CAROUSEL - ABOUT PAGE
-================================ */
+/* ==============================
+   ABOUT – PROCESS CAROUSEL
+   ============================== */
 
-let currentSlide = 0;
+let processIndex = 0;
 
-function moveSlide(direction) {
-  const slide = document.querySelector(".carousel-slide");
-  if (!slide) return; // si no hay carrusel en esta página, no hace nada
+function processMove(direction) {
+  const track = document.querySelector(".carousel-track");
+  if (!track) return;
 
-  const images = slide.querySelectorAll("img");
-  const totalSlides = images.length;
-  if (totalSlides === 0) return;
+  const items = track.querySelectorAll(".carousel-item");
+  const total = items.length;
+  if (!total) return;
 
-  currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
-  slide.style.transform = `translateX(-${currentSlide * 100}%)`;
+  processIndex = (processIndex + direction + total) % total;
+  track.style.transform = `translateX(-${processIndex * 100}%)`;
 }
 
-// Para que funcione con onclick="moveSlide(...)"
-window.moveSlide = moveSlide;
+/* make it available for inline onclick */
+window.processMove = processMove;
 
 /* ===============================
    INIT
