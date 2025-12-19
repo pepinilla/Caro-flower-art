@@ -234,7 +234,11 @@ nav {
 /* ===============================
    PROCESS / CAROUSEL (ABOUT)
 ================================ */
-
+.carousel-item figcaption h3 {
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
 .process-section{
   padding: 4rem 0;
   text-align: center;
@@ -336,8 +340,24 @@ nav {
 .carousel-btn.next{ right: 12px; }
 
 @media (max-width: 768px){
-  .carousel-item img{ height: 420px; }
-  .process-title{ font-size: 2.3rem; }
+  .carousel-item img{
+    height: 420px;
+  }
+
+  .process-title{
+    font-size: 2.3rem;
+    line-height: 1.15;
+  }
+
+  .carousel-item figcaption{
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    bottom: 12px;
+  }
+
+  .carousel-item figcaption h3{
+    font-size: 1.05rem;
+  }
 }
 
 /* ===== ABOUT PAGE ===== */
@@ -413,7 +433,7 @@ nav {
 /* Botón */
 .btn-contact{
   display: inline-block;
-  margin: 1.2rem auto 0;
+  margin: 2rem auto 3rem;
   padding: 0.7rem 1.2rem;
   border-radius: 999px;
   background: var(--primary-color);
@@ -421,6 +441,16 @@ nav {
   text-decoration: none;
   font-weight: 600;
   box-shadow: var(--shadow-light);
+}
+
+.process-title {
+  line-height: 1.15;
+}
+
+@media (max-width: 768px) {
+  .process-title {
+    font-size: 2.2rem;
+  }
 }
 
 /* Desktop */
