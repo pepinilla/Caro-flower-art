@@ -11,166 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="site.css">
-  
-  <style>
-    
 
-    /* ============ MAIN CONTENT ============ */
-
-    .about-section {
-      padding: 4rem 0;
-      text-align: cnter;
-    }
-
-    .about-content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3rem;
-      align-items: center;
-      text-align: left;
-      margin-top: 3rem;
-    }
-
-    .about-image {
-      flex: 1;
-      min-width: 300px;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    .about-image img {
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: var(--shadow);
-    }
-
-    .about-text {
-      flex: 2;
-      min-width: 300px;
-    }
-
-    .about-text h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: var(--dark-color);
-      margin-bottom: 1rem;
-    }
-
-    .about-text h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      color: var(--primary-color);
-      margin-bottom: 1rem;
-    }
-
-    .about-text p {
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-    }
-
-    .social-links a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .social-links a:hover {
-      color: var(--dark-color);
-    }
-
-
-
-    /* ============ FOOTER ============ */
-    footer {
-      background: var(--dark-color);
-      color: white;
-      padding: 2rem;
-      text-align: center;
-      margin-top: 4rem;
-    }
-
-    footer p {
-      margin: 0.5rem 0;
-      font-size: 0.9rem;
-    }
-
-    /* ============ RESPONSIVE DESIGN ============ */
-    @media (max-width: 768px) {
-      nav {
-        padding: 1rem;
-      }
-
-      .about-content {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .about-text {
-        min-width: 100%;
-      }
-
-      .about-image {
-        min-width: 100%;
-      }
-
-      .about-text h2 {
-        font-size: 2rem;
-      }
-
-      .about-text h3 {
-        font-size: 1.5rem;
-      }
-
-      .social-links {
-        justify-content: center;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .nav-menu {
-        position: fixed;
-        top: 70px;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        gap: 0;
-        padding: 1rem 0;
-        box-shadow: var(--shadow-light);
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        display: none;
-        z-index: 999;
-      }
-
-      .nav-menu.active {
-        max-height: calc(100vh - 70px);
-        display: flex;
-        overflow-y: auto;
-        bottom: 0;
-        background: white;
-      }
-
-      .nav-menu li {
-        width: 100%;
-        text-align: center;
-        width: 100%;
-      }
-
-      .nav-menu a {
-        text-align: center;
-        padding: 2rem 2rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-    }
-  </style>
 </head>
 <body>
   
@@ -218,92 +59,97 @@
       </div>
     </section>
 
-<section class="carousel-section">
-
-  <h2 class="process-title">
-    My Process · Mi proceso
-  </h2>
-
-  <p class="process-subtitle">
-    From paper to petals — De papel a flores
-  </p>
+  <section class="carousel-section">
+  <h2 class="process-title">My Process · Mi proceso</h2>
+  <p class="process-subtitle">From paper to petals — De papel a flores</p>
 
   <div class="carousel-container">
+    <div class="carousel-track">
 
-    <div class="carousel-slide">
+      <div class="carousel-item">
+        <figure>
+          <img src="Process-1.webp" alt="Hand-painting veins on paper leaves">
+          <figcaption>
+            <h3>Step 1 – Leaf texture · Paso 1 – Textura en hojas</h3>
+            <p>
+              I hand-paint the veins and details to give each leaf a natural look.<br>
+              Pinto a mano las venas y detalles para que cada hoja se vea más real.
+            </p>
+          </figcaption>
+        </figure>
+      </div>
 
-      <figure>
-        <img src="Process-1.webp" alt="Hand-painting veins on paper leaves">
-        <figcaption>
-          <h3>Step 1 — Leaf texture · Paso 1 — Textura en hojas</h3>
-          <p>
-            I hand-paint the veins and details to give each leaf a natural look.<br>
-            Pinto a mano las venas y detalles para que cada hoja se vea más real.
-          </p>
-        </figcaption>
-      </figure>
+      <div class="carousel-item">
+        <figure>
+          <img src="Process-2.webp" alt="Paper leaves prepared with wire">
+          <figcaption>
+            <h3>Step 2 – Leaf preparation · Paso 2 – Preparación de hojas</h3>
+            <p>
+              Leaves are shaped and wired to add movement and structure.<br>
+              Las hojas se moldean y alambran para dar movimiento y forma.
+            </p>
+          </figcaption>
+        </figure>
+      </div>
 
-      <figure>
-        <img src="Process-2.webp" alt="Paper leaves prepared with wire">
-        <figcaption>
-          <h3>Step 2 — Leaf preparation · Paso 2 — Preparación de hojas</h3>
-          <p>
-            Leaves are shaped and wired to add movement and structure.<br>
-            Las hojas se moldean y alambran para dar movimiento y forma.
-          </p>
-        </figcaption>
-      </figure>
+      <div class="carousel-item">
+        <figure>
+          <img src="Process-3.webp" alt="Cutting and shaping paper petals">
+          <figcaption>
+            <h3>Step 3 – Petals · Paso 3 – Pétalos</h3>
+            <p>
+              I cut and shape each petal to build soft, layered flowers.<br>
+              Corto y doy forma a cada pétalo para crear flores con volumen.
+            </p>
+          </figcaption>
+        </figure>
+      </div>
 
-      <figure>
-        <img src="Process-3.webp" alt="Cutting and shaping paper petals">
-        <figcaption>
-          <h3>Step 3 — Petals · Paso 3 — Pétalos</h3>
-          <p>
-            I cut and shape each petal to build soft, layered flowers.<br>
-            Corto y doy forma a cada pétalo para crear flores con volumen.
-          </p>
-        </figcaption>
-      </figure>
+      <div class="carousel-item">
+        <figure>
+          <img src="Process-4.webp" alt="Finished handmade paper roses">
+          <figcaption>
+            <h3>Step 4 – Finished flowers · Paso 4 – Flores terminadas</h3>
+            <p>
+              The flowers come together with delicate layers and natural flow.<br>
+              Las flores toman forma con capas suaves y un acabado natural.
+            </p>
+          </figcaption>
+        </figure>
+      </div>
 
-      <figure>
-        <img src="Process-4.webp" alt="Finished handmade paper roses">
-        <figcaption>
-          <h3>Step 4 — Finished flowers · Paso 4 — Flores terminadas</h3>
-          <p>
-            The flowers come together with delicate layers and natural flow.<br>
-            Las flores toman forma con capas suaves y un acabado natural.
-          </p>
-        </figcaption>
-      </figure>
+      <div class="carousel-item">
+        <figure>
+          <img src="Process-5.webp" alt="Forming a rosebud by hand">
+          <figcaption>
+            <h3>Step 5 – Rosebud · Paso 5 – Capullo</h3>
+            <p>
+              I carefully form the center, shaping the rosebud by hand.<br>
+              Formo el centro con cuidado, dando vida al capullo.
+            </p>
+          </figcaption>
+        </figure>
+      </div>
 
-      <figure>
-        <img src="Process-5.webp" alt="Forming a rosebud by hand">
-        <figcaption>
-          <h3>Step 5 — Rosebud · Paso 5 — Capullo</h3>
-          <p>
-            I carefully form the center, shaping the rosebud by hand.<br>
-            Formo el centro con cuidado, dando vida al capullo.
-          </p>
-        </figcaption>
-      </figure>
-
-      <figure>
-        <img src="Process-6.webp" alt="Final rose with stem and leaves">
-        <figcaption>
-          <h3>Step 6 — Final details · Paso 6 — Detalles finales</h3>
-          <p>
-            I adjust the stem and leaves for a clean, elegant finish.<br>
-            Ajusto el tallo y las hojas para un acabado limpio y delicado.
-          </p>
-        </figcaption>
-      </figure>
+      <div class="carousel-item">
+        <figure>
+          <img src="Process-6.webp" alt="Final rose with stem and leaves">
+          <figcaption>
+            <h3>Step 6 – Final details · Paso 6 – Detalles finales</h3>
+            <p>
+              I adjust the stem and leaves for a clean, elegant finish.<br>
+              Ajusto el tallo y las hojas para un acabado limpio y delicado.
+            </p>
+          </figcaption>
+        </figure>
+      </div>
 
     </div>
 
-    <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-    <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
-
+    <button class="carousel-btn prev" onclick="processMove(-1)">&#10094;</button>
+    <button class="carousel-btn next" onclick="processMove(1)">&#10095;</button>
   </div>
+  </section>
 
 </section>
   </div>
@@ -314,38 +160,7 @@
     <p>Handmade with <span style="color: var(--primary-color);">❤</span> in Colombia</p>
   </footer>
 
-  <script>
-    // Mobile Menu Toggle
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-
-    hamburger.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-    });
-
-    // Close menu when clicking on a link
-    document.querySelectorAll('.nav-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-      });
-    });
-
-    // Carousel Logic
-    let slideIndex = 0;
-    const slides = document.querySelector('.carousel-slide');
-    const totalSlides = slides.children.length;
-
-    function showSlide(n) {
-      slideIndex = (n + totalSlides) % totalSlides;
-      slides.style.transform = `translateX(${-slideIndex * 100}%)`;
-    }
-
-    function moveSlide(n) {
-      showSlide(slideIndex + n);
-    }
-
-    // Initial display
-    showSlide(0);
-  </script>
+  <script src="site.js"></script>
 </body>
 </html>
+
