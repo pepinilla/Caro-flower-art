@@ -254,7 +254,8 @@ nav {
   font-size: 1.1rem;
 }
 
-.carousel{
+
+.carousel-container{
   position: relative;
   max-width: 900px;
   margin: 0 auto;
