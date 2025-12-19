@@ -1,3 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-body: 'Poppins', sans-serif;
+  --font-title: 'Cormorant Garamond', serif;
+
+  --primary-color: #e89aa6;
+  --secondary-color: #f5d5dc;
+  --dark-color: #333;
+  --light-color: #f9f9f9;
+  --text-color: #555;
+  --border-color: #e0e0e0;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* RESET BÁSICO */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 🔹 AQUÍ ESTÁ EL BODY 🔹 */
+body {
+  font-family: var(--font-body);
+  color: var(--text-color);
+  line-height: 1.6;
+  background: linear-gradient(135deg, #fff 0%, #fef5f7 100%);
+  overflow-x: hidden;
+}
+
+/* TÍTULOS */
+h1, h2, h3 {
+  font-family: var(--font-title);
+  letter-spacing: 0.03em;
+  color: var(--dark-color);
+}
 /* ================= RESET BÁSICO ================= */
 * {
   box-sizing: border-box;
