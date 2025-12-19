@@ -234,10 +234,47 @@ nav {
 /* ===============================
    PROCESS / CAROUSEL (ABOUT)
 ================================ */
-.carousel-item figcaption h3 {
+.carousel-item figcaption {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.55);
   color: #fff;
-  font-weight: 600;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  text-align: left;
+  backdrop-filter: blur(6px);
+}
+
+.carousel-item figcaption h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+}
+
+.carousel-item figcaption p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  opacity: 0.95;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .carousel-item figcaption {
+    padding: 12px;
+  }
+
+  .carousel-item figcaption h3 {
+    font-size: 1rem;
+  }
+
+  .carousel-item figcaption p {
+    font-size: 0.9rem;
+  }
 }
 .process-section{
   padding: 4rem 0;
@@ -288,31 +325,9 @@ nav {
   display: block;
 }
 
-.carousel-item figcaption{
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 16px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: rgba(0,0,0,0.45);
-  color: #fff;
-  text-align: left;
-  backdrop-filter: blur(6px);
-}
 
-.carousel-item figcaption h3{
-  margin: 0 0 6px;
-  font-size: 1.2rem;
-  font-weight: 700;
-}
 
-.carousel-item figcaption p{
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.35;
-  opacity: 0.95;
-}
+
 
 .carousel-btn{
   position: absolute;
@@ -349,15 +364,6 @@ nav {
     line-height: 1.15;
   }
 
-  .carousel-item figcaption{
-    padding: 10px 12px;
-    font-size: 0.95rem;
-    bottom: 12px;
-  }
-
-  .carousel-item figcaption h3{
-    font-size: 1.05rem;
-  }
 }
 
 /* ===== ABOUT PAGE ===== */
