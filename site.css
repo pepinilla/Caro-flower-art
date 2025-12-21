@@ -145,6 +145,7 @@ nav {
 }
 
 /* ================= MOBILE MENU ================= */
+/* ============== MOBILE MENU (unified) ============== */
 @media (max-width: 768px) {
 
   .hamburger {
@@ -153,22 +154,22 @@ nav {
 
   .nav-menu {
     position: fixed;
-    top: 70px;                     /* altura del header */
+    top: 70px;
     left: 0;
     width: 100%;
     height: calc(100vh - 70px);
-    background: white;
+    background: #fff;
 
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
 
-    gap: 1.5rem;
-    padding-top: 2rem;
+    padding: 2.2rem 1.5rem;
+    gap: 1.2rem;
 
     transform: translateY(-120%);
     transition: transform 0.35s ease-in-out;
-
     z-index: 999;
   }
 
@@ -182,13 +183,30 @@ nav {
   }
 
   .nav-menu a {
-    font-size: 1.2rem;
-    padding: 0.8rem 0;
+    font-size: 1.25rem;
+    padding: 1rem 0;
     display: block;
+    text-decoration: none;
+    color: var(--dark-color, #333);
+    font-weight: 500;
+  }
+
+  .nav-menu li:not(:last-child) a {
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
   }
 
   .nav-menu a::after {
     display: none;
+  }
+
+  .nav-menu a.btn-contact {
+    margin-top: 1rem;
+    padding: 0.95rem 2.6rem;
+    border-radius: 999px;
+    background: var(--primary-color);
+    color: #fff !important;
+    font-weight: 600;
+    border-bottom: none !important;
   }
 }
 /* ABOUT PAGE */
