@@ -232,6 +232,38 @@ nav {
   margin-bottom: 2rem;
 }
 
+/* Breadcrumbs unified style */
+.breadcrumbs{
+  max-width: 1100px;
+  margin: 1rem auto 2rem;
+  padding: 0 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.breadcrumbs a{
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumbs a:hover{
+  text-decoration: underline;
+}
+
+.breadcrumbs span{
+  color: #bbb;
+}
+
+.breadcrumbs .current{
+  color: #555;
+  font-weight: 600;
+}
+
 /* ===============================
    PROCESS / CAROUSEL (ABOUT)
 ================================ */
