@@ -60,6 +60,24 @@
   
   
     /* ============ HERO SECTION ============ */
+
+    /* ✅ Solo agrega esto, NO borres tu hero actual */
+.hero-bg-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 245, 248, 0.65);
+  z-index: 1;
+}
     .hero {
       text-align: center;
       padding: 80px 20px;
@@ -77,11 +95,13 @@
       height: 500px;
       background: radial-gradient(circle, rgba(232, 154, 166, 0.1) 0%, transparent 70%);
       border-radius: 50%;
+      z-index: 2;
+pointer-events: none;
     }
 
     .hero-content {
       position: relative;
-      z-index: 1;
+      z-index: 3;
       max-width: 800px;
       margin: 0 auto;
     }
@@ -925,6 +945,14 @@
 
 <!-- ============ HERO SECTION ============ -->
 <section class="hero" id="home">
+   <!-- VIDEO BACKGROUND -->
+  <video class="hero-bg-video" autoplay muted loop playsinline>
+    <source src="videos/hero-flowers.mp4" type="video/mp4">
+  </video>
+
+  <!-- OVERLAY para que el texto se lea -->
+  <div class="hero-overlay"></div>
+  
   <div class="hero-content">
     <div class="hero-subtitle">
   Welcome to Caro Flower Art <br>
