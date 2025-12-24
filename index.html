@@ -112,9 +112,16 @@
 }
 
 .hero{
-  background-color: #fff5f8; /* mismo tono del poster */
-}
+  position: relative;
+  overflow: hidden;
 
+  /* fallback para que JAMÁS salga negro */
+  background-color: #fff5f8;
+  background-image: url("images/hero-poster.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
     .hero::before {
       content: '';
       position: absolute;
