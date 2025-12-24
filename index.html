@@ -63,20 +63,31 @@
 
     /* ✅ Solo agrega esto, NO borres tu hero actual */
 .hero-bg-video{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  pointer-events: none;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+  transform: scale(1.03);
+  animation: heroZoom 12s ease-in-out infinite alternate;
+}
+
+@keyframes heroZoom{
+  from { transform: scale(1.03); }
+  to   { transform: scale(1.10); }
 }
 
 .hero-overlay{
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 245, 248, 0.65);
-  z-index: 1;
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,245,248,0.80),
+    rgba(255,245,248,0.55),
+    rgba(255,245,248,0.80)
+  );
 }
     .hero {
       text-align: center;
