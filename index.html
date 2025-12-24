@@ -946,7 +946,14 @@ pointer-events: none;
 <!-- ============ HERO SECTION ============ -->
 <section class="hero" id="home">
    <!-- VIDEO BACKGROUND -->
-  <video class="hero-bg-video" autoplay muted loop playsinline>
+<video class="hero-bg-video"
+       autoplay
+       muted
+       loop
+       playsinline
+       webkit-playsinline
+       preload="auto"
+       poster="images/hero-poster.webp">
     <source src="videos/hero-flowers.mp4" type="video/mp4">
   </video>
 
