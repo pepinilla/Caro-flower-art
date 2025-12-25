@@ -78,7 +78,56 @@ nav {
     height: 40px;      /* mobile */
   }
 }
+/* ================= HERO ================= */
 
+.hero {
+  position: relative;
+  min-height: 80vh;
+  text-align: center;
+  overflow: hidden;
+  background-color: #fff5f8; /* respaldo */
+}
+
+/* VIDEO HERO (index) */
+.hero-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* OVERLAY */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 245, 248, 0.8),
+    rgba(255, 245, 248, 0.55),
+    rgba(255, 245, 248, 0.8)
+  );
+}
+
+/* CONTENIDO */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+/* HERO ESTÁTICO (flowers, pages internas) */
+.hero-static {
+  min-height: 60vh;
+  background: url("images/hero-poster.webp") center / cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* ================= MENU ================= */
 .nav-menu {
   list-style: none;
