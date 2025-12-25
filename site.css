@@ -36,7 +36,43 @@ h1, h2, h3 {
   letter-spacing: 0.03em;
   color: var(--dark-color);
 }
+/* ===== Animación general para títulos (h1, h2, h3) ===== */
+@keyframes titleFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+/* Por defecto: todos los títulos animan al cargar */
+h1, h2, h3 {
+  animation: titleFadeUp 700ms ease-out both;
+}
+
+/* Variación sutil por nivel (para que no se vea todo igual) */
+h1 { animation-duration: 850ms; }
+h2 { animation-duration: 750ms; }
+h3 { animation-duration: 650ms; }
+
+.hero h1 {
+  animation-duration: 1000ms;
+}
+
+.hero h1 .es {
+  animation-delay: 180ms;
+}
+
+/* Respeta usuarios con “reducir movimiento” */
+@media (prefers-reduced-motion: reduce) {
+  h1, h2, h3 {
+    animation: none !important;
+    transform: none !important;
+  }
+}
 /* ===== Traducciones en español ===== */
 .es {
   display: block;
@@ -46,7 +82,10 @@ h1, h2, h3 {
   margin-top: 0.35rem;
   line-height: 1.4;
 }
-
+h1 .es, h2 .es, h3 .es {
+  animation: titleFadeUp 900ms ease-out both;
+  animation-delay: 120ms;
+}
 /* ===== Ajuste especial en HERO ===== */
 .hero-content .es {
   font-size: 0.65em;
