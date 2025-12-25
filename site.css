@@ -80,10 +80,10 @@ nav {
 }
 /* ============== HERO (GLOBAL) ============== */
 
-.hero {
+.hero{
   position: relative;
-  height: 70vh;               /* controla el tamaño en desktop */
-  min-height: 520px;
+  min-height: 520px;      /* desktop */
+  height: auto;           /* ✅ clave: elimina 70vh */
   text-align: center;
   overflow: hidden;
   background-color: #fff5f8;  /* respaldo si el video falla */
@@ -131,16 +131,16 @@ nav {
 }
 
 /* ===== MOBILE ===== */
-@media (max-width: 768px) {
-  .hero {
-    height: 620px;      /* evita que se vea gigante */
-    min-height: 620px;
+@media (max-width: 768px){
+  .hero{
+    min-height: 420px;   /* ✅ más bonito en móvil */
   }
 
-  .hero-content {
-  padding: 30px 16px 40px;
-    }
+  .hero-content{
+    padding: 28px 16px;
+  }
 }
+
 /* ================= MENU ================= */
 .nav-menu {
   list-style: none;
