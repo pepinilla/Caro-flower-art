@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description" content="Caro Flower Art - Handmade paper flowers for special moments. Flores de papel hechas a mano para momentos especiales." />
+  <meta name="keywords" content="paper flowers, handmade flowers, bouquets, wedding flowers, flores de papel, ramo de novia, regalos" />
+  <meta name="author" content="Caro Flower Art" />
+
+  <meta property="og:title" content="Caro Flower Art – Handmade Paper Flowers" />
+  <meta property="og:description" content="Handmade paper flowers crafted with love. Custom orders available. Flores de papel hechas a mano. Pedidos personalizados." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://caroflower.com/" />
+
+  <title>Caro Flower Art – Handmade Paper Flowers</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+
+<body>
+  <!-- HEADER INYECTADO -->
+  <div id="site-header"></div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <video class="hero-bg-video"
+           autoplay muted loop playsinline webkit-playsinline
+           preload="auto"
+           poster="images/hero-poster.webp">
+      <source src="videos/hero-flowers.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-subtitle">
+        Welcome to Caro Flower Art
+        <span class="es">Bienvenidos a Caro Flower Art</span>
+      </div>
+
+      <h1>
+        Handmade Paper Flowers
+        <span class="es">Flores de papel hechas a mano</span>
+      </h1>
+
+      <p>
+        Timeless floral pieces for gifts, weddings, and meaningful moments.
+        <span class="es">Piezas florales atemporales para regalos, bodas y momentos especiales.</span>
+      </p>
+
+      <div class="hero-bullets">
+        <div class="hero-pill">
+          <i class="fa-solid fa-hand-sparkles"></i>
+          Made by hand
+          <span class="es">Hechas a mano</span>
+        </div>
+        <div class="hero-pill">
+          <i class="fa-solid fa-leaf"></i>
+          Keeps forever
+          <span class="es">Duran para siempre</span>
+        </div>
+        <div class="hero-pill">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Custom orders
+          <span class="es">Pedidos personalizados</span>
+        </div>
+      </div>
+
+      <div class="hero-buttons">
+        <a class="btn-primary" href="#gallery">
+          Explore Gallery
+          <span class="es">Ver galería</span>
+        </a>
+        <a class="btn-secondary" href="#contact">
+          Request a Quote
+          <span class="es">Pedir cotización</span>
+        </a>
+      </div>
+
+      <p class="hero-note">
+        Prices shown are starting prices. Final quote depends on size, colors, and delivery.
+        <span class="es">Los precios son “desde”. La cotización final depende de tamaño, colores y entrega.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <h2>
+      Our Collections
+      <span class="es">Nuestras colecciones</span>
+    </h2>
+
+    <p class="section-subtitle">
+      Explore curated collections and request a custom quote.
+      <span class="es">Explora colecciones y pide una cotización personalizada.</span>
+    </p>
+
+    <div class="filter-buttons" role="tablist" aria-label="Collection filters">
+      <button class="filter-btn active" data-filter="all" type="button">
+        All <span class="es">Todas</span>
+      </button>
+      <button class="filter-btn" data-filter="flowers" type="button">
+        Flowers <span class="es">Flores</span>
+      </button>
+      <button class="filter-btn" data-filter="wedding" type="button">
+        Wedding <span class="es">Bodas</span>
+      </button>
+      <button class="filter-btn" data-filter="special" type="button">
+        Special Occasions <span class="es">Ocasiones especiales</span>
+      </button>
+      <button class="filter-btn" data-filter="mini" type="button">
+        Mini Bouquets <span class="es">Mini ramos</span>
+      </button>
+    </div>
+
+    <div class="grid">
+      <!-- ALL FLOWERS -->
+      <article class="card" data-category="flowers">
+        <div class="card-image-wrapper">
+          <img src="images/bouquets/Paper-flowers-bouquets.webp" alt="All flowers collection" loading="lazy" />
+          <span class="card-badge">Flowers <span class="es">Flores</span></span>
+        </div>
+
+        <div class="card-content">
+          <div class="category">Flowers <span class="es">Flores</span></div>
+
+          <h3>
+            All Flowers Collection
+            <span class="es">Colección de flores</span>
+          </h3>
+
+          <p>
+            Browse flower styles and pick your favorites for a custom arrangement.
+            <span class="es">Explora estilos y elige tus favoritas para un arreglo personalizado.</span>
+          </p>
+
+          <div class="price" data-price-usd="20">
+            From $20 USD
+            <span class="es">Desde $20 USD</span>
+          </div>
+
+          <div class="card-footer">
+            <a href="flowers.html" class="card-btn">
+              View Collection
+              <span class="es">Ver colección</span>
+            </a>
+            <a href="#contact" class="card-btn secondary" data-prefill="Flowers Collection">
+              Request Quote
+              <span class="es">Cotizar</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- WEDDING -->
+      <article class="card" data-category="wedding">
+        <div class="card-image-wrapper">
+          <img src="images/wedding/Wedding_paper_flowers_bouquets.webp" alt="Bridal bouquet - Ramo de novia" loading="lazy" />
+          <span class="card-badge">Wedding <span class="es">Bodas</span></span>
+        </div>
+
+        <div class="card-content">
+          <div class="category">Wedding <span class="es">Bodas</span></div>
+
+          <h3>
+            Bridal Bouquet
+            <span class="es">Ramo de novia</span>
+          </h3>
+
+          <p>
+            Romantic bouquets designed to match your wedding style and colors.
+            <span class="es">Ramos románticos diseñados según tu estilo y paleta de boda.</span>
+          </p>
+
+          <div class="price" data-price-usd="85">
+            From $85 USD
+            <span class="es">Desde $85 USD</span>
+          </div>
+
+          <div class="card-footer">
+            <a href="https://www.instagram.com/p/DR4V17mkXyo/" target="_blank" rel="noopener" class="card-btn">
+              Instagram
+              <span class="es">Ver en IG</span>
+            </a>
+            <a href="#contact" class="card-btn secondary" data-prefill="Bridal Bouquet">
+              Request Quote
+              <span class="es">Cotizar</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- SPECIAL -->
+      <article class="card" data-category="special">
+        <div class="card-image-wrapper">
+          <img src="images/bouquets/Paper_flowers_bouquets.webp" alt="Special occasion bouquet - Ramos especiales" loading="lazy" />
+          <span class="card-badge">Special <span class="es">Especial</span></span>
+        </div>
+
+        <div class="card-content">
+          <div class="category">Special <span class="es">Especial</span></div>
+
+          <h3>
+            Special Occasion
+            <span class="es">Ocasión especial</span>
+          </h3>
+
+          <p>
+            Celebrate birthdays, anniversaries, and milestones with lasting flowers.
+            <span class="es">Celebra cumpleaños, aniversarios y momentos únicos con flores que duran.</span>
+          </p>
+
+          <div class="price" data-price-usd="45">
+            From $45 USD
+            <span class="es">Desde $45 USD</span>
+          </div>
+
+          <div class="card-footer">
+            <a href="https://www.instagram.com/p/DR2pEHGEX5t/" target="_blank" rel="noopener" class="card-btn">
+              Instagram
+              <span class="es">Ver en IG</span>
+            </a>
+            <a href="#contact" class="card-btn secondary" data-prefill="Special Occasion Bouquet">
+              Request Quote
+              <span class="es">Cotizar</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- MINI -->
+      <article class="card" data-category="mini">
+        <div class="card-image-wrapper">
+          <img src="images/bouquets/mini_paper_flower_bouquets.webp" alt="Mini bouquets - Mini ramos" loading="lazy" />
+          <span class="card-badge">Mini <span class="es">Mini</span></span>
+        </div>
+
+        <div class="card-content">
+          <div class="category">Mini <span class="es">Mini</span></div>
+
+          <h3>
+            Mini Bouquets
+            <span class="es">Mini ramos</span>
+          </h3>
+
+          <p>
+            Perfect for gifts, desk decor, and small surprises.
+            <span class="es">Perfectos para regalos, escritorio y pequeños detalles.</span>
+          </p>
+
+          <div class="price" data-price-usd="18">
+            From $18 USD
+            <span class="es">Desde $18 USD</span>
+          </div>
+
+          <div class="card-footer">
+            <a href="https://www.instagram.com/caroflowerart" target="_blank" rel="noopener" class="card-btn">
+              Instagram
+              <span class="es">Ver en IG</span>
+            </a>
+            <a href="#contact" class="card-btn secondary" data-prefill="Mini Bouquet">
+              Request Quote
+              <span class="es">Cotizar</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <h2>
+      About Caro
+      <span class="es">Sobre Caro</span>
+    </h2>
+
+    <p class="section-subtitle">
+      Every flower is crafted slowly, carefully, and with love.
+      <span class="es">Cada flor se crea con calma, detalle y amor.</span>
+    </p>
+
+    <div class="about-content">
+      <div class="about-text">
+        <h3>
+          Handmade, detailed, meaningful
+          <span class="es">Hechas a mano, con detalle y significado</span>
+        </h3>
+
+        <p>
+          Caro Flower Art creates paper flowers that look real, feel special, and last forever.
+          <span class="es">Caro Flower Art crea flores de papel que se ven reales, se sienten especiales y duran para siempre.</span>
+        </p>
+
+        <p>
+          Want a custom bouquet? Tell me your colors, occasion, and size — I’ll suggest options and a quote.
+          <span class="es">¿Quieres un ramo personalizado? Cuéntame colores, ocasión y tamaño — y te propongo opciones con cotización.</span>
+        </p>
+
+        <div class="about-cta">
+          <a class="btn-primary" href="#contact">
+            Request a Quote
+            <span class="es">Pedir cotización</span>
+          </a>
+          <a class="btn-secondary" href="https://www.instagram.com/caroflowerart" target="_blank" rel="noopener">
+            See More on Instagram
+            <span class="es">Ver más en Instagram</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="about-image">
+        <img src="images/bouquets/Paper_flowers_bouquets.webp" alt="Handmade paper flowers by Caro Flower Art" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <h2>
+      What Customers Say
+      <span class="es">Lo que dicen</span>
+    </h2>
+
+    <p class="section-subtitle">
+      A few kind words from clients.
+      <span class="es">Algunas palabras lindas de clientes.</span>
+    </p>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">
+          “The bouquet was stunning. The details are incredible.”
+          <span class="es">“El ramo fue hermoso. La atención al detalle es increíble.”</span>
+        </p>
+        <p class="testimonial-author">— María</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">
+          “Perfect for my wedding. Exactly what I imagined.”
+          <span class="es">“Perfecto para mi boda. Exactamente lo que imaginé.”</span>
+        </p>
+        <p class="testimonial-author">— Jessica</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">
+          “Amazing quality. Mini bouquets were perfect gifts.”
+          <span class="es">“Calidad increíble. Los mini ramos fueron regalos perfectos.”</span>
+        </p>
+        <p class="testimonial-author">— Sofía</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <h2>
+      Request a Quote
+      <span class="es">Pedir cotización</span>
+    </h2>
+
+    <p class="section-subtitle">
+      Tell me what you want — I’ll reply with options and pricing.
+      <span class="es">Cuéntame qué quieres — te respondo con opciones y precio.</span>
+    </p>
+
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <div class="contact-item">
+          <i class="fa-brands fa-whatsapp"></i>
+          <div>
+            <h4>WhatsApp</h4>
+            <p><a href="https://wa.me/573209781661" target="_blank" rel="noopener">+57 320 978 1661</a></p>
+            <p class="muted">
+              Custom orders & questions
+              <span class="es">Pedidos personalizados y preguntas</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <div>
+            <h4>Email</h4>
+            <p><a href="mailto:thrivingwomanandmom@gmail.com">thrivingwomanandmom@gmail.com</a></p>
+            <p class="muted">
+              Send inspiration photos or ideas
+              <span class="es">Envía fotos de referencia o ideas</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <div>
+            <h4>
+              Location
+              <span class="es">Ubicación</span>
+            </h4>
+            <p>Colombia</p>
+            <p class="muted">
+              Handmade with love
+              <span class="es">Hecho con amor</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <i class="fa-brands fa-instagram"></i>
+          <div>
+            <h4>Instagram</h4>
+            <p><a href="https://www.instagram.com/caroflowerart" target="_blank" rel="noopener">@caroflowerart</a></p>
+            <p class="muted">
+              See latest creations
+              <span class="es">Mira nuevas creaciones</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contactForm">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">WhatsApp (optional)</label>
+          <input type="tel" id="phone" name="phone" placeholder="+57..." />
+        </div>
+
+        <div class="form-group">
+          <label for="occasion">What are you looking for?</label>
+          <input type="text" id="occasion" name="occasion" placeholder="e.g., Bridal bouquet / Mini bouquet / Colors..." />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Details *</label>
+          <textarea id="message" name="message" required placeholder="Colors, size, date needed, city/country..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="submit">
+            Send via WhatsApp
+            <span class="es">Enviar por WhatsApp</span>
+          </button>
+          <p class="form-note">
+            This opens WhatsApp with your message (no payment yet).
+            <span class="es">Esto abre WhatsApp con tu mensaje (aún sin pago).</span>
+          </p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About</h4>
+        <p>
+          Caro Flower Art creates handmade paper flowers for special moments.
+          <span class="es">Caro Flower Art crea flores de papel hechas a mano para momentos especiales.</span>
+        </p>
+      </div>
+
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+        <a href="#contact">Quote</a>
+        <a href="https://www.instagram.com/caroflowerart" target="_blank" rel="noopener">Instagram</a>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <a href="https://wa.me/573209781661" target="_blank" rel="noopener">WhatsApp: +57 320 978 1661</a>
+        <a href="mailto:thrivingwomanandmom@gmail.com">thrivingwomanandmom@gmail.com</a>
+        <p>Colombia</p>
+      </div>
+    </div>
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/caroflowerart" target="_blank" rel="noopener" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://wa.me/573209781661" target="_blank" rel="noopener" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Caro Flower Art. All rights reserved.</p>
+      <p>Handmade with <span class="heart">❤</span> in Colombia</p>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <script src="site.js"></script>
+</body>
+</html>
