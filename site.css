@@ -783,3 +783,22 @@ footer{
 .gallery-prev { left: 12px; }
 .gallery-next { right: 12px; }
 
+
+/* --- Header logo safety --- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.brand-name {
+  font-weight: 800;
+}
+
