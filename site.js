@@ -3,7 +3,7 @@
    - Renders products from products.js (window.PRODUCTS)
    - Filtering (All / Flowers / Wedding / Special / Mini)
    - Modal gallery slider
-   - Simple header injection
+   - Shared header injection (loads /header.html)
    ====================================================== */
 
 (function () {
@@ -12,54 +12,79 @@
 
   const PRODUCTS = (window.PRODUCTS || []).map(p => ({
     ...p,
-    // normalize expected fields
-    id: p.id,
+    id: String(p.id || ""),
     name: p.name || "",
     name_es: p.name_es || "",
-    category: (p.category || "flowers").toLowerCase(),
-    thumb: p.thumb,
+    category: String(p.category || "flowers").toLowerCase(),
+    thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
     price_from: Number.isFinite(p.price_from) ? p.price_from : (parseFloat(p.price_from) || 0),
   }));
 
   // -----------------------------
-  // Header (simple)
+  // Header (shared via header.html)
   // -----------------------------
-  function injectHeader() {
+  async function injectHeader() {
     const host = qs("#site-header");
     if (!host) return;
 
-    host.innerHTML = `
-      <header class="site-header">
-        <div class="nav-wrap">
-          <a class="logo" href="index.html">Caro Flower Art</a>
-
-          <nav class="nav">
-            <a href="index.html#gallery">Gallery</a>
-            <a href="flowers.html">Flowers</a>
-            <a href="roses.html">Roses</a>
-            <a href="about.html">About</a>
-            <a href="index.html#contact" class="nav-cta">Quote</a>
-          </nav>
-        </div>
-      </header>
-    `;
+    try {
+      const res = await fetch("/header.html", { cache: "no-store" });
+      if (!res.ok) throw new Error("header.html not found");
+      host.innerHTML = await res.text();
+    } catch (e) {
+      // fallback (in case fetch fails)
+      host.innerHTML = `
+        <header class="site-header">
+          <div class="header-inner">
+            <a class="brand" href="/" aria-label="Caro Flower Art">
+              <img class="brand-logo" src="/logo.svg" alt="Caro Flower Art logo" />
+              <span class="brand-name">Caro Flower Art</span>
+            </a>
+            <nav class="nav" aria-label="Main">
+              <a class="nav-link" href="/#gallery">Gallery</a>
+              <a class="nav-link" href="/flowers.html">Flowers</a>
+              <a class="nav-link" href="/roses.html">Roses</a>
+              <a class="nav-link" href="/about.html">About</a>
+              <a class="nav-link" href="/#contact">Quote</a>
+            </nav>
+          </div>
+        </header>
+      `;
+      console.warn("Header failed to load, using fallback.", e);
+    }
   }
 
   // -----------------------------
-  // Price label (USD for now)
+  // Price label
+  // NOTE: your site shows $ as-is; later we can switch COP/USD labels
   // -----------------------------
   function priceHTML(p) {
-    const usd = p.price_from ? `$${Math.round(p.price_from)}` : "Request quote";
-    const es  = p.price_from ? `Desde $${Math.round(p.price_from)}` : "Pedir cotización";
-    return `<div class="price">From ${usd}<span class="es">${es}</span></div>`;
+    if (!p.price_from) {
+      return `
+        <div class="price">
+          Request quote
+          <span class="es">Pedir cotización</span>
+        </div>
+      `;
+    }
+    const amount = Math.round(p.price_from);
+    return `
+      <div class="price">
+        From $${amount}
+        <span class="es">Desde $${amount}</span>
+      </div>
+    `;
   }
 
   // -----------------------------
   // Card template
   // -----------------------------
   function cardHTML(p) {
-    const alt = `${p.name} / ${p.name_es}`;
+    const alt = `${p.name} / ${p.name_es}`.trim();
+    const viewPhotosLabel = `View Photos<span class="es">Ver fotos</span>`;
+    const requestQuoteLabel = `Request Quote<span class="es">Pedir cotización</span>`;
+
     return `
       <article class="card" data-category="${p.category}" data-id="${p.id}">
         <div class="card-image-wrapper">
@@ -71,8 +96,8 @@
           ${priceHTML(p)}
 
           <div class="card-footer">
-            <a href="index.html#contact" class="btn-quote" data-id="${p.id}">Request Quote</a>
-            <a href="#" class="btn-photos" data-id="${p.id}">View Photos</a>
+            <a href="/#contact" class="btn-quote" data-id="${p.id}">${requestQuoteLabel}</a>
+            <a href="#" class="btn-photos" data-id="${p.id}">${viewPhotosLabel}</a>
           </div>
         </div>
       </article>
@@ -182,11 +207,17 @@
     const price = qs("#galleryPrice");
 
     const photos = (p.gallery && p.gallery.length) ? p.gallery : [p.thumb];
-
     galleryState = { photos, index: 0, product: p };
 
     title.textContent = `${p.name} / ${p.name_es}`;
-    price.innerHTML = p.price_from ? `From $${Math.round(p.price_from)} <span class="es">Desde $${Math.round(p.price_from)}</span>` : `Request quote <span class="es">Pedir cotización</span>`;
+
+    if (p.price_from) {
+      const amount = Math.round(p.price_from);
+      price.innerHTML = `From $${amount} <span class="es">Desde $${amount}</span>`;
+    } else {
+      price.innerHTML = `Request quote <span class="es">Pedir cotización</span>`;
+    }
+
     img.src = photos[0];
 
     modal.classList.add("is-open");
@@ -244,8 +275,8 @@
   // -----------------------------
   // Init
   // -----------------------------
-  document.addEventListener("DOMContentLoaded", () => {
-    injectHeader();
+  document.addEventListener("DOMContentLoaded", async () => {
+    await injectHeader();
 
     // Page configuration via window.CARO_PAGE
     // Examples:
