@@ -298,6 +298,8 @@ p{font-size:1rem}
   border-radius:999px;
   border:1px solid rgba(0,0,0,.10);
   background:#fff;
+  color:var(--primary-color);
+  border-color:var(--primary-color);
   font-weight:700;
   cursor:pointer;
   transition:all .2s ease;
@@ -373,6 +375,7 @@ p{font-size:1rem}
   flex-direction:column;
   gap:.7rem;
   flex-grow:1;
+  align-items:center;
 }
 
 .category{
@@ -390,6 +393,7 @@ p{font-size:1rem}
   font-size:1.1rem;
   font-weight:900;
   color:var(--dark-color);
+  align-items:center;
 }
 
 .card-footer{
