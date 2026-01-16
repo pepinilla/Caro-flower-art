@@ -166,10 +166,10 @@ p{font-size:1rem}
 .hero{
   position:relative;
   text-align:center;
-  padding:110px 20px;
+  padding:100px 20px;
   background:#fff5f8;
   overflow:hidden;
-  max-width:100%;
+  max-width:80%;
 }
 
 .hero-bg-video{
@@ -201,17 +201,17 @@ p{font-size:1rem}
 }
 
 .hero-subtitle{
-  font-weight:700;
+  font-weight:650;
   color:var(--primary-dark);
   margin-bottom:.8rem;
 }
 
-.hero p{margin-top:.8rem}
+.hero p{margin-top:.7rem}
 
 .hero-bullets{
   display:flex;
   justify-content:center;
-  gap:10px;
+  gap:9px;
   flex-wrap:wrap;
   margin:1.6rem 0 1rem 0;
 }
@@ -219,7 +219,7 @@ p{font-size:1rem}
 .hero-pill{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:7px;
   padding:.55rem .9rem;
   border-radius:999px;
   background:rgba(255,255,255,.75);
@@ -410,19 +410,19 @@ p{font-size:1rem}
   border:2px solid var(--primary-color);
   color:var(--primary-color);
   background:#fff;
-  color:var(--primary-color);
-  border-color:var(--primary-color)
   font-weight:900;
 }
 
 .card-btn:hover{
   transform:translateY(-2px);
   box-shadow:var(--shadow-light);
+   border-color:var(--primary-color)
 }
 
 .card-btn.secondary{
   background:#fff;
   color:var(--primary-color);
+   border-color:var(--primary-color)
 }
 
 .card-btn.secondary:hover{
@@ -508,6 +508,7 @@ p{font-size:1rem}
   background:#fff;
   box-shadow:var(--shadow-light);
   border:1px solid rgba(0,0,0,.04);
+   border-color:var(--primary-color)
 }
 
 .contact-item i{
@@ -564,6 +565,7 @@ button[type="submit"]{
   font-weight:900;
   cursor:pointer;
   transition:all .2s ease;
+   border-color:var(--primary-color)
 }
 
 button[type="submit"]:hover{
@@ -571,6 +573,7 @@ button[type="submit"]:hover{
   transform:translateY(-1px);
   box-shadow:var(--shadow);
   color:var(--primary-color);
+   border-color:var(--primary-color)
 }
 
 .form-note{
@@ -732,6 +735,7 @@ footer{
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   overflow: hidden;
+   border-color:var(--primary-color)
 }
 
 .gallery-close {
@@ -753,6 +757,7 @@ footer{
   background: #fafafa;
   display: grid;
   place-items: center;
+   border-color:var(--primary-color)
 }
 
 .gallery-image-wrap img {
@@ -770,6 +775,7 @@ footer{
   font-size: 1.35rem;
   margin-bottom: 6px;
   color: var(--dark-color);
+   border-color:var(--primary-color)
 }
 
 .gallery-price {
@@ -885,72 +891,3 @@ body{
 }
 
 
-/* ================= HEADER ================= */
-.site-header{
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: rgba(255,255,255,.95);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #eee;
-}
-
-.header-inner{
-  max-width: 1200px;
-  margin: auto;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.brand{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: inherit;
-}
-
-.brand-logo{
-  height: 34px;
-  width: auto;
-}
-
-.brand-name{
-  font-family: var(--font-title);
-  font-size: 18px;
-  white-space: nowrap;
-}
-
-.nav{
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-
-.nav-link{
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 999px;
-}
-
-.nav-link:hover{
-  background: rgba(0,0,0,.05);
-}
-
-.nav-cta{
-  background: var(--primary-color);
-  color: white;
-}
-
-/* ===== HERO FIX ===== */
-body{
-  scroll-padding-top: 70px;
-}
-
-.hero{
-  padding-top: 70px;
-}
