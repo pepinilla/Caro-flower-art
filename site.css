@@ -118,8 +118,8 @@ p{font-size:1rem}
 }
 
 .brand img{
-  width:34px;
-  height:34px;
+  width:36px;
+  height:36px;
 }
 
 .brand span{
@@ -176,7 +176,7 @@ p{font-size:1rem}
   position:absolute;
   inset:0;
   width:100%;
-  height:100%;
+  height:80%;
   object-fit:cover;
   z-index:0;
 }
@@ -306,14 +306,15 @@ p{font-size:1rem}
 }
 
 .filter-btn:hover{
-  background:rgba(232,154,166,.12);
-  border-color:rgba(232,154,166,.35);
+  background:#fff;
+  color:var(--primary-color);
+  border-color:var(--primary-color)
 }
 
 .filter-btn.active{
-  background:var(--primary-color);
-  color:#fff;
-  border-color:var(--primary-color);
+  background:#fff;
+  color:var(--primary-color);
+  border-color:var(--primary-color)
 }
 
 /* GRID / CARDS */
@@ -332,6 +333,7 @@ p{font-size:1rem}
   flex-direction:column;
   transition:transform .25s ease, box-shadow .25s ease;
   border:1px solid rgba(0,0,0,.04);
+   border-color:var(--primary-color)
 }
 
 .card:hover{
@@ -408,6 +410,8 @@ p{font-size:1rem}
   border:2px solid var(--primary-color);
   color:var(--primary-color);
   background:#fff;
+  color:var(--primary-color);
+  border-color:var(--primary-color)
   font-weight:900;
 }
 
@@ -417,12 +421,13 @@ p{font-size:1rem}
 }
 
 .card-btn.secondary{
-  background:var(--primary-color);
-  color:#fff;
+  background:#fff;
+  color:var(--primary-color);
 }
 
 .card-btn.secondary:hover{
-  background:var(--primary-dark);
+  background:#fff;
+  color:var(--primary-color);
   border-color:var(--primary-dark);
 }
 
@@ -551,8 +556,8 @@ input:focus,textarea:focus{
 
 button[type="submit"]{
   margin-top:6px;
-  background:var(--primary-color);
-  color:#fff;
+  background:#fff;
+  color:var(--primary-color);
   border:none;
   padding:.95rem 1rem;
   border-radius:999px;
@@ -565,6 +570,7 @@ button[type="submit"]:hover{
   background:var(--primary-dark);
   transform:translateY(-1px);
   box-shadow:var(--shadow);
+  color:var(--primary-color);
 }
 
 .form-note{
