@@ -93,9 +93,10 @@
   }
 
   // ---------- RENDER GRID ----------
-  function renderGrid(cfg) {
-    const grid = qs("#galleryGrid");
-    if (!grid) return;
+    function renderGrid(cfg) {
+  const gridId = (cfg && cfg.gridId) ? cfg.gridId : "galleryGrid";
+  const grid = qs("#" + gridId);
+  if (!grid) return;
 
     let list = PRODUCTS.slice();
 
