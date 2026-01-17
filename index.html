@@ -25,8 +25,10 @@
 
 <body>
 
+<!-- HEADER INJECTADO POR site.js -->
 <div id="site-header"></div>
 
+<!-- HERO -->
 <section class="hero" id="home">
   <video class="hero-bg-video" autoplay muted loop playsinline poster="images/Hero/hero-poster.webp">
     <source src="videos/hero-flowers.mp4" type="video/mp4" />
@@ -50,14 +52,18 @@
     </p>
 
     <div class="hero-buttons">
-      <a href="#gallery" class="btn-primary">Explore gallery <span class="es">Ver galería</span></a>
-      <a href="#contact" class="btn-secondary">Request a quote <span class="es">Pedir cotización</span></a>
+      <a href="#collections" class="btn-primary">
+        Explore collections <span class="es">Ver colecciones</span>
+      </a>
+      <a href="#contact" class="btn-secondary">
+        Request a quote <span class="es">Pedir cotización</span>
+      </a>
     </div>
-
   </div>
-  
 </section>
-<section class="gallery">
+
+<!-- COLLECTIONS -->
+<section class="gallery" id="collections">
   <h2>Collections <span class="es">Colecciones</span></h2>
 
   <p class="section-subtitle">
@@ -66,67 +72,87 @@
   </p>
 
   <div class="grid">
-  <!-- Flowers card -->
-  <div class="card">
-    <div class="card-image-wrapper">
-      <img src="images/bouquets/Paper-flowers-bouquets.webp" alt="Flowers">
-      <span class="card-badge">Flowers</span>
-    </div>
 
-    <div class="card-content">
-      <div class="category">Flowers <span class="es">Flores</span></div>
-      <p>
-        Individual handmade paper flowers
-        <span class="es">Flores de papel hechas a mano</span>
-      </p>
+    <!-- FLOWERS CARD -->
+    <div class="card">
+      <a href="/flowers.html" class="card-image-wrapper">
+        <img src="images/bouquets/Paper-flowers-bouquets.webp" alt="Handmade paper flowers">
+        <span class="card-badge">Flowers</span>
+      </a>
 
-      <div class="card-footer">
-        <a href="flores.html" class="card-btn">
-          View Flowers <span class="es">Ver flores</span>
-        </a>
+      <div class="card-content">
+        <div class="category">
+          Flowers <span class="es">Flores</span>
+        </div>
+
+        <p>
+          Individual handmade paper flowers
+          <span class="es">Flores de papel hechas a mano</span>
+        </p>
+
+        <div class="card-footer">
+          <a href="/flowers.html" class="card-btn">
+            View Flowers <span class="es">Ver flores</span>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Bouquets card -->
-  <div class="card">
-    <div class="card-image-wrapper">
-      <img src="images/bouquets/Paper_flowers_bouquets.webp" alt="Bouquets">
-      <span class="card-badge">Bouquets</span>
-    </div>
+    <!-- BOUQUETS CARD -->
+    <div class="card">
+      <a href="/bouquets.html" class="card-image-wrapper">
+        <img src="images/bouquets/Paper_flowers_bouquets.webp" alt="Paper flower bouquets">
+        <span class="card-badge">Bouquets</span>
+      </a>
 
-    <div class="card-content">
-      <div class="category">Bouquets <span class="es">Ramos</span></div>
-      <p>
-        Handmade bouquets for special moments
-        <span class="es">Ramos hechos a mano para momentos especiales</span>
-      </p>
+      <div class="card-content">
+        <div class="category">
+          Bouquets <span class="es">Ramos</span>
+        </div>
 
-      <div class="card-footer">
-        <a href="bouquets.html" class="card-btn">
-          View Bouquets <span class="es">Ver ramos</span>
-        </a>
+        <p>
+          Handmade bouquets for special moments
+          <span class="es">Ramos hechos a mano para momentos especiales</span>
+        </p>
+
+        <div class="card-footer">
+          <a href="/bouquets.html" class="card-btn">
+            View Bouquets <span class="es">Ver ramos</span>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-  </div>
 
-  
-<section class="contact" id="contact">
-  <h2>Request a quote <span class="es">Pedir cotización</span></h2>
-
-  <div class="contact-info">
-    <a href="https://wa.me/573209781661" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-    <a href="mailto:thrivingwomanandmom@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
   </div>
 </section>
 
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <h2>
+    Request a quote <span class="es">Pedir cotización</span>
+  </h2>
+
+  <div class="contact-info">
+    <a href="https://wa.me/573209781661" target="_blank" rel="noopener">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+    <a href="mailto:thrivingwomanandmom@gmail.com">
+      <i class="fa-solid fa-envelope"></i> Email
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
   <p>© 2026 Caro Flower Art. All rights reserved.</p>
 </footer>
 
-<a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank" rel="noopener">
+  <i class="fab fa-whatsapp"></i>
+</a>
 
+<!-- JS -->
 <script src="/products.js?v=20260115a"></script>
 <script src="/site.js?v=20260115a"></script>
 
