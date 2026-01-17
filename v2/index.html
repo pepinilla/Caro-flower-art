@@ -61,53 +61,50 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section id="gallery" class="gallery-section">
+    <!-- Main Collections - 2 Category Cards -->
+    <section id="collections" class="collections-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Our Collections / Nuestras colecciones</h2>
+                <h2 class="section-title">Our Collections</h2>
                 <p class="section-subtitle">
+                    <em>Nuestras colecciones</em>
+                </p>
+                <p class="section-description">
                     Explore collections and request a custom quote.<br>
                     <em>Explora colecciones y pide una cotización.</em>
                 </p>
             </div>
 
-            <!-- Filter Tabs -->
-            <div class="filter-tabs">
-                <button class="tab-btn active" data-filter="all">All / Todo</button>
-                <button class="tab-btn" data-filter="flowers">Flowers / Flores</button>
-                <button class="tab-btn" data-filter="bouquets">Bouquets / Ramos</button>
-            </div>
+            <div class="main-cards">
+                <a href="flores.html" class="main-card">
+                    <div class="main-card-image">
+                        <img src="images/Paper_roses_bouquet.webp" alt="Individual Flowers" loading="lazy">
+                    </div>
+                    <div class="main-card-content">
+                        <h3 class="main-card-title">Flowers</h3>
+                        <p class="main-card-subtitle"><em>Flores</em></p>
+                        <p class="main-card-description">
+                            Individual handmade paper flowers<br>
+                            <em>Flores de papel hechas a mano individuales</em>
+                        </p>
+                        <span class="main-card-btn">View Flowers / Ver flores</span>
+                    </div>
+                </a>
 
-            <!-- Gallery Grid -->
-            <div class="gallery-grid" id="galleryGrid">
-                <!-- Items will be loaded via JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Flowers Section -->
-    <section id="flowers" class="products-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Individual Flowers / Flores Individuales</h2>
-            </div>
-            
-            <div class="products-catalog" id="flowersCatalog">
-                <!-- Will be loaded via JS -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Roses Section -->
-    <section id="roses" class="products-section bg-light">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Roses by Color / Rosas por Color</h2>
-            </div>
-            
-            <div class="products-catalog" id="rosesCatalog">
-                <!-- Will be loaded via JS -->
+                <a href="bouquets.html" class="main-card">
+                    <div class="main-card-image">
+                        <img src="images/Wedding_paper_flowers_bouquets.webp" alt="Bouquets" loading="lazy">
+                    </div>
+                    <div class="main-card-content">
+                        <h3 class="main-card-title">Bouquets</h3>
+                        <p class="main-card-subtitle"><em>Ramos</em></p>
+                        <p class="main-card-description">
+                            Handmade bouquets for special moments<br>
+                            <em>Ramos hechos a mano para momentos especiales</em>
+                        </p>
+                        <span class="main-card-btn">View Bouquets / Ver ramos</span>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -212,7 +209,6 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <script src="js/products.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

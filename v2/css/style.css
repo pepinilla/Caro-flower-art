@@ -199,7 +199,7 @@ section {
 /* CATALOG GRID - HORIZONTAL */
 .products-catalog {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
 }
 
@@ -219,6 +219,7 @@ section {
 .catalog-image {
     height: 300px;
     overflow: hidden;
+    position: relative;
 }
 
 .catalog-image img {
@@ -559,4 +560,89 @@ section {
 .nav-links a.active {
     color: var(--primary);
     font-weight: 600;
+}
+
+/* MAIN CARDS - 2 Cards Horizontal */
+.collections-section {
+    padding: 5rem 0;
+}
+
+.main-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.main-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--dark);
+}
+
+.main-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.main-card-image {
+    height: 300px;
+    overflow: hidden;
+}
+
+.main-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.main-card:hover .main-card-image img {
+    transform: scale(1.05);
+}
+
+.main-card-content {
+    padding: 2rem;
+    text-align: center;
+}
+
+.main-card-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.main-card-subtitle {
+    font-size: 1.3rem;
+    color: var(--gray);
+    margin-bottom: 1rem;
+}
+
+.main-card-description {
+    font-size: 1rem;
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+}
+
+.main-card-btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+.main-card:hover .main-card-btn {
+    background: var(--primary-dark);
+}
+
+@media (max-width: 768px) {
+    .main-cards {
+        grid-template-columns: 1fr;
+    }
 }
