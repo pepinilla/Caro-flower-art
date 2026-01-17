@@ -926,3 +926,13 @@ body{
     height: 220px;
   }
 }
+
+.inline-link{
+  color: var(--primary-dark);
+  font-weight: 800;
+  text-decoration: underline;
+  margin-left: 6px;
+}
+.inline-link:hover{
+  opacity: .8;
+}
