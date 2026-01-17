@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowers - Individual Handmade Paper Flowers | Caro Flower Art</title>
+    <meta name="description" content="Individual handmade paper flowers. Flores de papel hechas a mano individuales.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.svg" alt="Caro Flower Art" class="logo-img">
+                    <span>Caro Flower Art</span>
+                </a>
+                <button class="menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="index.html#gallery">Gallery</a></li>
+                    <li><a href="flores.html" class="active">Flowers</a></li>
+                    <li><a href="bouquets.html">Bouquets</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#contact">Quote</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Individual Handmade Paper Flowers</h1>
+            <p class="page-subtitle"><em>Flores de papel hechas a mano individuales</em></p>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <div class="container">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All / Todo</button>
+                <button class="filter-btn" data-filter="hortensias">Hydrangeas / Hortensias</button>
+                <button class="filter-btn" data-filter="tulipanes">Tulips / Tulipanes</button>
+                <button class="filter-btn" data-filter="rosas">Roses / Rosas</button>
+                <button class="filter-btn" data-filter="otras">Other Flowers / Otras</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products-section">
+        <div class="container">
+            <div class="products-catalog" id="flowersGrid">
+                <!-- Will be loaded via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Want a Custom Bouquet?</h2>
+                <p><em>¿Quieres un ramo personalizado?</em></p>
+                <p class="cta-description">
+                    Share your color palette, occasion, and size — and I'll send options and pricing.<br>
+                    <em>Comparte tu paleta de colores, ocasión y tamaño — y te envío opciones y precios.</em>
+                </p>
+                <a href="https://wa.me/573209781661" class="btn btn-primary" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Request Quote / Pedir Cotización
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="images/logo.svg" alt="Caro Flower Art" class="footer-logo">
+                    <p>Handmade paper flowers with love<br>
+                    <em>Flores de papel hechas a mano con amor</em></p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://wa.me/573209781661" target="_blank" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/caroflowerart" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="mailto:thrivingwomanandmom@gmail.com" aria-label="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Caro Flower Art. All rights reserved / Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/573209781661" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="js/flores.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

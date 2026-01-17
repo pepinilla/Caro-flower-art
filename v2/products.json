@@ -1,0 +1,193 @@
+{
+  "flores": [
+    {
+      "id": 1,
+      "category": "hortensias",
+      "name": "Hortensias / Hydrangeas",
+      "description": "Beautiful handmade hydrangeas, perfect for elegant arrangements. Hermosas hortensias de papel hechas a mano, perfectas para arreglos elegantes.",
+      "price": 25000,
+      "currency": "COP",
+      "image": "images/Hydrangeas_bouquets.webp",
+      "badge": "Popular",
+      "available": true
+    },
+    {
+      "id": 2,
+      "category": "tulipanes",
+      "name": "Tulipanes / Tulips",
+      "description": "Vibrant tulips that convey joy and optimism. Tulipanes vibrantes que transmiten alegría y optimismo.",
+      "price": 18000,
+      "currency": "COP",
+      "image": "images/Tulips_bouquets.webp",
+      "badge": "Bestseller",
+      "available": true
+    },
+    {
+      "id": 3,
+      "category": "otras",
+      "name": "Peonías / Peonies",
+      "description": "Lush peonies with multiple petals, symbol of prosperity. Peonías exuberantes con múltiples pétalos, símbolo de prosperidad.",
+      "price": 30000,
+      "currency": "COP",
+      "image": "images/Bouquets_of_peonies.webp",
+      "badge": "Exclusivo",
+      "available": true
+    },
+    {
+      "id": 4,
+      "category": "otras",
+      "name": "Claveles / Carnations",
+      "description": "Delicate carnations perfect for any occasion. Claveles delicados perfectos para cualquier ocasión.",
+      "price": 20000,
+      "currency": "COP",
+      "image": "images/Carnations_bouquets.webp",
+      "badge": "",
+      "available": true
+    },
+    {
+      "id": 5,
+      "category": "otras",
+      "name": "Flores Moradas / Purple Flowers",
+      "description": "Beautiful purple flowers, elegant and sophisticated. Hermosas flores en tono morado, elegantes y sofisticadas.",
+      "price": 22000,
+      "currency": "COP",
+      "image": "images/Purple-flowers.webp",
+      "badge": "Nuevo",
+      "available": true
+    },
+    {
+      "id": 6,
+      "category": "rosas",
+      "name": "Rosas de Papel / Paper Roses",
+      "description": "Classic paper roses, perfect for expressing love. Rosas clásicas de papel, perfectas para expresar amor.",
+      "price": 15000,
+      "currency": "COP",
+      "image": "images/Paper_roses_bouquet.webp",
+      "badge": "Favorito",
+      "available": true
+    },
+    {
+      "id": 7,
+      "category": "rosas",
+      "name": "Rosas Rojas / Red Roses",
+      "description": "Red paper roses, symbol of true love. Rosas rojas en papel, símbolo de amor verdadero.",
+      "price": 15000,
+      "currency": "COP",
+      "image": "images/Paper_red_roses.webp",
+      "badge": "Popular",
+      "available": true
+    },
+    {
+      "id": 8,
+      "category": "rosas",
+      "name": "Rosas Salmón / Salmon Roses",
+      "description": "Soft salmon tone roses, perfect for delicate gifts. Rosas en tono salmón suave, perfectas para regalos delicados.",
+      "price": 15000,
+      "currency": "COP",
+      "image": "images/Paper-rose-salmon.webp",
+      "badge": "",
+      "available": true
+    },
+    {
+      "id": 9,
+      "category": "rosas",
+      "name": "Rosas Amarillas / Yellow Roses",
+      "description": "Yellow roses that convey joy and friendship. Rosas amarillas que transmiten alegría y amistad.",
+      "price": 15000,
+      "currency": "COP",
+      "image": "images/Yellow_roses_bouquet.webp",
+      "badge": "",
+      "available": true
+    }
+  ],
+  "bouquets": [
+    {
+      "id": 101,
+      "category": "wedding",
+      "name": "Wedding Paper Flowers Bouquet / Ramo de Boda con Flores de Papel",
+      "description": "Elegant bouquet for weddings with durable paper flowers. Ramo elegante para bodas con flores de papel duraderas.",
+      "price": 150000,
+      "currency": "COP",
+      "image": "images/Wedding_paper_flowers_bouquets.webp",
+      "badge": "Bestseller",
+      "available": true
+    },
+    {
+      "id": 102,
+      "category": "wedding",
+      "name": "Paper Flowers Bouquet / Ramo de Flores de Papel",
+      "description": "Beautiful bouquet for special occasions. Hermoso ramo para ocasiones especiales.",
+      "price": 120000,
+      "currency": "COP",
+      "image": "images/Paper-flowers-bouquets.webp",
+      "badge": "Popular",
+      "available": true
+    },
+    {
+      "id": 103,
+      "category": "wedding",
+      "name": "Paper Flower Bouquet / Bouquet de Flores de Papel",
+      "description": "Romantic bouquet with variety of flowers. Ramo romántico con variedad de flores.",
+      "price": 140000,
+      "currency": "COP",
+      "image": "images/Paper_flower_bouquets.webp",
+      "badge": "",
+      "available": true
+    },
+    {
+      "id": 104,
+      "category": "mini",
+      "name": "Mini Paper Flower Bouquet / Ramo Mini de Flores",
+      "description": "Small and charming, perfect for gifting. Pequeño y encantador, perfecto para regalar.",
+      "price": 45000,
+      "currency": "COP",
+      "image": "images/mini_paper_flower_bouquets.webp",
+      "badge": "Nuevo",
+      "available": true
+    },
+    {
+      "id": 105,
+      "category": "ocasion",
+      "name": "Peonies Bouquet / Ramo de Peonías",
+      "description": "Lush peony bouquet for special occasions. Exuberante ramo de peonías para ocasiones especiales.",
+      "price": 95000,
+      "currency": "COP",
+      "image": "images/Bouquets_of_paper_peonies.webp",
+      "badge": "Exclusivo",
+      "available": true
+    },
+    {
+      "id": 106,
+      "category": "ocasion",
+      "name": "Carnations Bouquet / Ramo de Claveles",
+      "description": "Cheerful carnation bouquet perfect for any celebration. Alegre ramo de claveles perfecto para cualquier celebración.",
+      "price": 75000,
+      "currency": "COP",
+      "image": "images/Carnations_bouquets.webp",
+      "badge": "",
+      "available": true
+    },
+    {
+      "id": 107,
+      "category": "ocasion",
+      "name": "Tulips Bouquet / Ramo de Tulipanes",
+      "description": "Vibrant tulip bouquet to brighten the day. Vibrante ramo de tulipanes para alegrar el día.",
+      "price": 85000,
+      "currency": "COP",
+      "image": "images/Tulips_bouquets.webp",
+      "badge": "Favorito",
+      "available": true
+    },
+    {
+      "id": 108,
+      "category": "ocasion",
+      "name": "Hydrangeas Bouquet / Ramo de Hortensias",
+      "description": "Elegant hydrangea bouquet for special moments. Elegante ramo de hortensias para momentos especiales.",
+      "price": 90000,
+      "currency": "COP",
+      "image": "images/Hydrangeas_bouquets.webp",
+      "badge": "",
+      "available": true
+    }
+  ]
+}

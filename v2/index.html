@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caro Flower Art - Handmade Paper Flowers | Flores de Papel Hechas a Mano</title>
+    <meta name="description" content="Handmade paper flowers for weddings, gifts, and special occasions. Flores de papel hechas a mano para bodas, regalos y ocasiones especiales.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.svg" alt="Caro Flower Art" class="logo-img">
+                    <span>Caro Flower Art</span>
+                </a>
+                <button class="menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#gallery">Gallery / Galería</a></li>
+                    <li><a href="#flowers">Flowers / Flores</a></li>
+                    <li><a href="#roses">Roses / Rosas</a></li>
+                    <li><a href="#about">About / Acerca de</a></li>
+                    <li><a href="#contact">Quote / Cotización</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Video Section -->
+    <section class="hero-video">
+        <video autoplay muted loop playsinline class="hero-video-bg" poster="images/hero-poster.webp">
+            <source src="images/hero-flowers.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Handmade Paper Flowers<br>
+                <span class="hero-subtitle-text">Flores de papel hechas a mano</span>
+            </h1>
+            <p class="hero-description">
+                Timeless floral pieces for gifts, weddings, and meaningful moments.<br>
+                <em>Piezas florales atemporales para regalos, bodas y momentos especiales.</em>
+            </p>
+            <div class="hero-buttons">
+                <a href="#gallery" class="btn btn-primary">
+                    Explore Gallery / Ver galería
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    Request Quote / Pedir cotización
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Collections / Nuestras colecciones</h2>
+                <p class="section-subtitle">
+                    Explore collections and request a custom quote.<br>
+                    <em>Explora colecciones y pide una cotización.</em>
+                </p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" data-filter="all">All / Todo</button>
+                <button class="tab-btn" data-filter="flowers">Flowers / Flores</button>
+                <button class="tab-btn" data-filter="bouquets">Bouquets / Ramos</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Items will be loaded via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowers Section -->
+    <section id="flowers" class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Individual Flowers / Flores Individuales</h2>
+            </div>
+            
+            <div class="products-catalog" id="flowersCatalog">
+                <!-- Will be loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Roses Section -->
+    <section id="roses" class="products-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Roses by Color / Rosas por Color</h2>
+            </div>
+            
+            <div class="products-catalog" id="rosesCatalog">
+                <!-- Will be loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="images/about-me.webp" alt="About Caro" loading="lazy">
+                </div>
+                <div class="about-content">
+                    <h2 class="section-title">About Caro / Sobre Caro</h2>
+                    <p class="about-text">
+                        Hi, I am Carolina and I create paper flowers.<br>
+                        <em>Hola soy Carolina y creo flores de papel.</em>
+                    </p>
+                    <p class="about-text">
+                        I create paper flowers that look real, feel special, and last forever.<br>
+                        <em>Yo creo flores de papel que se ven reales, se sienten especiales y duran para siempre.</em>
+                    </p>
+                    <p class="about-text">
+                        Want a custom bouquet? Share your color palette, occasion, and size — and I'll send options and pricing.<br>
+                        <em>¿Quieres un ramo personalizado? Cuéntame de tu ocasión y tamaño — y te envío opciones y precios.</em>
+                    </p>
+                    
+                    <div class="about-process">
+                        <h3>The Process / El Proceso</h3>
+                        <div class="process-images">
+                            <img src="images/Process-1.webp" alt="Process 1">
+                            <img src="images/Process-2.webp" alt="Process 2">
+                            <img src="images/Process-3.webp" alt="Process 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Request a quote / Pedir cotización</h2>
+                <p class="section-subtitle">
+                    Get in touch for custom orders and inquiries.<br>
+                    <em>Contáctame para pedidos personalizados y consultas.</em>
+                </p>
+            </div>
+            
+            <div class="contact-methods">
+                <a href="https://wa.me/573209781661" target="_blank" class="contact-card">
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>WhatsApp</h3>
+                    <p>Quick response / Respuesta rápida</p>
+                </a>
+                
+                <a href="mailto:thrivingwomanandmom@gmail.com" class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p>Detailed quotes / Cotizaciones detalladas</p>
+                </a>
+                
+                <a href="https://instagram.com/caroflowerart" target="_blank" class="contact-card">
+                    <i class="fab fa-instagram"></i>
+                    <h3>Instagram</h3>
+                    <p>See more designs / Ver más diseños</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="images/logo.svg" alt="Caro Flower Art" class="footer-logo">
+                    <p>Handmade paper flowers with love<br>
+                    <em>Flores de papel hechas a mano con amor</em></p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://wa.me/573209781661" target="_blank" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/caroflowerart" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="mailto:thrivingwomanandmom@gmail.com" aria-label="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Caro Flower Art. All rights reserved / Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/573209781661" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
