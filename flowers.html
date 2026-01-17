@@ -4,21 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flowers | Caro Flower Art</title>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="./site.css?v=20260115a" />
+  <link rel="stylesheet" href="/site.css?v=20260115a" />
 </head>
 <body>
 
-<header id="site-header"></header>
+<div id="site-header"></div>
 
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1>Flowers <span class="es">Flores</span></h1>
     <p>
-      Explore the types of flowers available and request a quote.
-      <span class="es">Explora los tipos de flores disponibles y pide cotización.</span>
+      Explore handmade flower pieces and request a quote.
+      <span class="es">Explora flores hechas a mano y pide cotización.</span>
     </p>
 
     <div class="hero-buttons">
@@ -29,12 +27,41 @@
 </section>
 
 <section class="gallery" id="gallery">
-  <h2>Flower Types <span class="es">Tipos de flores</span></h2>
-  <p class="section-subtitle">
-    Tap “View Photos” to open the slider.
-    <span class="es">Toca “View Photos” para ver el carrusel.</span>
-  </p>
+  <h2>All Flowers <span class="es">Todas las flores</span></h2>
 
+  <!-- ✅ Card Roses (solo link a roses.html) -->
+  <div class="grid" style="margin-top: 18px; margin-bottom: 26px;">
+    <div class="card">
+      <a href="roses.html" class="card-image-wrapper">
+        <!-- CAMBIA esta imagen por una tuya real -->
+        <img src="images/roses/rose-thumb.webp" alt="Roses">
+        <span class="card-badge">Roses</span>
+      </a>
+
+      <div class="card-content">
+        <div class="category">Roses <span class="es">Rosas</span></div>
+        <p>
+          Explore colors and rose bouquets
+          <span class="es">Explora colores y ramos de rosas</span>
+        </p>
+
+        <div class="card-footer">
+          <a href="roses.html" class="card-btn">
+            View Roses <span class="es">Ver rosas</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional filters (esto filtra lo que está en #galleryGrid) -->
+  <div class="filter-buttons">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="flowers">Flowers</button>
+    <button class="filter-btn" data-filter="wedding">Bouquets</button>
+  </div>
+
+  <!-- ✅ Aquí sí se renderizan productos y View Photos abre el slider -->
   <div class="gallery-grid" id="galleryGrid"></div>
 </section>
 
@@ -42,12 +69,12 @@
   <i class="fab fa-whatsapp"></i>
 </a>
 
-<script src="./products.js?v=20260117a"></script>
-<script src="./site.js?v=20260117a"></script>
+<script src="/products.js?v=20260115a"></script>
+<script src="/site.js?v=20260115a"></script>
 
 <script>
-  // ONLY flower types
-  window.CARO_PAGE = { gridId: "galleryGrid", mode: "category", category: "flowers" };
+  // muestra todos los productos en esta página (y los filtros funcionan)
+  window.CARO_PAGE = { gridId: "galleryGrid", mode: "all" };
 </script>
 
 </body>
