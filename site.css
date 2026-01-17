@@ -43,7 +43,7 @@ body{
 a{color:inherit}
 img{max-width:100%;display:block}
 section{
-  padding:80px 20px;
+  padding:40px 20px;
   max-width:var(--container);
   margin:0 auto;
 }
@@ -166,7 +166,7 @@ p{font-size:1rem}
 .hero{
   position:relative;
   text-align:center;
-  padding:100px 20px;
+  padding:70px 20px;
   background:#fff5f8;
   overflow:hidden;
   max-width:100%;
