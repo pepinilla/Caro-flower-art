@@ -1,4 +1,4 @@
-// Main JavaScript
+a// Main JavaScript
 document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
