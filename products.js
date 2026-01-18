@@ -45,8 +45,8 @@ window.PRODUCTS = [
   {
     id: "rose-yellow-bouquet",
     category: "rose-colors",
-    name: "Yellow Roses Bouquet",
-    name_es: "Ramo de rosas amarillas",
+    name: "Yellow Roses",
+    name_es: "Rosas amarillas",
     prices: [
       { amount: 15000, label: "unit", label_es: "unidad" },
       { amount: 130000, label: "10 units", label_es: "10 unidades" }
@@ -60,8 +60,8 @@ window.PRODUCTS = [
   {
     id: "rose-purple-mix",
     category: "rose-colors",
-    name: "Purple Mix",
-    name_es: "Mezcla morada",
+    name: "Purple Roses",
+    name_es: "Rosas moradas",
     prices: [
       { amount: 15000, label: "unit", label_es: "unidad" },
       { amount: 130000, label: "10 units", label_es: "10 unidades" }
