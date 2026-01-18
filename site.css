@@ -989,20 +989,10 @@ body{
 .contact-card:hover{
   transform: translateY(-1px);
 }
-/* ---------- CARD SIZE / SPACING ---------- */
-.gallery-grid .card {
-  max-width: 420px;
-  margin: 0 auto;
-}
 
-@media (min-width: 900px) {
-  .gallery-grid .card {
-    max-width: 360px;
-  }
-}
-
-/* ---------- ACTION BUTTONS: horizontal + nice ---------- */
-.card-actions.actions-row {
+/* ---------- ACTION BUTTONS (solo dentro de cards de productos) ---------- */
+.gallery-grid .card-actions.actions-row,
+#galleryGrid .card-actions.actions-row {
   display: flex;
   gap: 12px;
   justify-content: center;
@@ -1010,7 +1000,8 @@ body{
   margin-top: 14px;
 }
 
-.card-actions .btn-action {
+.gallery-grid .card-actions .btn-action,
+#galleryGrid .card-actions .btn-action {
   flex: 1;
   min-width: 0;
   text-align: center;
@@ -1021,23 +1012,26 @@ body{
   background: rgba(248, 232, 236, .65);
   color: #333;
   font-weight: 600;
-line-height: 1.15;
+  line-height: 1.15;
 }
 
-.card-actions .btn-outline {
+.gallery-grid .card-actions .btn-outline,
+#galleryGrid .card-actions .btn-outline {
   background: #fff;
 }
 
-.card-actions .btn-action .es {
+.gallery-grid .card-actions .btn-action .es,
+#galleryGrid .card-actions .btn-action .es {
   display: block;
-  margin-top: 4px;       /* ✅ separa español */
+  margin-top: 4px;
   font-weight: 500;
   opacity: .85;
   font-size: .92em;
 }
 
-/* ---------- SINGLE PRICE BOX (one-line, clean) ---------- */
-.price-box {
+/* ---------- PRICE BOX (solo productos) ---------- */
+.gallery-grid .price-box,
+#galleryGrid .price-box {
   margin: 14px auto 0;
   padding: 14px 16px;
   border-radius: 18px;
@@ -1046,27 +1040,17 @@ line-height: 1.15;
   text-align: center;
 }
 
-.price-line {
+.gallery-grid .price-line,
+#galleryGrid .price-line {
   font-size: 1.05rem;
   font-weight: 600;
   margin: 6px 0;
 }
 
-.price-units {
+.gallery-grid .price-units,
+#galleryGrid .price-units {
   margin-left: 6px;
   font-size: .9rem;
   font-weight: 500;
   opacity: .75;
-}
-
-/* ---------- Make card content spacing tighter ---------- */
-.card-content {
-  padding: 18px 18px 20px;
-}
-
-.card-content h3 .es {
-  display: block;
-  margin-top: 6px;
-  opacity: .85;
-  font-style: italic;
 }
