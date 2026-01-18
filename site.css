@@ -754,38 +754,40 @@ footer{
 /* ===== Gallery modal: show FULL image (no crop) ===== */
 .gallery-image-wrap{
   width: 100%;
-  max-height: 80vh;         /* 👈 ya no es altura fija */
+  max-height: 80vh;
   padding: 12px;
   background: #fafafa;
-  display: flex;            /* 👈 mejor que grid para esto */
+  display: flex;
   align-items: center;
   justify-content: center;
-  border-color: var(--primary-color);
 }
 
 .gallery-image-wrap img{
   max-width: 100%;
-  max-height: 76vh;         /* 👈 clave: que quepa completa */
+  max-height: 76vh;
   width: auto;
   height: auto;
-  object-fit: contain;      /* 👈 nunca recorta */
+  object-fit: contain;
 }
 
 .gallery-meta {
   padding: 16px 18px 20px;
 }
-
-.gallery-title {
+.gallery-title{
   font-family: var(--font-title);
-  font-size: 1.35rem;
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: .02em;
   margin-bottom: 6px;
   color: var(--dark-color);
-   border-color:var(--primary-color)
 }
 
-.gallery-price {
-  font-weight: 700;
+.gallery-price{
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 1.05rem;
   color: var(--dark-color);
+  opacity: .9;
 }
 
 .gallery-nav {
@@ -799,6 +801,23 @@ footer{
   background: rgba(255,255,255,0.92);
   font-size: 30px;
   cursor: pointer;
+}
+@media (max-width: 480px){
+  .gallery-panel{
+    width: 94vw;
+    margin: 4vh auto;
+  }
+
+  /* fuerza layout vertical (imagen arriba, texto abajo) */
+  .gallery-image-wrap{
+    max-height: none;
+    padding: 10px;
+  }
+
+  .gallery-meta{
+    padding: 14px 16px 18px;
+    text-align: center;
+  }
 }
 
 .gallery-prev { left: 12px; }
