@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Roses | Caro Flower Art</title>
+
   <link rel="stylesheet" href="/site.css?v=20260115a" />
 </head>
 <body>
@@ -20,16 +21,26 @@
     </p>
 
     <div class="hero-buttons">
-      <a href="index.html#contact" class="btn-primary">Request a quote <span class="es">Pedir cotización</span></a>
-      <a href="index.html" class="btn-secondary">Back home <span class="es">Volver</span></a>
+      <a href="/index.html#contact" class="btn-primary">
+        Request a quote <span class="es">Pedir cotización</span>
+      </a>
+      <a href="/index.html" class="btn-secondary">
+        Back home <span class="es">Volver</span>
+      </a>
     </div>
   </div>
 </section>
-  <section class="gallery" id="gallery">
 
+<!-- SOLO CARDS -->
+<section class="gallery" id="gallery">
+  <!-- wrapper igual al resto del sitio -->
   <div class="gallery-grid" id="galleryGrid"></div>
-  </section>
-<a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank" rel="noopener">
+</section>
+
+<a href="https://wa.me/573209781661"
+   class="whatsapp-button"
+   target="_blank"
+   rel="noopener">
   <i class="fab fa-whatsapp"></i>
 </a>
 
@@ -37,7 +48,12 @@
 <script src="/site.js?v=20260115a"></script>
 
 <script>
-  window.CARO_PAGE = { gridId: "galleryGrid", mode: "category", category: "rose-colors" };
+  // 👉 SOLO colores de rosas
+  window.CARO_PAGE = {
+    gridId: "galleryGrid",
+    mode: "category",
+    category: "rose-colors"
+  };
 </script>
 
 </body>
