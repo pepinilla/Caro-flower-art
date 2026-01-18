@@ -77,21 +77,7 @@ window.PRODUCTS = [
   // FLOWERS (types)
   // =========================
 
-   {
-    id: "Rosas",
-    category: "flowers",
-    name: "Roses",
-    name_es: "Rosas",
-    prices: [
-      { amount: 15000, label: "unit", label_es: "unidad" },
-      { amount: 150000, label: "10 units", label_es: "10 unidades" }
-    ],
-    currency: "COP",
-    thumb: "images/products/rose-bouquet/thumb/thumb.webp",
-    gallery: ["images/products/rose-bouquet/gallery/01.webp"],
-    badge: "",
-    available: true
-  },
+   
    {
     id: "tulips",
     category: "flowers",
