@@ -30,56 +30,44 @@
   </div>
 </section>
 
-  <!-- 🌹 ROSES FEATURE CARD (TODA la tarjeta es clickeable) -->
-  <div class="grid" style="margin-top: 6px; margin-bottom: 26px;">
-    <a href="/roses.html"
-       class="card"
-       style="
-         display:block;
-         text-decoration:none;
-         color:inherit;
-         border: 1px solid rgba(232,154,166,.55);
-         border-radius: 22px;
-         overflow:hidden;
-         box-shadow: 0 10px 26px rgba(0,0,0,.06);
-         transition: transform .12s ease, box-shadow .12s ease;
-       "
-       onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 14px 32px rgba(0,0,0,.08)'"
-       onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 26px rgba(0,0,0,.06)'"
-       aria-label="View Roses / Ver rosas"
-    >
-      <div class="card-image-wrapper" style="display:block;">
+<!-- 🌹 ROSES FEATURE CARD (same card styles, no inline hover hacks) -->
+<section class="gallery" style="padding-top: 18px; padding-bottom: 0;">
+  <div class="grid">
+    <a href="/roses.html" class="card" style="text-decoration:none; color:inherit;" aria-label="View Roses / Ver rosas">
+      <div class="card-image-wrapper">
         <img
           src="images/products/rose-bouquet/thumb/thumb.webp"
           alt="Roses Bouquet"
           loading="lazy"
-        >
+        />
         <span class="card-badge">Roses</span>
       </div>
 
-      <div class="card-content" style="gap:.55rem; text-align:center;">
-        <div class="category" style="font-size: 1.05rem;">
+      <div class="card-content" style="text-align:center;">
+        <div class="category">
           Roses <span class="es">Rosas</span>
         </div>
 
-        <p style="margin:0; max-width:520px; margin-left:auto; margin-right:auto;">
+        <p style="margin:0;">
           View rose colors and bouquets in one place
           <span class="es">Ver colores de rosas y ramos en un solo lugar</span>
         </p>
 
         <div class="card-footer" style="justify-content:center;">
-          <span class="card-btn" style="min-width: 220px; text-align:center;">
+          <span class="card-btn" style="min-width:220px; text-align:center;">
             View Roses <span class="es">Ver rosas</span>
           </span>
         </div>
       </div>
     </a>
   </div>
+</section>
 
-  <section class="gallery" id="gallery">
-
+<!-- ✅ REAL FLOWERS GRID (only category: flowers) -->
+<section class="gallery" id="gallery">
   <div class="gallery-grid" id="galleryGrid"></div>
 </section>
+
 <a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank" rel="noopener">
   <i class="fab fa-whatsapp"></i>
 </a>
@@ -88,7 +76,7 @@
 <script src="/site.js?v=20260115a"></script>
 
 <script>
-  // Solo categoría "flowers" (NO roses ni bouquets aquí)
+  // Solo categoría "flowers" (NO roses-colors ni bouquets aquí)
   window.CARO_PAGE = { gridId: "galleryGrid", mode: "category", category: "flowers" };
 </script>
 
