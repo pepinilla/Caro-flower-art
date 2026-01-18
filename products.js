@@ -4,12 +4,13 @@
    Categories:
    - flowers  (types of flowers)
    - bouquets (bouquets / arrangements)
-   - roses    (rose colors)
+   - rose-colors (rose colors)
+   - roses (rose bouquets)
    ====================================================== */
 
 window.PRODUCTS = [
   // =========================
-  // ROSES (colors) - best assets under images/products/*
+  // ROSES (colors) - images/products/*
   // =========================
   {
     id: "rose-salmon",
@@ -17,8 +18,9 @@ window.PRODUCTS = [
     name: "Salmon Roses",
     name_es: "Rosas salmón",
     prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/products/rose-salmon/thumb/thumb.webp",
     gallery: ["images/products/rose-salmon/gallery/01.webp"],
@@ -30,10 +32,10 @@ window.PRODUCTS = [
     category: "rose-colors",
     name: "Red Roses",
     name_es: "Rosas rojas",
-prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" }
-    price_from: 15000,
+    prices: [
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/products/rose-red/thumb/thumb.webp",
     gallery: ["images/products/rose-red/gallery/01.webp"],
@@ -46,8 +48,9 @@ prices: [
     name: "Yellow Roses Bouquet",
     name_es: "Ramo de rosas amarillas",
     prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/products/rose-yellow-bouquet/thumb/thumb.webp",
     gallery: ["images/products/rose-yellow-bouquet/gallery/01.webp"],
@@ -60,14 +63,19 @@ prices: [
     name: "Purple Mix",
     name_es: "Mezcla morada",
     prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/products/rose-purple-mix/thumb/thumb.webp",
     gallery: ["images/products/rose-purple-mix/gallery/01.webp"],
     badge: "Nuevo",
     available: true
   },
+
+  // =========================
+  // ROSE BOUQUETS (separado de "rose-colors")
+  // =========================
   {
     id: "rose-bouquet",
     category: "roses",
@@ -82,7 +90,7 @@ prices: [
   },
 
   // =========================
-  // FLOWERS (types) - using existing one-image assets per type
+  // FLOWERS (types)
   // =========================
   {
     id: "tulips",
@@ -90,8 +98,9 @@ prices: [
     name: "Tulips",
     name_es: "Tulipanes",
     prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/tulips/Tulips_bouquets.webp",
     gallery: ["images/tulips/Tulips_bouquets.webp"],
@@ -104,8 +113,9 @@ prices: [
     name: "Hydrangeas",
     name_es: "Hortensias",
     prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" } 
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/hydrangeas/Hydrangeas_bouquets.webp",
     gallery: ["images/hydrangeas/Hydrangeas_bouquets.webp"],
@@ -118,8 +128,9 @@ prices: [
     name: "Peonies",
     name_es: "Peonías",
     prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/peonies/Bouquets_of_paper_peonies.webp",
     gallery: ["images/peonies/Bouquets_of_paper_peonies.webp"],
@@ -132,8 +143,9 @@ prices: [
     name: "Carnations",
     name_es: "Claveles",
     prices: [
-    { amount: 15000, label: "unit", label_es: "unidad" },
-{ amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/carnations/Carnations_bouquets.webp",
     gallery: ["images/carnations/Carnations_bouquets.webp"],
@@ -142,7 +154,7 @@ prices: [
   },
 
   // =========================
-  // BOUQUETS - using existing bouquet images
+  // BOUQUETS
   // =========================
   {
     id: "bouquet-paper-flowers",
@@ -175,8 +187,8 @@ prices: [
     name_es: "Ramo de flores de papel",
     price_from: 150000,
     currency: "COP",
-    thumb: "images/bouquets/Paper_flowers-bouquets.webp",
-    gallery: ["images/bouquets/Paper_flowers-bouquets.webp"],
+    thumb: "images/bouquets/Paper-flowers-bouquets.webp",
+    gallery: ["images/bouquets/Paper-flowers-bouquets.webp"],
     badge: "Bestseller",
     available: true
   },
