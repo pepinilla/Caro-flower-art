@@ -1085,3 +1085,15 @@ body{
   font-weight: 400;
   opacity: .7;
 }
+/* ======================================================
+   GALLERY MODAL – FULL IMAGE (no crop)
+  en mobiles ====================================================== */
+@media (max-width: 480px){
+  .gallery-image-wrap{
+    max-height: 85vh;
+    padding: 8px;
+  }
+  .gallery-image-wrap img{
+    max-height: 80vh;
+  }
+}
