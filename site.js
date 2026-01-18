@@ -137,26 +137,32 @@
 
   // ---------- MODAL ----------
   function ensureModal() {
-    if (qs("#galleryModal")) return;
+  if (qs("#galleryModal")) return;
 
-    document.body.insertAdjacentHTML("beforeend", `
-      <div class="gallery-modal" id="galleryModal">
-        <div class="gallery-backdrop" data-close></div>
-        <div class="gallery-panel">
-          <button class="gallery-close" data-close>×</button>
-          <button class="gallery-nav gallery-prev">‹</button>
-          <button class="gallery-nav gallery-next">›</button>
+  document.body.insertAdjacentHTML("beforeend", `
+    <div class="gallery-modal" id="galleryModal">
+      <div class="gallery-backdrop" data-close></div>
+
+      <div class="gallery-panel">
+        <button class="gallery-close" data-close>×</button>
+
+        <div class="gallery-body">
+          <button class="gallery-nav gallery-prev" type="button">‹</button>
+          <button class="gallery-nav gallery-next" type="button">›</button>
+
           <div class="gallery-image-wrap">
-            <img id="galleryImage" />
-            <div class="gallery-meta">
-              <div id="galleryTitle"></div>
-              <div id="galleryPrice"></div>
-            </div>
+            <img id="galleryImage" alt="" />
+          </div>
+
+          <div class="gallery-meta">
+            <div id="galleryTitle" class="gallery-title"></div>
+            <div id="galleryPrice" class="gallery-price"></div>
           </div>
         </div>
       </div>
-    `);
-  }
+    </div>
+  `);
+}
 
   let galleryState = { photos: [], index: 0 };
 
