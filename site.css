@@ -751,19 +751,24 @@ footer{
   cursor: pointer;
 }
 
-.gallery-image-wrap {
+/* ===== Gallery modal: show FULL image (no crop) ===== */
+.gallery-image-wrap{
   width: 100%;
-  height: min(62vh, 520px);
+  max-height: 80vh;         /* 👈 ya no es altura fija */
+  padding: 12px;
   background: #fafafa;
-  display: grid;
-  place-items: center;
-   border-color:var(--primary-color)
+  display: flex;            /* 👈 mejor que grid para esto */
+  align-items: center;
+  justify-content: center;
+  border-color: var(--primary-color);
 }
 
-.gallery-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.gallery-image-wrap img{
+  max-width: 100%;
+  max-height: 76vh;         /* 👈 clave: que quepa completa */
+  width: auto;
+  height: auto;
+  object-fit: contain;      /* 👈 nunca recorta */
 }
 
 .gallery-meta {
