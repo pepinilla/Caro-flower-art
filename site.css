@@ -989,3 +989,88 @@ body{
 .contact-card:hover{
   transform: translateY(-1px);
 }
+/* ---------- CARD SIZE / SPACING ---------- */
+.gallery-grid .card,
+.grid .card {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  .gallery-grid .card {
+    max-width: 360px;
+  }
+}
+
+/* ---------- ACTION BUTTONS: horizontal + nice ---------- */
+.card-actions.actions-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: stretch;
+  margin-top: 14px;
+}
+
+.card-actions .btn-action {
+  flex: 1;
+  min-width: 140px;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  text-decoration: none;
+  border: 1px solid rgba(232,154,166,.45);
+  background: rgba(248, 232, 236, .65);
+  color: #333;
+  font-weight: 600;
+}
+
+.card-actions .btn-outline {
+  background: #fff;
+}
+
+.card-actions .btn-action .es {
+  display: block;
+  margin-top: 4px;       /* ✅ separa español */
+  font-weight: 500;
+  opacity: .85;
+  font-size: .92em;
+}
+
+/* ---------- SINGLE PRICE BOX ---------- */
+.price-single {
+  margin: 14px auto 0;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(232,154,166,.35);
+  background: rgba(248, 232, 236, .55);
+  text-align: center;
+}
+
+.price-single strong {
+  font-size: 1.15rem;
+}
+
+.price-single .price-note {
+  margin-left: 6px;
+  font-weight: 600;
+  opacity: .75;
+}
+
+.price-single .es {
+  display: block;
+  margin-top: 6px;
+  opacity: .85;
+  font-style: italic;
+}
+
+/* ---------- Make card content spacing tighter ---------- */
+.card-content {
+  padding: 18px 18px 20px;
+}
+
+.card-content h3 .es {
+  display: block;
+  margin-top: 6px;
+  opacity: .85;
+  font-style: italic;
+}
