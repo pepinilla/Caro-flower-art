@@ -1068,24 +1068,7 @@ body{
     font-size: .78rem;   /* 👈 entra perfecto en 1 línea */
   }
 }
-/* ---------- HERO TITLE (match index look) ---------- */
-.hero-content h1{
-  font-family: var(--font-title);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  font-size: clamp(2.6rem, 5.2vw, 3.9rem);
-  line-height: 1.05;
-  text-align: center;
-}
-
-.hero-content h1 .es{
-  display:block;
-  margin-top: 10px;
-  font-style: italic;
-  font-weight: 400;
-  opacity: .7;
-}
-/* ======================================================
+ ======================================================
    GALLERY MODAL – FULL IMAGE (no crop)
   en mobiles ====================================================== */
 @media (max-width: 480px){
