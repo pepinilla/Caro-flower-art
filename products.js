@@ -16,7 +16,9 @@ window.PRODUCTS = [
     category: "rose-colors",
     name: "Salmon Roses",
     name_es: "Rosas salmón",
-    price_from: 15000,
+    prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" }
     currency: "COP",
     thumb: "images/products/rose-salmon/thumb/thumb.webp",
     gallery: ["images/products/rose-salmon/gallery/01.webp"],
@@ -28,6 +30,9 @@ window.PRODUCTS = [
     category: "rose-colors",
     name: "Red Roses",
     name_es: "Rosas rojas",
+prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" }
     price_from: 15000,
     currency: "COP",
     thumb: "images/products/rose-red/thumb/thumb.webp",
@@ -40,7 +45,9 @@ window.PRODUCTS = [
     category: "rose-colors",
     name: "Yellow Roses Bouquet",
     name_es: "Ramo de rosas amarillas",
-    price_from: 15000,
+    prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" }
     currency: "COP",
     thumb: "images/products/rose-yellow-bouquet/thumb/thumb.webp",
     gallery: ["images/products/rose-yellow-bouquet/gallery/01.webp"],
@@ -52,7 +59,9 @@ window.PRODUCTS = [
     category: "rose-colors",
     name: "Purple Mix",
     name_es: "Mezcla morada",
-    price_from: 22000,
+    prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" }
     currency: "COP",
     thumb: "images/products/rose-purple-mix/thumb/thumb.webp",
     gallery: ["images/products/rose-purple-mix/gallery/01.webp"],
@@ -64,7 +73,7 @@ window.PRODUCTS = [
     category: "roses",
     name: "Classic Roses Bouquet",
     name_es: "Ramo clásico de rosas",
-    price_from: 15000,
+    price_from: 130000,
     currency: "COP",
     thumb: "images/products/rose-bouquet/thumb/thumb.webp",
     gallery: ["images/products/rose-bouquet/gallery/01.webp"],
@@ -80,7 +89,9 @@ window.PRODUCTS = [
     category: "flowers",
     name: "Tulips",
     name_es: "Tulipanes",
-    price_from: 18000,
+    prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" }
     currency: "COP",
     thumb: "images/tulips/Tulips_bouquets.webp",
     gallery: ["images/tulips/Tulips_bouquets.webp"],
@@ -92,7 +103,9 @@ window.PRODUCTS = [
     category: "flowers",
     name: "Hydrangeas",
     name_es: "Hortensias",
-    price_from: 25000,
+    prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" } 
     currency: "COP",
     thumb: "images/hydrangeas/Hydrangeas_bouquets.webp",
     gallery: ["images/hydrangeas/Hydrangeas_bouquets.webp"],
@@ -104,7 +117,9 @@ window.PRODUCTS = [
     category: "flowers",
     name: "Peonies",
     name_es: "Peonías",
-    price_from: 30000,
+    prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" }
     currency: "COP",
     thumb: "images/peonies/Bouquets_of_paper_peonies.webp",
     gallery: ["images/peonies/Bouquets_of_paper_peonies.webp"],
@@ -116,7 +131,9 @@ window.PRODUCTS = [
     category: "flowers",
     name: "Carnations",
     name_es: "Claveles",
-    price_from: 20000,
+    prices: [
+    { amount: 15000, label: "unit", label_es: "unidad" },
+{ amount: 130000, label: "10 units", label_es: "10 unidades" }
     currency: "COP",
     thumb: "images/carnations/Carnations_bouquets.webp",
     gallery: ["images/carnations/Carnations_bouquets.webp"],
@@ -154,8 +171,8 @@ window.PRODUCTS = [
   {
     id: "bouquet-paper-flowers-3",
     category: "bouquets",
-    name: "Paper Flowers Bouquet (Variant)",
-    name_es: "Ramo de flores de papel (Variante)",
+    name: "Paper Flowers Bouquet",
+    name_es: "Ramo de flores de papel",
     price_from: 150000,
     currency: "COP",
     thumb: "images/bouquets/Paper_flowers-bouquets.webp",
