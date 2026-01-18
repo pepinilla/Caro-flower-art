@@ -12,6 +12,11 @@
   const qs  = (s, r = document) => r.querySelector(s);
   const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
 
+const FLOWER_UNIT_PRICES = [
+  { amount: 15000, label: "unit", label_es: "unidad" },
+  { amount: 130000, label: "10 units", label_es: "10 unidades" },
+];
+
   // ---------- PRODUCTS ----------
   const PRODUCTS = (window.PRODUCTS || []).map(p => ({
     ...p,
