@@ -191,28 +191,30 @@
   }
 
   function priceHTML(p) {
-    if (Array.isArray(p.prices) && p.prices.length) {
-      const items = p.prices.slice(0, 2).map(x => {
-        const amt = formatMoney(x.amount);
-        const l1 = x.label || "";
-        const l2 = x.label_es || "";
-        return `
-          <div class="price-pill">
-            <strong>$${amt}</strong> <span class="price-note">${l1}</span>
-            <span class="es"><strong>$${amt}</strong> <span class="price-note">${l2}</span></span>
-          </div>
-        `;
-      }).join("");
-      return `<div class="price-stack">${items}</div>`;
-    }
+  // 1) Si hay prices[], muestra SOLO el de 10 units (si existe)
+  if (Array.isArray(p.prices) && p.prices.length) {
+    const ten = p.prices.find(x => String(x.label || "").toLowerCase().includes("10")) || p.prices[0];
+    const amt = formatMoney(ten.amount, p.currency);
+    const cur = (p.currency || "COP").toUpperCase();
 
-    if (p.price_from) {
-      const amt = formatMoney(p.price_from);
-      return `<div class="price">From $${amt}<span class="es">Desde $${amt}</span></div>`;
-    }
-
-    return `<div class="price">Request quote<span class="es">Pedir cotización</span></div>`;
+    return `
+      <div class="price-single">
+        <strong>$${amt} ${cur}</strong>
+        <span class="price-note">/ ${ten.label || ""}</span>
+        <span class="es"><strong>$${amt} ${cur}</strong> <span class="price-note">/ ${ten.label_es || ""}</span></span>
+      </div>
+    `;
   }
+
+  // 2) fallback viejo
+  if (p.price_from) {
+    const amt = formatMoney(p.price_from, p.currency);
+    const cur = (p.currency || "COP").toUpperCase();
+    return `<div class="price-single"><strong>$${amt} ${cur}</strong><span class="es"><strong>$${amt} ${cur}</strong></span></div>`;
+  }
+
+  return `<div class="price-single"><strong>Request quote</strong><span class="es"><strong>Pedir cotización</strong></span></div>`;
+}
 
   // ---------- CARD ----------
   function cardHTML(p) {
