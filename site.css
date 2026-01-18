@@ -1050,7 +1050,16 @@ body{
 .gallery-grid .price-units,
 #galleryGrid .price-units {
   margin-left: 6px;
-  font-size: .9rem;
+  font-size: .85rem;      /* 👈 más pequeño */
   font-weight: 500;
-  opacity: .75;
+  opacity: .7;
+  white-space: nowrap;   /* 👈 clave: no se parte en 2 líneas */
+}
+
+/* Ajuste fino SOLO en mobile */
+@media (max-width: 480px){
+  .gallery-grid .price-units,
+  #galleryGrid .price-units {
+    font-size: .78rem;   /* 👈 entra perfecto en 1 línea */
+  }
 }
