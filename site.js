@@ -181,39 +181,40 @@
 
   // ---------- PRICE ----------
   function formatMoney(amount) {
-    const n = Number(amount || 0);
-    if (!n) return "";
-    try {
-      return new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(n);
-    } catch {
-      return String(Math.round(n));
-    }
+  const n = Number(amount || 0);
+  if (!n) return "";
+  try {
+    return new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(n);
+  } catch {
+    return String(Math.round(n));
   }
+}
 
-  function priceHTML(p) {
-  // 1) Si hay prices[], muestra SOLO el de 10 units (si existe)
+function priceHTML(p) {
+  // si hay lista de precios, pintamos 1 fila por item
   if (Array.isArray(p.prices) && p.prices.length) {
-    const ten = p.prices.find(x => String(x.label || "").toLowerCase().includes("10")) || p.prices[0];
-    const amt = formatMoney(ten.amount, p.currency);
-    const cur = (p.currency || "COP").toUpperCase();
+    const rows = p.prices.slice(0, 2).map(x => {
+      const amt = formatMoney(x.amount);
+      const labelEN = x.label || "";
+      const labelES = x.label_es || "";
+      return `
+        <div class="price-row">
+          <strong>$${amt} COP</strong>
+          <span class="price-note">/ ${labelEN} <span class="muted">(${labelES})</span></span>
+        </div>
+      `;
+    }).join("");
 
-    return `
-      <div class="price-single">
-        <strong>$${amt} ${cur}</strong>
-        <span class="price-note">/ ${ten.label || ""}</span>
-        <span class="es"><strong>$${amt} ${cur}</strong> <span class="price-note">/ ${ten.label_es || ""}</span></span>
-      </div>
-    `;
+    return `<div class="price-box">${rows}</div>`;
   }
 
-  // 2) fallback viejo
+  // fallback
   if (p.price_from) {
-    const amt = formatMoney(p.price_from, p.currency);
-    const cur = (p.currency || "COP").toUpperCase();
-    return `<div class="price-single"><strong>$${amt} ${cur}</strong><span class="es"><strong>$${amt} ${cur}</strong></span></div>`;
+    const amt = formatMoney(p.price_from);
+    return `<div class="price">From $${amt} COP<span class="es">Desde $${amt} COP</span></div>`;
   }
 
-  return `<div class="price-single"><strong>Request quote</strong><span class="es"><strong>Pedir cotización</strong></span></div>`;
+  return `<div class="price">Request quote<span class="es">Pedir cotización</span></div>`;
 }
 
   // ---------- CARD ----------
