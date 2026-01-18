@@ -71,35 +71,35 @@ window.PRODUCTS = [
     gallery: ["images/products/rose-purple-mix/gallery/01.webp"],
     badge: "Nuevo",
     available: true
-  },
+  },  
 
   // =========================
-  // ROSE BOUQUETS (separado de "rose-colors")
+  // FLOWERS (types)
   // =========================
-  {
-    id: "rose-bouquet",
-    category: "rose-colors",
-    name: "Classic Roses Bouquet",
-    name_es: "Ramo clásico de rosas",
-    price_from: 130000,
+
+   {
+    id: "Rosas",
+    category: "flowers",
+    name: "Roses",
+    name_es: "Rosas",
+    prices: [
+      { amount: 15000, label: "unit", label_es: "unidad" },
+      { amount: 150000, label: "10 units", label_es: "10 unidades" }
+    ],
     currency: "COP",
     thumb: "images/products/rose-bouquet/thumb/thumb.webp",
     gallery: ["images/products/rose-bouquet/gallery/01.webp"],
     badge: "",
     available: true
   },
-
-  // =========================
-  // FLOWERS (types)
-  // =========================
-  {
+   {
     id: "tulips",
     category: "flowers",
     name: "Tulips",
     name_es: "Tulipanes",
     prices: [
-      { amount: 15000, label: "unit", label_es: "unidad" },
-      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 10000, label: "unit", label_es: "unidad" },
+      { amount: 110000, label: "10 units", label_es: "10 unidades" }
     ],
     currency: "COP",
     thumb: "images/tulips/Tulips_bouquets.webp",
@@ -128,8 +128,8 @@ window.PRODUCTS = [
     name: "Peonies",
     name_es: "Peonías",
     prices: [
-      { amount: 15000, label: "unit", label_es: "unidad" },
-      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 20000, label: "unit", label_es: "unidad" },
+      { amount: 180000, label: "10 units", label_es: "10 unidades" }
     ],
     currency: "COP",
     thumb: "images/peonies/Bouquets_of_paper_peonies.webp",
@@ -143,8 +143,8 @@ window.PRODUCTS = [
     name: "Carnations",
     name_es: "Claveles",
     prices: [
-      { amount: 15000, label: "unit", label_es: "unidad" },
-      { amount: 130000, label: "10 units", label_es: "10 unidades" }
+      { amount: 16000, label: "unit", label_es: "unidad" },
+      { amount: 150000, label: "10 units", label_es: "10 unidades" }
     ],
     currency: "COP",
     thumb: "images/carnations/Carnations_bouquets.webp",
@@ -161,7 +161,7 @@ window.PRODUCTS = [
     category: "bouquets",
     name: "Paper Flowers Bouquet",
     name_es: "Ramo de flores de papel",
-    price_from: 120000,
+    price_from: 150000,
     currency: "COP",
     thumb: "images/bouquets/Paper_flowers_bouquets.webp",
     gallery: ["images/bouquets/Paper_flowers_bouquets.webp"],
@@ -209,7 +209,7 @@ window.PRODUCTS = [
     category: "bouquets",
     name: "Wedding Paper Flowers Bouquet",
     name_es: "Ramo para boda con flores de papel",
-    price_from: 150000,
+    price_from: 180000,
     currency: "COP",
     thumb: "images/wedding/Wedding_paper_flowers_bouquets.webp",
     gallery: ["images/wedding/Wedding_paper_flowers_bouquets.webp"],
