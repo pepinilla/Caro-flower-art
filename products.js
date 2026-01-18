@@ -13,7 +13,7 @@ window.PRODUCTS = [
   // =========================
   {
     id: "rose-salmon",
-    category: "roses",
+    category: "rose-colors",
     name: "Salmon Roses",
     name_es: "Rosas salmón",
     price_from: 15000,
@@ -25,7 +25,7 @@ window.PRODUCTS = [
   },
   {
     id: "rose-red",
-    category: "roses",
+    category: "rose-colors",
     name: "Red Roses",
     name_es: "Rosas rojas",
     price_from: 15000,
@@ -37,7 +37,7 @@ window.PRODUCTS = [
   },
   {
     id: "rose-yellow-bouquet",
-    category: "roses",
+    category: "rose-colors",
     name: "Yellow Roses Bouquet",
     name_es: "Ramo de rosas amarillas",
     price_from: 15000,
@@ -49,7 +49,7 @@ window.PRODUCTS = [
   },
   {
     id: "rose-purple-mix",
-    category: "roses",
+    category: "rose-colors",
     name: "Purple Mix",
     name_es: "Mezcla morada",
     price_from: 22000,
