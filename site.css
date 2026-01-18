@@ -1036,8 +1036,8 @@ line-height: 1.15;
   font-size: .92em;
 }
 
-/* ---------- SINGLE PRICE BOX ---------- */
-.price-single {
+/* ---------- SINGLE PRICE BOX (one-line, clean) ---------- */
+.price-box {
   margin: 14px auto 0;
   padding: 14px 16px;
   border-radius: 18px;
@@ -1046,21 +1046,17 @@ line-height: 1.15;
   text-align: center;
 }
 
-.price-single strong {
-  font-size: 1.15rem;
-}
-
-.price-single .price-note {
-  margin-left: 6px;
+.price-line {
+  font-size: 1.05rem;
   font-weight: 600;
-  opacity: .75;
+  margin: 6px 0;
 }
 
-.price-single .es {
-  display: block;
-  margin-top: 6px;
-  opacity: .85;
-  font-style: italic;
+.price-units {
+  margin-left: 6px;
+  font-size: .9rem;
+  font-weight: 500;
+  opacity: .75;
 }
 
 /* ---------- Make card content spacing tighter ---------- */
