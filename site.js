@@ -107,11 +107,15 @@
       const c = String(cfg.category).toLowerCase();
       list = list.filter(p => p.category === c);
     } else if (mode === "roses") {
-      list = list.filter(p => p.id.startsWith("rose"));
-    } else if (mode === "ids" && Array.isArray(cfg.ids)) {
-      const set = new Set(cfg.ids.map(x => String(x)));
-      list = list.filter(p => set.has(p.id));
-    }
+  // Solo ramos de rosas (category = "roses")
+  list = list.filter(p => p.category === "roses");
+} else if (mode === "rose-colors") {
+  // Solo colores de rosas (category = "rose-colors")
+  list = list.filter(p => p.category === "rose-colors");
+} else if (mode === "ids" && Array.isArray(cfg.ids)) {
+  const set = new Set(cfg.ids.map(x => String(x)));
+  list = list.filter(p => set.has(p.id));
+}
 
     grid.innerHTML = list.map(cardHTML).join("");
 
