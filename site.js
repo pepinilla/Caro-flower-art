@@ -22,7 +22,125 @@
     thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
     price_from: Number(p.price_from || 0),
+    prices: Array.isArray(p.prices) ? p.prices : [],
+    currency: p.currency || "COP",
   })).filter(p => p.id && p.thumb);
+
+  // ---------- MINI CSS (injected once) ----------
+  function injectMiniStyles() {
+    if (qs("#caro-mini-styles")) return;
+
+    const style = document.createElement("style");
+    style.id = "caro-mini-styles";
+    style.textContent = `
+      /* Buttons row inside cards */
+      .actions-row{
+        display:flex; gap:12px; justify-content:center; align-items:center;
+        flex-wrap:wrap; margin-top:14px;
+      }
+      .btn-action{
+        display:inline-flex; align-items:center; justify-content:center;
+        padding:12px 16px; border-radius:14px;
+        font-weight:700; text-decoration:none; cursor:pointer;
+        border:1px solid rgba(220, 150, 170, .35);
+        background: rgba(250, 240, 244, .9);
+        color: inherit;
+        min-width: 160px;
+      }
+      .btn-action .es{
+        display:block; font-weight:600; opacity:.75;
+        font-style:italic; margin-top:4px;
+      }
+      .btn-outline{ background: transparent; }
+      .btn-action:hover{ transform: translateY(-1px); }
+
+      /* Price pills (unit + 10 units) */
+      .price-stack{ display:grid; gap:10px; justify-items:center; margin:12px 0; }
+      .price-pill{
+        padding:12px 16px; border-radius:16px;
+        background: rgba(250, 240, 244, .9);
+        border:1px solid rgba(220, 150, 170, .25);
+        text-align:center;
+        min-width: 220px;
+      }
+      .price-note{ margin-left:6px; opacity:.75; font-weight:600; }
+
+      /* Modal: make photo NOT crop on desktop + readable text */
+      .gallery-panel{
+        max-width: 980px;
+        width: calc(100% - 24px);
+        max-height: calc(100vh - 24px);
+        overflow: hidden;
+      }
+
+      /* Keep image fully visible (no crop) */
+      .gallery-image-wrap{
+        position: relative;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        max-height: 70vh;
+        overflow:hidden;
+        border-radius: 16px;
+      }
+
+      #galleryImage{
+        width: 100%;
+        height: auto;
+        max-height: 70vh;
+        object-fit: contain; /* ✅ this avoids cropping */
+        display:block;
+      }
+
+      /* Text overlay with gradient so it’s readable */
+      .gallery-meta{
+        position:absolute;
+        left:0; right:0; bottom:0;
+        padding: 14px 16px;
+        color: #111;
+        pointer-events:none;
+        background: linear-gradient(to top, rgba(255,255,255,.92), rgba(255,255,255,.0));
+      }
+
+      .gallery-title{
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 1.2;
+        text-shadow: 0 1px 0 rgba(255,255,255,.6);
+      }
+
+      .gallery-price{
+        margin-top: 6px;
+        font-weight: 700;
+      }
+
+      .modal-price-line{
+        margin: 4px 0;
+      }
+
+      /* Make close button always visible */
+      .gallery-close{
+        width: 44px; height: 44px;
+        border-radius: 999px;
+        font-size: 26px;
+        line-height: 1;
+      }
+
+      /* Nav buttons a bit nicer */
+      .gallery-nav{
+        width: 44px; height: 44px;
+        border-radius: 999px;
+        font-size: 28px;
+      }
+
+      /* On very small screens: give more height to image */
+      @media (max-width: 480px){
+        .gallery-image-wrap{ max-height: 78vh; }
+        #galleryImage{ max-height: 78vh; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
 
   // ---------- HEADER (from header.html) ----------
   async function injectHeader() {
@@ -34,15 +152,13 @@
       if (!res.ok) throw new Error("header.html not found");
       host.innerHTML = await res.text();
 
-      // Si estoy en otra página, pero quiero ir al #gallery o #contact del index:
       const onIndex = location.pathname === "/" || location.pathname.endsWith("/index.html");
       qsa('a[href^="/#"]', host).forEach(a => {
-        const href = a.getAttribute("href"); // "/#gallery"
+        const href = a.getAttribute("href");
         if (!href) return;
-        if (!onIndex) a.setAttribute("href", "/index.html" + href.substring(1)); // "/index.html#gallery"
+        if (!onIndex) a.setAttribute("href", "/index.html" + href.substring(1));
       });
     } catch (e) {
-      // fallback mínimo si falla el fetch
       host.innerHTML = `
         <header class="site-header">
           <div class="header-inner">
@@ -64,10 +180,38 @@
   }
 
   // ---------- PRICE ----------
+  function formatMoney(amount) {
+    const n = Number(amount || 0);
+    if (!n) return "";
+    try {
+      return new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(n);
+    } catch {
+      return String(Math.round(n));
+    }
+  }
+
   function priceHTML(p) {
-    return p.price_from
-      ? `<div class="price">From $${Math.round(p.price_from)}<span class="es">Desde $${Math.round(p.price_from)}</span></div>`
-      : `<div class="price">Request quote<span class="es">Pedir cotización</span></div>`;
+    if (Array.isArray(p.prices) && p.prices.length) {
+      const items = p.prices.slice(0, 2).map(x => {
+        const amt = formatMoney(x.amount);
+        const l1 = x.label || "";
+        const l2 = x.label_es || "";
+        return `
+          <div class="price-pill">
+            <strong>$${amt}</strong> <span class="price-note">${l1}</span>
+            <span class="es"><strong>$${amt}</strong> <span class="price-note">${l2}</span></span>
+          </div>
+        `;
+      }).join("");
+      return `<div class="price-stack">${items}</div>`;
+    }
+
+    if (p.price_from) {
+      const amt = formatMoney(p.price_from);
+      return `<div class="price">From $${amt}<span class="es">Desde $${amt}</span></div>`;
+    }
+
+    return `<div class="price">Request quote<span class="es">Pedir cotización</span></div>`;
   }
 
   // ---------- CARD ----------
@@ -83,9 +227,14 @@
           <h3>${p.name}<span class="es">${p.name_es}</span></h3>
           ${priceHTML(p)}
 
-          <div class="card-actions">
-            <a href="/index.html#contact" class="btn-quote" data-prefill="${escapeHtml(p.name)}">Request Quote<span class="es">Pedir cotización</span></a>
-            <a href="#" class="btn-photos" data-id="${p.id}">View Photos<span class="es">Ver fotos</span></a>
+          <div class="card-actions actions-row">
+            <a href="/index.html#contact" class="btn-quote btn-action" data-prefill="${escapeHtml(p.name)}">
+              Request Quote<span class="es">Pedir cotización</span>
+            </a>
+
+            <button type="button" class="btn-photos btn-action btn-outline" data-id="${p.id}">
+              View Photos<span class="es">Ver fotos</span>
+            </button>
           </div>
         </div>
       </article>
@@ -93,43 +242,38 @@
   }
 
   // ---------- RENDER GRID ----------
-    function renderGrid(cfg) {
-  const gridId = (cfg && cfg.gridId) ? cfg.gridId : "galleryGrid";
-  const grid = qs("#" + gridId);
-  if (!grid) return;
+  function renderGrid(cfg) {
+    const gridId = (cfg && cfg.gridId) ? cfg.gridId : "galleryGrid";
+    const grid = qs("#" + gridId);
+    if (!grid) return;
 
     let list = PRODUCTS.slice();
-
-    // cfg.mode: "all" | "category" | "roses" | "ids"
     const mode = (cfg && cfg.mode) || "all";
 
     if (mode === "category" && cfg.category) {
       const c = String(cfg.category).toLowerCase();
       list = list.filter(p => p.category === c);
     } else if (mode === "roses") {
-  // Solo ramos de rosas (category = "roses")
-  list = list.filter(p => p.category === "roses");
-} else if (mode === "rose-colors") {
-  // Solo colores de rosas (category = "rose-colors")
-  list = list.filter(p => p.category === "rose-colors");
-} else if (mode === "ids" && Array.isArray(cfg.ids)) {
-  const set = new Set(cfg.ids.map(x => String(x)));
-  list = list.filter(p => set.has(p.id));
-}
+      list = list.filter(p => p.category === "roses");
+    } else if (mode === "rose-colors") {
+      list = list.filter(p => p.category === "rose-colors");
+    } else if (mode === "ids" && Array.isArray(cfg.ids)) {
+      const set = new Set(cfg.ids.map(x => String(x)));
+      list = list.filter(p => set.has(p.id));
+    }
 
     grid.innerHTML = list.map(cardHTML).join("");
 
-    // Bind "View Photos"
+    // View Photos
     qsa(".btn-photos", grid).forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
+      btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-id");
         const p = PRODUCTS.find(x => x.id === id);
         if (p) openGallery(p);
       });
     });
 
-    // Bind "Request Quote" (prefill)
+    // Request Quote (prefill)
     qsa(".btn-quote", grid).forEach(btn => {
       btn.addEventListener("click", () => {
         window.CARO_SELECTED_PRODUCT = btn.getAttribute("data-prefill") || "";
@@ -170,11 +314,10 @@
 
           <div class="gallery-image-wrap">
             <img id="galleryImage" alt="Product photo" />
-          </div>
-
-          <div class="gallery-meta">
-            <div class="gallery-title" id="galleryTitle"></div>
-            <div class="gallery-price" id="galleryPrice"></div>
+            <div class="gallery-meta">
+              <div class="gallery-title" id="galleryTitle"></div>
+              <div class="gallery-price" id="galleryPrice"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -196,9 +339,23 @@
     galleryState = { photos, index: 0, product: p };
 
     title.textContent = `${p.name}${p.name_es ? " / " + p.name_es : ""}`;
-    price.innerHTML = p.price_from
-      ? `From $${Math.round(p.price_from)} <span class="es">Desde $${Math.round(p.price_from)}</span>`
-      : `Request quote <span class="es">Pedir cotización</span>`;
+
+    if (Array.isArray(p.prices) && p.prices.length) {
+      price.innerHTML = p.prices.slice(0, 2).map(x => {
+        const amt = formatMoney(x.amount);
+        return `
+          <div class="modal-price-line">
+            <strong>$${amt}</strong> <span class="price-note">${x.label || ""}</span>
+            <span class="es"><strong>$${amt}</strong> <span class="price-note">${x.label_es || ""}</span></span>
+          </div>
+        `;
+      }).join("");
+    } else if (p.price_from) {
+      const amt = formatMoney(p.price_from);
+      price.innerHTML = `From $${amt} <span class="es">Desde $${amt}</span>`;
+    } else {
+      price.innerHTML = `Request quote <span class="es">Pedir cotización</span>`;
+    }
 
     img.src = photos[0];
 
@@ -232,6 +389,7 @@
     document.addEventListener("click", (e) => {
       const t = e.target;
       if (!t) return;
+
       if (t.matches("[data-close]")) closeGallery();
 
       const modal = qs("#galleryModal");
@@ -262,7 +420,6 @@
     if (window.CARO_SELECTED_PRODUCT) {
       occ.value = window.CARO_SELECTED_PRODUCT;
       window.CARO_SELECTED_PRODUCT = "";
-      // opcional: enfocar el textarea
       const msg = qs("#message");
       if (msg) msg.focus();
     }
@@ -281,11 +438,11 @@
   // ---------- INIT ----------
   document.addEventListener("DOMContentLoaded", async () => {
     await injectHeader();
+    injectMiniStyles();
 
     const cfg = window.CARO_PAGE || { mode: "all" };
     renderGrid(cfg);
 
-    // al llegar al index#contact desde otro producto:
     setTimeout(applyQuotePrefill, 50);
   });
 })();
