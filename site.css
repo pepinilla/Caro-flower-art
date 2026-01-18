@@ -936,3 +936,56 @@ body{
 .inline-link:hover{
   opacity: .8;
 }
+
+/* ===== Contact section (nice buttons) ===== */
+.contact-subtitle{
+  max-width: 760px;
+  margin: 10px auto 20px;
+  opacity: .8;
+}
+
+.contact-cards{
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.contact-card{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  text-decoration: none;
+  border: 1px solid rgba(220,150,170,.25);
+  background: rgba(250,240,244,.85);
+  color: inherit;
+}
+
+.contact-card i{
+  font-size: 22px;
+  width: 30px;
+  text-align: center;
+  opacity: .9;
+}
+
+.contact-card-title{
+  font-weight: 800;
+}
+
+.contact-card-sub{
+  font-style: italic;
+  opacity: .75;
+  margin-top: 2px;
+}
+
+.contact-card-arrow{
+  margin-left: auto;
+  font-size: 22px;
+  opacity: .6;
+}
+
+.contact-card:hover{
+  transform: translateY(-1px);
+}
