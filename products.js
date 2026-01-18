@@ -78,7 +78,7 @@ window.PRODUCTS = [
   // =========================
   {
     id: "rose-bouquet",
-    category: "roses",
+    category: "rose-colors",
     name: "Classic Roses Bouquet",
     name_es: "Ramo clásico de rosas",
     price_from: 130000,
@@ -171,8 +171,8 @@ window.PRODUCTS = [
   {
     id: "bouquet-paper-flowers-2",
     category: "bouquets",
-    name: "Paper Flowers Bouquet (Alt)",
-    name_es: "Ramo de flores de papel (Alt)",
+    name: "Paper Flowers Bouquet",
+    name_es: "Ramo de flores de papel",
     price_from: 140000,
     currency: "COP",
     thumb: "images/bouquets/Paper_flower_bouquets.webp",
