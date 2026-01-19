@@ -162,8 +162,8 @@ window.PRODUCTS = [
     name_es: "Ramo de flores de papel en jarron",
     price_from: 200000,
     currency: "COP",
-    thumb: "images/bouquets/Paper_flowers_bouquets.webp",
-    gallery: ["images/bouquets/Paper-flowers-bouquets.webp"],
+    thumb: "images/bouquets/jar/thumb/Paper_flowers_bouquets.webp",
+    gallery: ["images/bouquets/jar/gallery/Paper-flowers-bouquets.webp"],
     badge: "Bestseller",
     available: true
   },
