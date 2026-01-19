@@ -142,18 +142,7 @@ window.PRODUCTS = [
   // =========================
   // BOUQUETS
   // =========================
-  {
-    id: "bouquet-paper-flowers",
-    category: "bouquets",
-    name: "Paper Flowers Bouquet",
-    name_es: "Ramo de flores de papel",
-    price_from: 150000,
-    currency: "COP",
-    thumb: "images/bouquets/Paper_flowers_bouquets.webp",
-    gallery: ["images/bouquets/Paper_flowers_bouquets.webp"],
-    badge: "Popular",
-    available: true
-  },
+   
   {
     id: "bouquet-paper-flowers-2",
     category: "bouquets",
@@ -169,11 +158,11 @@ window.PRODUCTS = [
   {
     id: "bouquet-paper-flowers-3",
     category: "bouquets",
-    name: "Paper Flowers Bouquet",
-    name_es: "Ramo de flores de papel",
-    price_from: 150000,
+    name: "Paper Flower Bouquet in a Jar",
+    name_es: "Ramo de flores de papel en jarron",
+    price_from: 200000,
     currency: "COP",
-    thumb: "images/bouquets/Paper-flowers-bouquets.webp",
+    thumb: "images/bouquets/Paper_flowers_bouquets.webp",
     gallery: ["images/bouquets/Paper-flowers-bouquets.webp"],
     badge: "Bestseller",
     available: true
