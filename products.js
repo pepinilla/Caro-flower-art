@@ -150,8 +150,9 @@ window.PRODUCTS = [
     name_es: "Ramo de flores de papel",
     price_from: 140000,
     currency: "COP",
-    thumb: "images/bouquets/Paper_flower_bouquets.webp",
-    gallery: ["images/bouquets/Paper_flower_bouquets.webp"],
+    thumb: "images/bouquets/hand/thumb/Paper_flower_bouquets.webp",
+    gallery: ["images/bouquets/hand/gallery/Wedding-bouquet-2.webp",
+             "images/bouquets/hand/gallery/Wedding-bouquet.webp"],
     badge: "",
     available: true
   },
