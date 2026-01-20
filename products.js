@@ -165,7 +165,8 @@ window.PRODUCTS = [
     price_from: 200000,
     currency: "COP",
     thumb: "images/bouquets/jar/thumb/Paper_flowers_bouquets.webp",
-    gallery: ["images/bouquets/jar/gallery/Paper-flowers-bouquets.webp"],
+    gallery: ["images/bouquets/jar/gallery/Paper-flowers-bouquets.webp",
+             "images/bouquets/jar/thumb/Paper_flowers_bouquets.webp"],
     badge: "Bestseller",
     available: true
   },
