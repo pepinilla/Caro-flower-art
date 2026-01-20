@@ -34,6 +34,7 @@
         location.pathname === "/" ||
         location.pathname.endsWith("/index.html");
 
+      // En páginas internas: /#contact -> /index.html#contact
       qsa('a[href^="/#"]', host).forEach(a => {
         if (!onIndex) {
           a.setAttribute("href", "/index.html" + a.getAttribute("href").slice(1));
@@ -81,11 +82,11 @@
     return `
       <article class="card" data-category="${p.category}" data-id="${p.id}">
         <div class="card-image-wrapper">
-          <img src="${p.thumb}" alt="${p.name}" loading="lazy" />
+          <img src="${p.thumb}" alt="${escapeHtml(p.name)}" loading="lazy" />
         </div>
 
         <div class="card-content">
-          <h3>${p.name}<span class="es">${p.name_es}</span></h3>
+          <h3>${escapeHtml(p.name)}<span class="es">${escapeHtml(p.name_es)}</span></h3>
 
           ${priceHTML(p)}
 
@@ -98,6 +99,7 @@
             </a>
 
             <button class="btn-action btn-outline btn-photos"
+                    type="button"
                     data-id="${p.id}">
               View Photos
               <span class="es">Ver fotos</span>
@@ -137,57 +139,144 @@
 
   // ---------- MODAL ----------
   function ensureModal() {
-  if (qs("#galleryModal")) return;
+    if (qs("#galleryModal")) return;
 
-  document.body.insertAdjacentHTML("beforeend", `
-    <div class="gallery-modal" id="galleryModal">
-      <div class="gallery-backdrop" data-close></div>
+    document.body.insertAdjacentHTML("beforeend", `
+      <div class="gallery-modal" id="galleryModal">
+        <div class="gallery-backdrop" data-close></div>
 
-      <div class="gallery-panel">
-        <button class="gallery-close" data-close>×</button>
+        <div class="gallery-panel" role="dialog" aria-modal="true">
+          <button class="gallery-close" type="button" data-close aria-label="Close">×</button>
 
-        <div class="gallery-body">
-          <button class="gallery-nav gallery-prev" type="button">‹</button>
-          <button class="gallery-nav gallery-next" type="button">›</button>
+          <div class="gallery-body">
+            <button class="gallery-nav gallery-prev" type="button" aria-label="Previous">‹</button>
+            <button class="gallery-nav gallery-next" type="button" aria-label="Next">›</button>
 
-          <div class="gallery-image-wrap">
-            <img id="galleryImage" alt="" />
-          </div>
+            <div class="gallery-image-wrap" id="gallerySwipeArea">
+              <img id="galleryImage" alt="" />
+            </div>
 
-          <div class="gallery-meta">
-            <div id="galleryTitle" class="gallery-title"></div>
-            <div id="galleryPrice" class="gallery-price"></div>
+            <div class="gallery-meta">
+              <div id="galleryTitle" class="gallery-title"></div>
+              <div id="galleryPrice" class="gallery-price"></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  `);
-}
+    `);
+  }
 
-  let galleryState = { photos: [], index: 0 };
+  let galleryState = { photos: [], index: 0, isOpen: false };
+
+  function renderGalleryImage() {
+    const img = qs("#galleryImage");
+    if (!img || !galleryState.photos.length) return;
+    img.src = galleryState.photos[galleryState.index];
+  }
+
+  function nextPhoto() {
+    if (!galleryState.photos.length) return;
+    galleryState.index = (galleryState.index + 1) % galleryState.photos.length;
+    renderGalleryImage();
+  }
+
+  function prevPhoto() {
+    if (!galleryState.photos.length) return;
+    galleryState.index =
+      (galleryState.index - 1 + galleryState.photos.length) % galleryState.photos.length;
+    renderGalleryImage();
+  }
 
   function openGallery(p) {
     ensureModal();
 
-    galleryState.photos = p.gallery.length ? p.gallery : [p.thumb];
+    galleryState.photos = (p.gallery && p.gallery.length) ? p.gallery : [p.thumb];
     galleryState.index = 0;
+    galleryState.isOpen = true;
 
-    qs("#galleryImage").src = galleryState.photos[0];
+    renderGalleryImage();
+
     qs("#galleryTitle").textContent = `${p.name} / ${p.name_es}`;
     qs("#galleryPrice").innerHTML = priceHTML(p);
+
+    // ✅ conectar flechas
+    const btnPrev = qs(".gallery-prev");
+    const btnNext = qs(".gallery-next");
+    if (btnPrev) btnPrev.onclick = (e) => { e.preventDefault(); e.stopPropagation(); prevPhoto(); };
+    if (btnNext) btnNext.onclick = (e) => { e.preventDefault(); e.stopPropagation(); nextPhoto(); };
+
+    // ✅ swipe (móvil)
+    setupSwipe();
 
     qs("#galleryModal").classList.add("is-open");
     document.body.style.overflow = "hidden";
   }
 
   function closeGallery() {
-    qs("#galleryModal")?.classList.remove("is-open");
+    const modal = qs("#galleryModal");
+    if (!modal) return;
+
+    modal.classList.remove("is-open");
     document.body.style.overflow = "";
+    galleryState.isOpen = false;
   }
 
-  document.addEventListener("click", e => {
-    if (e.target.matches("[data-close]")) closeGallery();
+  // cerrar por backdrop o X
+  document.addEventListener("click", (e) => {
+    if (e.target && e.target.matches("[data-close]")) {
+      closeGallery();
+    }
   });
+
+  // teclado: Esc, ←, →
+  document.addEventListener("keydown", (e) => {
+    if (!galleryState.isOpen) return;
+
+    if (e.key === "Escape") closeGallery();
+    if (e.key === "ArrowRight") nextPhoto();
+    if (e.key === "ArrowLeft") prevPhoto();
+  });
+
+  // swipe helpers
+  let swipeBound = false;
+  function setupSwipe() {
+    if (swipeBound) return;
+    const area = qs("#gallerySwipeArea");
+    if (!area) return;
+
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+
+    area.addEventListener("touchstart", (ev) => {
+      if (!galleryState.isOpen) return;
+      const t = ev.touches && ev.touches[0];
+      if (!t) return;
+      tracking = true;
+      startX = t.clientX;
+      startY = t.clientY;
+    }, { passive: true });
+
+    area.addEventListener("touchend", (ev) => {
+      if (!galleryState.isOpen || !tracking) return;
+      tracking = false;
+
+      const t = ev.changedTouches && ev.changedTouches[0];
+      if (!t) return;
+
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+
+      // evitar que swipe vertical dispare
+      if (Math.abs(dx) < 40) return;
+      if (Math.abs(dy) > 120) return;
+
+      if (dx < 0) nextPhoto();
+      else prevPhoto();
+    }, { passive: true });
+
+    swipeBound = true;
+  }
 
   // ---------- HELPERS ----------
   function escapeHtml(str) {
