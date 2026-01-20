@@ -152,6 +152,7 @@ window.PRODUCTS = [
     currency: "COP",
     thumb: "images/bouquets/hand/thumb/Paper_flower_bouquets.webp",
     gallery: ["images/bouquets/hand/gallery/Wedding-bouquet-2.webp",
+              "images/bouquets/hand/thumb/Paper_flower_bouquets.webp",
              "images/bouquets/hand/gallery/Wedding-bouquet.webp"],
     badge: "",
     available: true
