@@ -39,7 +39,7 @@ window.PRODUCTS = [
     currency: "COP",
     thumb: "images/roses/red roses/Paper_red_roses.webp",
     gallery: ["images/roses/red roses/Paper_red_roses.webp",
-             "images/roses/r1ed roses/Paper_red_roses_bouquet.webp",
+             "images/roses/red roses/Paper_red_roses_bouquet.webp",
              "images/roses/red roses/Red_paper_rose_2.webp",
              "images/roses/red roses/Red_paper_rose_3.webp",
              "images/roses/red roses/A_paper_red_rose.webp",
