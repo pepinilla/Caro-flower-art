@@ -37,8 +37,13 @@ window.PRODUCTS = [
       { amount: 130000, label: "10 units", label_es: "10 unidades" }
     ],
     currency: "COP",
-    thumb: "images/products/rose-red/thumb/thumb.webp",
-    gallery: ["images/products/rose-red/gallery/01.webp"],
+    thumb: "images/roses/red roses/Paper_red_roses.webp",
+    gallery: ["images/roses/red roses/Paper_red_roses.webp",
+             "images/roses/r1ed roses/Paper_red_roses_bouquet.webp",
+             "images/roses/red roses/Red_paper_rose_2.webp",
+             "images/roses/red roses/Red_paper_rose_3.webp",
+             "images/roses/red roses/A_paper_red_rose.webp",
+             "images/roses/red roses/A_rose_bud.webp"],
     badge: "Popular",
     available: true
   },
