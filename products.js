@@ -68,15 +68,17 @@ window.PRODUCTS = [
   {
     id: "rose-purple-mix",
     category: "rose-colors",
-    name: "Purple Roses",
-    name_es: "Rosas moradas",
+    name: "Purple - Pink Roses",
+    name_es: "Rosas moradas - rosadas",
     prices: [
       { amount: 15000, label: "unit", label_es: "unidad" },
       { amount: 130000, label: "10 units", label_es: "10 unidades" }
     ],
     currency: "COP",
-    thumb: "images/products/rose-purple-mix/thumb/thumb.webp",
-    gallery: ["images/products/rose-purple-mix/gallery/01.webp"],
+    thumb: "images/roses/purple roses/Purple-flowers.webp",
+    gallery: ["images/roses/purple roses/Purple-flowers.webp",
+             "images/roses/purple roses/Pink-purple_roses_3.webp",
+             "images/roses/purple roses/Pink-purple_roses.webp"],
     badge: "Nuevo",
     available: true
   },  
