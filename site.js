@@ -7,17 +7,28 @@
   const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
 
   /* ======================
-     CURRENCY
+     CURRENCY (LocalStorage)
      ====================== */
-  window.CARO_CURRENCY = localStorage.getItem("CARO_CURRENCY") || "CAD";
+  const CURRENCY_KEY = "CARO_CURRENCY";
+  window.CARO_CURRENCY = localStorage.getItem(CURRENCY_KEY) || "CAD";
 
   function setCurrency(cur){
     window.CARO_CURRENCY = cur;
-    localStorage.setItem("CARO_CURRENCY", cur);
+    localStorage.setItem(CURRENCY_KEY, cur);
+
+    // Actualiza grid
     renderGrid(window.CARO_PAGE || {});
+
+    // Actualiza modal si está abierto
+    if (galleryState.isOpen && galleryState.product) {
+      qs("#galleryPrice").innerHTML = priceHTML(galleryState.product);
+    }
+
+    // Actualiza UI del header (botones)
+    syncCurrencyUI();
   }
 
-  // (opcional) por si luego pones botones en el header:
+  // por si quieres llamarlo desde cualquier lado
   window.CARO_setCurrency = setCurrency;
 
   /* ======================
@@ -32,11 +43,10 @@
     thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
 
-    // viejo
+    // formatos soportados:
     prices: Array.isArray(p.prices) ? p.prices : [],
     price_from: Number(p.price_from || 0),
 
-    // nuevo
     prices_by_currency: p.prices_by_currency || null,
     price_from_by_currency: p.price_from_by_currency || null,
 
@@ -59,19 +69,32 @@
         location.pathname === "/" ||
         location.pathname.endsWith("/index.html");
 
+      // En páginas internas: /#contact -> /index.html#contact
       qsa('a[href^="/#"]', host).forEach(a => {
         if (!onIndex) {
           a.setAttribute("href", "/index.html" + a.getAttribute("href").slice(1));
         }
       });
 
-      // (opcional) si algún día haces botones de currency:
-      // Ej: <button data-currency="CAD">CAD</button>
+      // Botones de moneda
       qsa("[data-currency]", host).forEach(btn => {
         btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
       });
 
-    } catch {}
+      // pinta estado actual en header
+      syncCurrencyUI();
+    } catch {
+      /* fallback mínimo */
+    }
+  }
+
+  function syncCurrencyUI(){
+    const cur = window.CARO_CURRENCY;
+    qsa("[data-currency]").forEach(btn => {
+      btn.setAttribute("aria-pressed", btn.dataset.currency === cur ? "true" : "false");
+    });
+    const label = qs("#currencyLabel");
+    if (label) label.textContent = cur;
   }
 
   /* ======================
@@ -89,15 +112,13 @@
   function getPrices(p){
     const cur = window.CARO_CURRENCY;
 
-    // ✅ nuevo formato
+    // ✅ nuevo formato (recomendado)
     if (p.prices_by_currency && p.prices_by_currency[cur]) {
       return p.prices_by_currency[cur] || [];
     }
 
-    // ✅ fallback formato viejo
-    if (p.prices && p.prices.length) {
-      return p.prices;
-    }
+    // fallback viejo
+    if (p.prices && p.prices.length) return p.prices;
 
     return [];
   }
@@ -105,12 +126,12 @@
   function getPriceFrom(p){
     const cur = window.CARO_CURRENCY;
 
-    // ✅ nuevo formato: price_from_by_currency
+    // ✅ nuevo formato (price_from_by_currency)
     if (p.price_from_by_currency && typeof p.price_from_by_currency[cur] !== "undefined") {
       return Number(p.price_from_by_currency[cur] || 0);
     }
 
-    // ✅ fallback viejo
+    // fallback viejo
     if (p.price_from) return Number(p.price_from || 0);
 
     return 0;
@@ -124,7 +145,7 @@
       const rows = list.slice(0,2).map(x => `
         <div class="price-line">
           <strong>${formatMoney(x.amount, cur)}</strong>
-          <span class="price-units">/ ${x.label} – ${x.label_es}</span>
+          <span class="price-units">/ ${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
         </div>
       `).join("");
 
@@ -156,6 +177,7 @@
 
         <div class="card-content">
           <h3>${escapeHtml(p.name)}<span class="es">${escapeHtml(p.name_es)}</span></h3>
+
           ${priceHTML(p)}
 
           <div class="card-actions actions-row">
@@ -198,6 +220,12 @@
         if (p) openGallery(p);
       };
     });
+
+    qsa(".btn-quote", grid).forEach(btn => {
+      btn.onclick = () => {
+        window.CARO_SELECTED_PRODUCT = btn.dataset.prefill;
+      };
+    });
   }
 
   /* ======================
@@ -209,10 +237,11 @@
     document.body.insertAdjacentHTML("beforeend", `
       <div class="gallery-modal" id="galleryModal">
         <div class="gallery-backdrop" data-close></div>
-        <div class="gallery-panel">
-          <button class="gallery-close" data-close>×</button>
-          <button class="gallery-nav gallery-prev" type="button">‹</button>
-          <button class="gallery-nav gallery-next" type="button">›</button>
+
+        <div class="gallery-panel" role="dialog" aria-modal="true">
+          <button class="gallery-close" type="button" data-close aria-label="Close">×</button>
+          <button class="gallery-nav gallery-prev" type="button" aria-label="Previous">‹</button>
+          <button class="gallery-nav gallery-next" type="button" aria-label="Next">›</button>
 
           <div class="gallery-image-wrap">
             <img id="galleryImage" alt="">
@@ -227,13 +256,15 @@
     `);
   }
 
-  let galleryState = { photos: [], index: 0 };
+  let galleryState = { photos: [], index: 0, isOpen: false, product: null };
 
   function openGallery(p){
     ensureModal();
 
+    galleryState.product = p;
     galleryState.photos = (p.gallery && p.gallery.length) ? p.gallery : [p.thumb];
     galleryState.index = 0;
+    galleryState.isOpen = true;
 
     qs("#galleryImage").src = galleryState.photos[0];
     qs("#galleryTitle").textContent = `${p.name} / ${p.name_es}`;
@@ -241,11 +272,21 @@
 
     const prevBtn = qs(".gallery-prev");
     const nextBtn = qs(".gallery-next");
-    if (prevBtn) prevBtn.onclick = () => move(-1);
-    if (nextBtn) nextBtn.onclick = () => move(1);
+    if (prevBtn) prevBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); move(-1); };
+    if (nextBtn) nextBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); move(1); };
 
     qs("#galleryModal").classList.add("is-open");
     document.body.style.overflow = "hidden";
+  }
+
+  function closeGallery(){
+    const modal = qs("#galleryModal");
+    if (!modal) return;
+
+    modal.classList.remove("is-open");
+    document.body.style.overflow = "";
+    galleryState.isOpen = false;
+    galleryState.product = null;
   }
 
   function move(dir){
@@ -257,16 +298,26 @@
 
   document.addEventListener("click", e => {
     if (e.target && e.target.matches("[data-close]")){
-      qs("#galleryModal")?.classList.remove("is-open");
-      document.body.style.overflow = "";
+      closeGallery();
     }
   });
 
+  document.addEventListener("keydown", e => {
+    if (!galleryState.isOpen) return;
+    if (e.key === "Escape") closeGallery();
+    if (e.key === "ArrowLeft") move(-1);
+    if (e.key === "ArrowRight") move(1);
+  });
+
+  /* ======================
+     HELPERS
+     ====================== */
   function escapeHtml(str){
     return String(str || "")
       .replaceAll("&","&amp;")
       .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;");
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;");
   }
 
   /* ======================
