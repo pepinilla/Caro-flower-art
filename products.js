@@ -23,7 +23,10 @@ window.PRODUCTS = [
     ],
     currency: "COP",
     thumb: "images/products/rose-salmon/thumb/thumb.webp",
-    gallery: ["images/products/rose-salmon/gallery/01.webp"],
+    gallery: ["images/products/rose-salmon/gallery/01.webp",
+             "images/roses/salmon roses/Paper-rose-salmon-5.webp",
+             "images/roses/salmon roses/Paper-rose-salmon-4.webp",
+             "images/roses/salmon roses/Paper-rose-salmon-3.webp"],
     badge: "Favorito",
     available: true
   },
