@@ -17,6 +17,9 @@
     renderGrid(window.CARO_PAGE || {});
   }
 
+  // (opcional) por si luego pones botones en el header:
+  window.CARO_setCurrency = setCurrency;
+
   /* ======================
      PRODUCTS NORMALIZATION
      ====================== */
@@ -28,9 +31,15 @@
     category: String(p.category || "flowers").toLowerCase(),
     thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
+
+    // viejo
     prices: Array.isArray(p.prices) ? p.prices : [],
-    prices_by_currency: p.prices_by_currency || null,
     price_from: Number(p.price_from || 0),
+
+    // nuevo
+    prices_by_currency: p.prices_by_currency || null,
+    price_from_by_currency: p.price_from_by_currency || null,
+
     currency: p.currency || "COP",
   })).filter(p => p.id && p.thumb);
 
@@ -55,6 +64,13 @@
           a.setAttribute("href", "/index.html" + a.getAttribute("href").slice(1));
         }
       });
+
+      // (opcional) si algún día haces botones de currency:
+      // Ej: <button data-currency="CAD">CAD</button>
+      qsa("[data-currency]", host).forEach(btn => {
+        btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
+      });
+
     } catch {}
   }
 
@@ -73,15 +89,31 @@
   function getPrices(p){
     const cur = window.CARO_CURRENCY;
 
+    // ✅ nuevo formato
     if (p.prices_by_currency && p.prices_by_currency[cur]) {
-      return p.prices_by_currency[cur];
+      return p.prices_by_currency[cur] || [];
     }
 
+    // ✅ fallback formato viejo
     if (p.prices && p.prices.length) {
       return p.prices;
     }
 
     return [];
+  }
+
+  function getPriceFrom(p){
+    const cur = window.CARO_CURRENCY;
+
+    // ✅ nuevo formato: price_from_by_currency
+    if (p.price_from_by_currency && typeof p.price_from_by_currency[cur] !== "undefined") {
+      return Number(p.price_from_by_currency[cur] || 0);
+    }
+
+    // ✅ fallback viejo
+    if (p.price_from) return Number(p.price_from || 0);
+
+    return 0;
   }
 
   function priceHTML(p){
@@ -99,11 +131,12 @@
       return `<div class="price-box">${rows}</div>`;
     }
 
-    if (p.price_from){
+    const from = getPriceFrom(p);
+    if (from){
       return `
         <div class="price-box">
           <div class="price-line">
-            <strong>${formatMoney(p.price_from, cur)}</strong>
+            <strong>${formatMoney(from, cur)}</strong>
           </div>
         </div>`;
     }
@@ -178,11 +211,11 @@
         <div class="gallery-backdrop" data-close></div>
         <div class="gallery-panel">
           <button class="gallery-close" data-close>×</button>
-          <button class="gallery-nav gallery-prev">‹</button>
-          <button class="gallery-nav gallery-next">›</button>
+          <button class="gallery-nav gallery-prev" type="button">‹</button>
+          <button class="gallery-nav gallery-next" type="button">›</button>
 
           <div class="gallery-image-wrap">
-            <img id="galleryImage">
+            <img id="galleryImage" alt="">
           </div>
 
           <div class="gallery-meta">
@@ -198,15 +231,18 @@
 
   function openGallery(p){
     ensureModal();
-    galleryState.photos = p.gallery.length ? p.gallery : [p.thumb];
+
+    galleryState.photos = (p.gallery && p.gallery.length) ? p.gallery : [p.thumb];
     galleryState.index = 0;
 
     qs("#galleryImage").src = galleryState.photos[0];
     qs("#galleryTitle").textContent = `${p.name} / ${p.name_es}`;
     qs("#galleryPrice").innerHTML = priceHTML(p);
 
-    qs(".gallery-prev").onclick = () => move(-1);
-    qs(".gallery-next").onclick = () => move(1);
+    const prevBtn = qs(".gallery-prev");
+    const nextBtn = qs(".gallery-next");
+    if (prevBtn) prevBtn.onclick = () => move(-1);
+    if (nextBtn) nextBtn.onclick = () => move(1);
 
     qs("#galleryModal").classList.add("is-open");
     document.body.style.overflow = "hidden";
@@ -214,12 +250,13 @@
 
   function move(dir){
     const len = galleryState.photos.length;
+    if (!len) return;
     galleryState.index = (galleryState.index + dir + len) % len;
     qs("#galleryImage").src = galleryState.photos[galleryState.index];
   }
 
   document.addEventListener("click", e => {
-    if (e.target.matches("[data-close]")){
+    if (e.target && e.target.matches("[data-close]")){
       qs("#galleryModal")?.classList.remove("is-open");
       document.body.style.overflow = "";
     }
