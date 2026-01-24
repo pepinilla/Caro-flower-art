@@ -1,5 +1,8 @@
 /* ======================================================
-   CARO FLOWER ART – GLOBAL JS
+   CARO FLOWER ART – GLOBAL JS (STABLE)
+   - No BASE path logic
+   - Header loads from /header.html
+   - Gallery uses paths as-is (no modifications)
    ====================================================== */
 
 (function () {
@@ -13,31 +16,6 @@
   if (typeof CFG.portfolioMode === "undefined") CFG.portfolioMode = false;
   if (typeof CFG.autoCurrency === "undefined") CFG.autoCurrency = true;
   if (!CFG.defaultCurrency) CFG.defaultCurrency = "CAD";
-
-  /* ======================
-     BASE PATH (important for GitHub Pages subfolder)
-     ====================== */
-  function getBasePath() {
-    // If site.js is loaded from /something/site.js, basePath = /something
-    const s = document.currentScript;
-    if (s && s.src) {
-      try {
-        const u = new URL(s.src, location.href);
-        return u.pathname.replace(/\/[^\/]*$/, ""); // remove filename
-      } catch {}
-    }
-    return ""; // root
-  }
-  const BASE = getBasePath();
-
-  function withBase(path) {
-    // Ensures "/header.html" -> `${BASE}/header.html` when BASE is not empty
-    if (!path) return path;
-    if (!BASE) return path;
-    if (path.startsWith(BASE + "/")) return path;
-    if (path.startsWith("/")) return BASE + path;
-    return BASE + "/" + path;
-  }
 
   /* ======================
      CURRENCY (LocalStorage + Auto)
@@ -133,33 +111,21 @@
     if (!host) return;
 
     try {
-      // ✅ IMPORTANT: use BASE path, not hard "/header.html"
-      const res = await fetch(withBase("/header.html"), { cache: "no-cache" });
+      const res = await fetch("/header.html", { cache: "no-cache" });
       if (!res.ok) throw new Error("header.html not found");
       host.innerHTML = await res.text();
 
-      // ✅ Fix links if site is in subfolder (GitHub Pages)
-      if (BASE) {
-        // Any link like "/flowers.html" becomes "/<BASE>/flowers.html"
-        qsa('a[href^="/"]', host).forEach(a => {
-          const href = a.getAttribute("href");
-          if (!href) return;
-          if (href.startsWith(BASE + "/")) return;
-          a.setAttribute("href", withBase(href));
-        });
-      }
-
       const onIndex =
-        location.pathname === withBase("/") ||
+        location.pathname === "/" ||
         location.pathname.endsWith("/index.html");
 
-      // On internal pages: "/#contact" -> "/index.html#contact" (with base)
+      // On internal pages: "/#contact" -> "/index.html#contact"
       qsa('a[href^="/#"]', host).forEach(a => {
         if (!onIndex) {
           const raw = a.getAttribute("href"); // "/#contact"
           if (!raw) return;
           const hash = raw.replace("/#", "#");
-          a.setAttribute("href", withBase("/index.html" + hash));
+          a.setAttribute("href", "/index.html" + hash);
         }
       });
 
@@ -170,12 +136,12 @@
 
       updateCurrencyUI();
     } catch (err) {
-      // ✅ Fallback: show a minimal header so it never "disappears"
+      // Fallback minimal header (so it never disappears)
       host.innerHTML = `
         <header class="site-header">
           <div class="header-inner">
-            <a class="brand" href="${withBase("/index.html")}" aria-label="Caro Flower Art">
-              <img class="brand-logo" src="${withBase("/logo.svg")}" alt="Caro Flower Art logo" loading="eager" />
+            <a class="brand" href="/index.html" aria-label="Caro Flower Art">
+              <img class="brand-logo" src="/logo.svg" alt="Caro Flower Art logo" loading="eager" />
             </a>
           </div>
         </header>
@@ -216,7 +182,7 @@
   }
 
   function priceHTML(p) {
-    // ✅ Portfolio mode: hide all prices
+    // Portfolio mode: hide all prices
     if (CFG.portfolioMode) {
       return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
     }
@@ -255,7 +221,7 @@
     return `
       <article class="card" data-category="${p.category}" data-id="${p.id}">
         <div class="card-image-wrapper">
-          <img src="${withBase("/" + p.thumb).replace("//", "/")}" alt="${escapeHtml(p.name)}" loading="lazy">
+          <img src="${p.thumb}" alt="${escapeHtml(p.name)}" loading="lazy">
         </div>
 
         <div class="card-content">
@@ -264,7 +230,7 @@
           ${priceHTML(p)}
 
           <div class="card-actions actions-row">
-            <a href="${withBase("/index.html#contact")}"
+            <a href="/index.html#contact"
                class="btn-action btn-quote"
                data-prefill="${escapeHtml(p.name)}">
               Request Quote
@@ -341,7 +307,8 @@
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
-    img.src = withBase("/" + galleryState.photos[galleryState.index]).replace("//", "/");
+    // ✅ IMPORTANT: use paths as-is (do NOT prepend slash/base)
+    img.src = galleryState.photos[galleryState.index];
   }
 
   function nextPhoto() {
