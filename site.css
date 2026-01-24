@@ -1099,3 +1099,15 @@ body{
     max-height: 80vh;
   }
 }
+
+============
+   CURRENCY BUTTONS  ====================================================== 
+.currency-btn.is-active{
+  border: 2px solid #111;
+  font-weight: 700;
+}
+.currency-hint{
+  font-size: 12px;
+  opacity: .7;
+  margin-right: 10px;
+}
