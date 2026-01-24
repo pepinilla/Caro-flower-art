@@ -1100,14 +1100,63 @@ body{
   }
 }
 
-============
-   CURRENCY BUTTONS  ====================================================== 
-.currency-btn.is-active{
-  border: 2px solid #111;
-  font-weight: 700;
+/* =========================
+   CURRENCY BUTTONS
+   ========================= */
+
+.currency-wrap{
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
 .currency-hint{
   font-size: 12px;
   opacity: .7;
-  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.currency-buttons{
+  display: flex;
+  gap: 8px;
+}
+
+.currency-btn{
+  border: 1px solid rgba(0,0,0,.25);
+  background: #fff;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.currency-btn.is-active{
+  border: 2px solid #111;
+}
+
+/* ===== MOBILE FIX ===== */
+@media (max-width: 720px){
+  .header-inner{
+    gap: 10px;
+  }
+
+  /* que no se aplaste el header */
+  .currency-wrap{
+    margin-left: auto;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .currency-hint{
+    max-width: 170px;
+    text-align: right;
+    white-space: normal;
+  }
+
+  .currency-btn{
+    padding: 7px 9px;
+    border-radius: 10px;
+  }
 }
