@@ -15,12 +15,34 @@
   if (!CFG.defaultCurrency) CFG.defaultCurrency = "CAD";
 
   /* ======================
+     BASE PATH (important for GitHub Pages subfolder)
+     ====================== */
+  function getBasePath() {
+    // If site.js is loaded from /something/site.js, basePath = /something
+    const s = document.currentScript;
+    if (s && s.src) {
+      try {
+        const u = new URL(s.src, location.href);
+        return u.pathname.replace(/\/[^\/]*$/, ""); // remove filename
+      } catch {}
+    }
+    return ""; // root
+  }
+  const BASE = getBasePath();
+
+  function withBase(path) {
+    // Ensures "/header.html" -> `${BASE}/header.html` when BASE is not empty
+    if (!path) return path;
+    if (!BASE) return path;
+    if (path.startsWith(BASE + "/")) return path;
+    if (path.startsWith("/")) return BASE + path;
+    return BASE + "/" + path;
+  }
+
+  /* ======================
      CURRENCY (LocalStorage + Auto)
      ====================== */
   function guessCurrency() {
-    // Heurística simple (sin API):
-    // - si navegador está en en-CA -> CAD
-    // - si timezone parece Canadá -> CAD
     const lang = String((navigator.languages && navigator.languages[0]) || navigator.language || "").toLowerCase();
     const tz = String(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
 
@@ -63,29 +85,23 @@
     updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
   }
-
-  // expuesto para header botones
   window.CARO_setCurrency = setCurrency;
 
   function updateCurrencyUI() {
-    // Marca botones activos (si existen)
     qsa("[data-currency]").forEach(btn => {
       const isActive = btn.dataset.currency === window.CARO_CURRENCY;
       btn.classList.toggle("is-active", isActive);
       btn.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
 
-    // Texto hint (si existe)
     const hint = qs("#currencyHint");
     if (hint && CFG.currencyHint) {
       hint.textContent = CFG.currencyHint[window.CARO_CURRENCY] || "";
     }
 
-    // Opcional: ocultar switch en modo portfolio
+    // Optional: hide currency switch in portfolio mode
     const wrap = qs("#currencyWrap");
-    if (wrap && CFG.portfolioMode) {
-      wrap.style.display = "none";
-    }
+    if (wrap && CFG.portfolioMode) wrap.style.display = "none";
   }
 
   /* ======================
@@ -100,15 +116,13 @@
     thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
 
-    // viejo
+    // legacy
     prices: Array.isArray(p.prices) ? p.prices : [],
     price_from: Number(p.price_from || 0),
 
-    // nuevo
+    // new
     prices_by_currency: p.prices_by_currency || null,
     price_from_by_currency: p.price_from_by_currency || null,
-
-    currency: p.currency || "COP",
   })).filter(p => p.id && p.thumb);
 
   /* ======================
@@ -119,29 +133,53 @@
     if (!host) return;
 
     try {
-      const res = await fetch("/header.html", { cache: "no-cache" });
-      if (!res.ok) throw new Error();
+      // ✅ IMPORTANT: use BASE path, not hard "/header.html"
+      const res = await fetch(withBase("/header.html"), { cache: "no-cache" });
+      if (!res.ok) throw new Error("header.html not found");
       host.innerHTML = await res.text();
 
+      // ✅ Fix links if site is in subfolder (GitHub Pages)
+      if (BASE) {
+        // Any link like "/flowers.html" becomes "/<BASE>/flowers.html"
+        qsa('a[href^="/"]', host).forEach(a => {
+          const href = a.getAttribute("href");
+          if (!href) return;
+          if (href.startsWith(BASE + "/")) return;
+          a.setAttribute("href", withBase(href));
+        });
+      }
+
       const onIndex =
-        location.pathname === "/" ||
+        location.pathname === withBase("/") ||
         location.pathname.endsWith("/index.html");
 
-      // En páginas internas: /#contact -> /index.html#contact
+      // On internal pages: "/#contact" -> "/index.html#contact" (with base)
       qsa('a[href^="/#"]', host).forEach(a => {
         if (!onIndex) {
-          a.setAttribute("href", "/index.html" + a.getAttribute("href").slice(1));
+          const raw = a.getAttribute("href"); // "/#contact"
+          if (!raw) return;
+          const hash = raw.replace("/#", "#");
+          a.setAttribute("href", withBase("/index.html" + hash));
         }
       });
 
-      // Botones currency (si existen)
+      // Currency buttons
       qsa("[data-currency]", host).forEach(btn => {
         btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
       });
 
       updateCurrencyUI();
-    } catch {
-      // sin header no pasa nada
+    } catch (err) {
+      // ✅ Fallback: show a minimal header so it never "disappears"
+      host.innerHTML = `
+        <header class="site-header">
+          <div class="header-inner">
+            <a class="brand" href="${withBase("/index.html")}" aria-label="Caro Flower Art">
+              <img class="brand-logo" src="${withBase("/logo.svg")}" alt="Caro Flower Art logo" loading="eager" />
+            </a>
+          </div>
+        </header>
+      `;
     }
   }
 
@@ -160,16 +198,10 @@
   function getPrices(p) {
     const cur = window.CARO_CURRENCY;
 
-    // nuevo formato
     if (p.prices_by_currency && p.prices_by_currency[cur]) {
       return p.prices_by_currency[cur] || [];
     }
-
-    // fallback viejo
-    if (p.prices && p.prices.length) {
-      return p.prices;
-    }
-
+    if (p.prices && p.prices.length) return p.prices;
     return [];
   }
 
@@ -179,13 +211,12 @@
     if (p.price_from_by_currency && typeof p.price_from_by_currency[cur] !== "undefined") {
       return Number(p.price_from_by_currency[cur] || 0);
     }
-
     if (p.price_from) return Number(p.price_from || 0);
     return 0;
   }
 
   function priceHTML(p) {
-    // ✅ MODO PORTFOLIO: ocultar precios SIEMPRE
+    // ✅ Portfolio mode: hide all prices
     if (CFG.portfolioMode) {
       return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
     }
@@ -224,7 +255,7 @@
     return `
       <article class="card" data-category="${p.category}" data-id="${p.id}">
         <div class="card-image-wrapper">
-          <img src="${p.thumb}" alt="${escapeHtml(p.name)}" loading="lazy">
+          <img src="${withBase("/" + p.thumb).replace("//", "/")}" alt="${escapeHtml(p.name)}" loading="lazy">
         </div>
 
         <div class="card-content">
@@ -233,7 +264,7 @@
           ${priceHTML(p)}
 
           <div class="card-actions actions-row">
-            <a href="/index.html#contact"
+            <a href="${withBase("/index.html#contact")}"
                class="btn-action btn-quote"
                data-prefill="${escapeHtml(p.name)}">
               Request Quote
@@ -260,7 +291,6 @@
     if (!grid) return;
 
     let list = [...PRODUCTS];
-
     if (cfg.mode === "category" && cfg.category) {
       list = list.filter(p => p.category === cfg.category);
     }
@@ -311,7 +341,7 @@
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
-    img.src = galleryState.photos[galleryState.index];
+    img.src = withBase("/" + galleryState.photos[galleryState.index]).replace("//", "/");
   }
 
   function nextPhoto() {
@@ -408,9 +438,6 @@
     swipeBound = true;
   }
 
-  /* ======================
-     HELPERS
-     ====================== */
   function escapeHtml(str) {
     return String(str || "")
       .replaceAll("&", "&amp;")
@@ -427,4 +454,3 @@
     renderGrid(window.CARO_PAGE || {});
   });
 })();
-```0
