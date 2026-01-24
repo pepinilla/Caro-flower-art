@@ -60,8 +60,8 @@ window.PRODUCTS = [
       { amount: 130000, label: "10 units", label_es: "10 unidades" }
     ],
     currency: "COP",
-    thumb: "images/products/rose-yellow-bouquet/thumb/thumb.webp",
-    gallery: ["images/products/rose-yellow-bouquet/gallery/01.webp"],
+    thumb: "images/roses/yellow roses/Yellow_roses_bouquet.webp",
+    gallery: ["images/roses/yellow roses/Yellow_roses_bouquet.webp"],
     badge: "",
     available: true
   },
