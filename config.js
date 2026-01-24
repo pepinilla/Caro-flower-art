@@ -13,9 +13,5 @@ window.CARO_CONFIG = {
   // Fallback si no se puede adivinar
   defaultCurrency: "CAD",
 
-  // Texto superior (opcional)
-  currencyHint: {
-    CAD: "Prices shown in CAD (Canada)",
-    COP: "Precios en COP (Colombia)"
-  }
+ 
 };
