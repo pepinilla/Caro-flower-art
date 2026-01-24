@@ -200,7 +200,8 @@ window.PRODUCTS = [
     price_from: 180000,
     currency: "COP",
     thumb: "images/wedding/Wedding_paper_flowers_bouquets.webp",
-    gallery: ["images/wedding/Wedding_paper_flowers_bouquets.webp"],
+    gallery: ["images/wedding/Wedding_paper_flowers_bouquets.webp",
+             "images/wedding/Paper_flower_bouquet_wedding_3.webp"],
     badge: "Wedding",
     available: true
   }
