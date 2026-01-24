@@ -129,7 +129,8 @@ window.PRODUCTS = [
     ],
     currency: "COP",
     thumb: "images/peonies/Bouquets_of_paper_peonies.webp",
-    gallery: ["images/peonies/Bouquets_of_paper_peonies.webp"],
+    gallery: ["images/peonies/Bouquets_of_paper_peonies.webp",
+             "images/peonies/Bouquets_of_peonies (1).webp"],
     badge: "Exclusivo",
     available: true
   },
