@@ -5,31 +5,71 @@
 (function () {
   const qs  = (s, r = document) => r.querySelector(s);
   const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const CFG = window.CARO_CONFIG || {};
 
   /* ======================
-     CURRENCY (LocalStorage)
+     CURRENCY (LocalStorage + Auto)
      ====================== */
-  const CURRENCY_KEY = "CARO_CURRENCY";
-  window.CARO_CURRENCY = localStorage.getItem(CURRENCY_KEY) || "CAD";
+  function guessCurrency() {
+    // Heurística simple (sin API):
+    // - si el navegador está en en-CA -> CAD
+    // - si timezone está en Canadá -> CAD
+    const lang = String((navigator.languages && navigator.languages[0]) || navigator.language || "").toLowerCase();
+    const tz = String(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
 
-  function setCurrency(cur){
-    window.CARO_CURRENCY = cur;
-    localStorage.setItem(CURRENCY_KEY, cur);
+    const tzLooksCanada =
+      tz.includes("Vancouver") ||
+      tz.includes("Toronto") ||
+      tz.includes("Edmonton") ||
+      tz.includes("Winnipeg") ||
+      tz.includes("Halifax") ||
+      tz.includes("St_Johns");
 
-    // Actualiza grid
-    renderGrid(window.CARO_PAGE || {});
-
-    // Actualiza modal si está abierto
-    if (galleryState.isOpen && galleryState.product) {
-      qs("#galleryPrice").innerHTML = priceHTML(galleryState.product);
-    }
-
-    // Actualiza UI del header (botones)
-    syncCurrencyUI();
+    if (lang.includes("en-ca") || tzLooksCanada) return "CAD";
+    return "COP";
   }
 
-  // por si quieres llamarlo desde cualquier lado
+  function initCurrency() {
+    const saved = localStorage.getItem("CARO_CURRENCY");
+    if (saved) return saved;
+
+    if (CFG.autoCurrency) {
+      const guessed = guessCurrency();
+      localStorage.setItem("CARO_CURRENCY", guessed);
+      return guessed;
+    }
+
+    const fallback = CFG.defaultCurrency || "CAD";
+    localStorage.setItem("CARO_CURRENCY", fallback);
+    return fallback;
+  }
+
+  window.CARO_CURRENCY = initCurrency();
+
+  function setCurrency(cur) {
+    window.CARO_CURRENCY = cur;
+    localStorage.setItem("CARO_CURRENCY", cur);
+    updateCurrencyUI();
+    renderGrid(window.CARO_PAGE || {});
+  }
+
+  // expuesto para header botones
   window.CARO_setCurrency = setCurrency;
+
+  function updateCurrencyUI() {
+    // Marca botones activos (si existen)
+    qsa("[data-currency]").forEach(btn => {
+      const isActive = btn.dataset.currency === window.CARO_CURRENCY;
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+
+    // Texto (si existe elemento)
+    const hint = qs("#currencyHint");
+    if (hint && CFG.currencyHint) {
+      hint.textContent = CFG.currencyHint[window.CARO_CURRENCY] || "";
+    }
+  }
 
   /* ======================
      PRODUCTS NORMALIZATION
@@ -43,10 +83,11 @@
     thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
 
-    // formatos soportados:
+    // viejo
     prices: Array.isArray(p.prices) ? p.prices : [],
     price_from: Number(p.price_from || 0),
 
+    // nuevo
     prices_by_currency: p.prices_by_currency || null,
     price_from_by_currency: p.price_from_by_currency || null,
 
@@ -76,31 +117,21 @@
         }
       });
 
-      // Botones de moneda
+      // Botones currency (si existen)
       qsa("[data-currency]", host).forEach(btn => {
         btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
       });
 
-      // pinta estado actual en header
-      syncCurrencyUI();
+      updateCurrencyUI();
     } catch {
-      /* fallback mínimo */
+      // sin header no pasa nada
     }
-  }
-
-  function syncCurrencyUI(){
-    const cur = window.CARO_CURRENCY;
-    qsa("[data-currency]").forEach(btn => {
-      btn.setAttribute("aria-pressed", btn.dataset.currency === cur ? "true" : "false");
-    });
-    const label = qs("#currencyLabel");
-    if (label) label.textContent = cur;
   }
 
   /* ======================
      PRICE HELPERS
      ====================== */
-  function formatMoney(amount, currency){
+  function formatMoney(amount, currency) {
     const locale = currency === "COP" ? "es-CO" : "en-CA";
     return new Intl.NumberFormat(locale, {
       style: "currency",
@@ -109,40 +140,44 @@
     }).format(Number(amount || 0));
   }
 
-  function getPrices(p){
+  function getPrices(p) {
     const cur = window.CARO_CURRENCY;
 
-    // ✅ nuevo formato (recomendado)
+    // nuevo formato
     if (p.prices_by_currency && p.prices_by_currency[cur]) {
       return p.prices_by_currency[cur] || [];
     }
 
     // fallback viejo
-    if (p.prices && p.prices.length) return p.prices;
+    if (p.prices && p.prices.length) {
+      return p.prices;
+    }
 
     return [];
   }
 
-  function getPriceFrom(p){
+  function getPriceFrom(p) {
     const cur = window.CARO_CURRENCY;
 
-    // ✅ nuevo formato (price_from_by_currency)
     if (p.price_from_by_currency && typeof p.price_from_by_currency[cur] !== "undefined") {
       return Number(p.price_from_by_currency[cur] || 0);
     }
 
-    // fallback viejo
     if (p.price_from) return Number(p.price_from || 0);
-
     return 0;
   }
 
-  function priceHTML(p){
+  function priceHTML(p) {
+    // ✅ MODO PORTFOLIO: ocultar precios
+    if (CFG.portfolioMode) {
+      return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
+    }
+
     const cur = window.CARO_CURRENCY;
     const list = getPrices(p);
 
-    if (list.length){
-      const rows = list.slice(0,2).map(x => `
+    if (list.length) {
+      const rows = list.slice(0, 2).map(x => `
         <div class="price-line">
           <strong>${formatMoney(x.amount, cur)}</strong>
           <span class="price-units">/ ${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
@@ -153,7 +188,7 @@
     }
 
     const from = getPriceFrom(p);
-    if (from){
+    if (from) {
       return `
         <div class="price-box">
           <div class="price-line">
@@ -168,7 +203,7 @@
   /* ======================
      CARD
      ====================== */
-  function cardHTML(p){
+  function cardHTML(p) {
     return `
       <article class="card" data-category="${p.category}" data-id="${p.id}">
         <div class="card-image-wrapper">
@@ -203,12 +238,13 @@
   /* ======================
      GRID
      ====================== */
-  function renderGrid(cfg){
+  function renderGrid(cfg) {
     const grid = qs("#" + (cfg.gridId || "galleryGrid"));
     if (!grid) return;
 
     let list = [...PRODUCTS];
-    if (cfg.mode === "category" && cfg.category){
+
+    if (cfg.mode === "category" && cfg.category) {
       list = list.filter(p => p.category === cfg.category);
     }
 
@@ -220,18 +256,12 @@
         if (p) openGallery(p);
       };
     });
-
-    qsa(".btn-quote", grid).forEach(btn => {
-      btn.onclick = () => {
-        window.CARO_SELECTED_PRODUCT = btn.dataset.prefill;
-      };
-    });
   }
 
   /* ======================
      GALLERY MODAL
      ====================== */
-  function ensureModal(){
+  function ensureModal() {
     if (qs("#galleryModal")) return;
 
     document.body.insertAdjacentHTML("beforeend", `
@@ -240,84 +270,135 @@
 
         <div class="gallery-panel" role="dialog" aria-modal="true">
           <button class="gallery-close" type="button" data-close aria-label="Close">×</button>
-          <button class="gallery-nav gallery-prev" type="button" aria-label="Previous">‹</button>
-          <button class="gallery-nav gallery-next" type="button" aria-label="Next">›</button>
 
-          <div class="gallery-image-wrap">
-            <img id="galleryImage" alt="">
-          </div>
+          <div class="gallery-body">
+            <button class="gallery-nav gallery-prev" type="button" aria-label="Previous">‹</button>
+            <button class="gallery-nav gallery-next" type="button" aria-label="Next">›</button>
 
-          <div class="gallery-meta">
-            <div id="galleryTitle" class="gallery-title"></div>
-            <div id="galleryPrice" class="gallery-price"></div>
+            <div class="gallery-image-wrap" id="gallerySwipeArea">
+              <img id="galleryImage" alt="">
+            </div>
+
+            <div class="gallery-meta">
+              <div id="galleryTitle" class="gallery-title"></div>
+              <div id="galleryPrice" class="gallery-price"></div>
+            </div>
           </div>
         </div>
       </div>
     `);
   }
 
-  let galleryState = { photos: [], index: 0, isOpen: false, product: null };
+  let galleryState = { photos: [], index: 0, isOpen: false };
 
-  function openGallery(p){
+  function renderGalleryImage() {
+    const img = qs("#galleryImage");
+    if (!img || !galleryState.photos.length) return;
+    img.src = galleryState.photos[galleryState.index];
+  }
+
+  function nextPhoto() {
+    if (!galleryState.photos.length) return;
+    galleryState.index = (galleryState.index + 1) % galleryState.photos.length;
+    renderGalleryImage();
+  }
+
+  function prevPhoto() {
+    if (!galleryState.photos.length) return;
+    galleryState.index =
+      (galleryState.index - 1 + galleryState.photos.length) % galleryState.photos.length;
+    renderGalleryImage();
+  }
+
+  function openGallery(p) {
     ensureModal();
 
-    galleryState.product = p;
     galleryState.photos = (p.gallery && p.gallery.length) ? p.gallery : [p.thumb];
     galleryState.index = 0;
     galleryState.isOpen = true;
 
-    qs("#galleryImage").src = galleryState.photos[0];
+    renderGalleryImage();
     qs("#galleryTitle").textContent = `${p.name} / ${p.name_es}`;
     qs("#galleryPrice").innerHTML = priceHTML(p);
 
-    const prevBtn = qs(".gallery-prev");
-    const nextBtn = qs(".gallery-next");
-    if (prevBtn) prevBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); move(-1); };
-    if (nextBtn) nextBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); move(1); };
+    const btnPrev = qs(".gallery-prev");
+    const btnNext = qs(".gallery-next");
+    if (btnPrev) btnPrev.onclick = (e) => { e.preventDefault(); e.stopPropagation(); prevPhoto(); };
+    if (btnNext) btnNext.onclick = (e) => { e.preventDefault(); e.stopPropagation(); nextPhoto(); };
+
+    setupSwipe();
 
     qs("#galleryModal").classList.add("is-open");
     document.body.style.overflow = "hidden";
   }
 
-  function closeGallery(){
+  function closeGallery() {
     const modal = qs("#galleryModal");
     if (!modal) return;
 
     modal.classList.remove("is-open");
     document.body.style.overflow = "";
     galleryState.isOpen = false;
-    galleryState.product = null;
   }
 
-  function move(dir){
-    const len = galleryState.photos.length;
-    if (!len) return;
-    galleryState.index = (galleryState.index + dir + len) % len;
-    qs("#galleryImage").src = galleryState.photos[galleryState.index];
-  }
-
-  document.addEventListener("click", e => {
-    if (e.target && e.target.matches("[data-close]")){
-      closeGallery();
-    }
+  document.addEventListener("click", (e) => {
+    if (e.target && e.target.matches("[data-close]")) closeGallery();
   });
 
-  document.addEventListener("keydown", e => {
+  document.addEventListener("keydown", (e) => {
     if (!galleryState.isOpen) return;
     if (e.key === "Escape") closeGallery();
-    if (e.key === "ArrowLeft") move(-1);
-    if (e.key === "ArrowRight") move(1);
+    if (e.key === "ArrowRight") nextPhoto();
+    if (e.key === "ArrowLeft") prevPhoto();
   });
+
+  let swipeBound = false;
+  function setupSwipe() {
+    if (swipeBound) return;
+    const area = qs("#gallerySwipeArea");
+    if (!area) return;
+
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+
+    area.addEventListener("touchstart", (ev) => {
+      if (!galleryState.isOpen) return;
+      const t = ev.touches && ev.touches[0];
+      if (!t) return;
+      tracking = true;
+      startX = t.clientX;
+      startY = t.clientY;
+    }, { passive: true });
+
+    area.addEventListener("touchend", (ev) => {
+      if (!galleryState.isOpen || !tracking) return;
+      tracking = false;
+
+      const t = ev.changedTouches && ev.changedTouches[0];
+      if (!t) return;
+
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+
+      if (Math.abs(dx) < 40) return;
+      if (Math.abs(dy) > 120) return;
+
+      if (dx < 0) nextPhoto();
+      else prevPhoto();
+    }, { passive: true });
+
+    swipeBound = true;
+  }
 
   /* ======================
      HELPERS
      ====================== */
-  function escapeHtml(str){
+  function escapeHtml(str) {
     return String(str || "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;");
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
   }
 
   /* ======================
@@ -325,6 +406,7 @@
      ====================== */
   document.addEventListener("DOMContentLoaded", async () => {
     await injectHeader();
+    updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
   });
 })();
