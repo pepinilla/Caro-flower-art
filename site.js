@@ -8,12 +8,19 @@
   const CFG = window.CARO_CONFIG || {};
 
   /* ======================
+     SAFE DEFAULTS
+     ====================== */
+  if (typeof CFG.portfolioMode === "undefined") CFG.portfolioMode = false;
+  if (typeof CFG.autoCurrency === "undefined") CFG.autoCurrency = true;
+  if (!CFG.defaultCurrency) CFG.defaultCurrency = "CAD";
+
+  /* ======================
      CURRENCY (LocalStorage + Auto)
      ====================== */
   function guessCurrency() {
     // Heurística simple (sin API):
-    // - si el navegador está en en-CA -> CAD
-    // - si timezone está en Canadá -> CAD
+    // - si navegador está en en-CA -> CAD
+    // - si timezone parece Canadá -> CAD
     const lang = String((navigator.languages && navigator.languages[0]) || navigator.language || "").toLowerCase();
     const tz = String(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
 
@@ -23,7 +30,10 @@
       tz.includes("Edmonton") ||
       tz.includes("Winnipeg") ||
       tz.includes("Halifax") ||
-      tz.includes("St_Johns");
+      tz.includes("St_Johns") ||
+      tz.includes("Regina") ||
+      tz.includes("Calgary") ||
+      tz.includes("Montreal");
 
     if (lang.includes("en-ca") || tzLooksCanada) return "CAD";
     return "COP";
@@ -47,6 +57,7 @@
   window.CARO_CURRENCY = initCurrency();
 
   function setCurrency(cur) {
+    if (!cur) return;
     window.CARO_CURRENCY = cur;
     localStorage.setItem("CARO_CURRENCY", cur);
     updateCurrencyUI();
@@ -64,10 +75,16 @@
       btn.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
 
-    // Texto (si existe elemento)
+    // Texto hint (si existe)
     const hint = qs("#currencyHint");
     if (hint && CFG.currencyHint) {
       hint.textContent = CFG.currencyHint[window.CARO_CURRENCY] || "";
+    }
+
+    // Opcional: ocultar switch en modo portfolio
+    const wrap = qs("#currencyWrap");
+    if (wrap && CFG.portfolioMode) {
+      wrap.style.display = "none";
     }
   }
 
@@ -168,7 +185,7 @@
   }
 
   function priceHTML(p) {
-    // ✅ MODO PORTFOLIO: ocultar precios
+    // ✅ MODO PORTFOLIO: ocultar precios SIEMPRE
     if (CFG.portfolioMode) {
       return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
     }
@@ -410,3 +427,4 @@
     renderGrid(window.CARO_PAGE || {});
   });
 })();
+```0
