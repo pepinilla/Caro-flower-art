@@ -1016,41 +1016,90 @@ body{
 
 /* ---------- ACTION BUTTONS (solo dentro de cards de productos) ---------- */
 .gallery-grid .card-actions.actions-row,
-#galleryGrid .card-actions.actions-row {
-  display: flex;
+#galleryGrid .card-actions.actions-row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  justify-content: center;
-  align-items: stretch;
   margin-top: 14px;
+  width: 100%;
 }
 
+/* Base */
 .gallery-grid .card-actions .btn-action,
-#galleryGrid .card-actions .btn-action {
-  flex: 1;
-  min-width: 0;
-  text-align: center;
-  padding: 12px 14px;
-  border-radius: 16px;
+#galleryGrid .card-actions .btn-action{
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  padding: 10px 10px;           /* 👈 menos grande */
+  border-radius: 14px;          /* 👈 más elegante */
   text-decoration: none;
-  border: 1px solid rgba(232,154,166,.45);
-  background: rgba(248, 232, 236, .65);
-  color: #333;
-  font-weight: 600;
+
+  font-size: 13px;              /* 👈 más fino */
   line-height: 1.15;
+  font-weight: 600;
+
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.65);
+  color: rgba(0,0,0,.78);
+
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
 }
 
+.gallery-grid .card-actions .btn-action:hover,
+#galleryGrid .card-actions .btn-action:hover{
+  transform: translateY(-1px);
+  background: rgba(0,0,0,.03);
+}
+
+/* Primary (Request Quote) */
+.gallery-grid .card-actions .btn-quote,
+#galleryGrid .card-actions .btn-quote{
+  background: rgba(232,154,166,.18);
+  border-color: rgba(232,154,166,.45);
+  color: #222;
+}
+
+.gallery-grid .card-actions .btn-quote:hover,
+#galleryGrid .card-actions .btn-quote:hover{
+  background: rgba(232,154,166,.26);
+}
+
+/* Secondary (View Photos) */
 .gallery-grid .card-actions .btn-outline,
-#galleryGrid .card-actions .btn-outline {
-  background: #fff;
+#galleryGrid .card-actions .btn-outline{
+  background: rgba(255,255,255,.75);
 }
 
+/* Spanish line smaller */
 .gallery-grid .card-actions .btn-action .es,
-#galleryGrid .card-actions .btn-action .es {
-  display: block;
-  margin-top: 4px;
-  font-weight: 500;
-  opacity: .85;
-  font-size: .92em;
+#galleryGrid .card-actions .btn-action .es{
+  margin-top: 0;
+  font-size: 11px;
+  opacity: .65;
+  font-style: italic;
+}
+
+/* Mobile fine-tune */
+@media (max-width: 480px){
+  .gallery-grid .card-actions.actions-row,
+  #galleryGrid .card-actions.actions-row{
+    gap: 10px;
+  }
+
+  .gallery-grid .card-actions .btn-action,
+  #galleryGrid .card-actions .btn-action{
+    padding: 9px 8px;
+    border-radius: 13px;
+    font-size: 12.5px;
+  }
+
+  .gallery-grid .card-actions .btn-action .es,
+  #galleryGrid .card-actions .btn-action .es{
+    font-size: 10.5px;
+  }
 }
 
 /* ---------- PRICE BOX (solo productos) ---------- */
