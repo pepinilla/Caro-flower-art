@@ -378,8 +378,15 @@ p{font-size:1rem}
   gap:.7rem;
   flex-grow:1;
   align-items:center;
+  text-align:center;
 }
 
+.card-content p{
+  max-width: 360px;     /* controla el ancho del texto */
+  margin: 6px auto 0;  /* centra y separa del título */
+  opacity: .88;        /* look más fino */
+  line-height: 1.45;   /* más elegante */
+}
 .category{
   color:var(--primary-dark);
   font-weight:800;
