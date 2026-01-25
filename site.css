@@ -661,15 +661,18 @@ footer{
   background: rgba(0,0,0,0.55);
 }
 
-.gallery-panel {
+.gallery-panel{
   position: relative;
   width: min(920px, 92vw);
   margin: 6vh auto 0;
   background: white;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  overflow: hidden;
-   border-color:var(--primary-color)
+
+  /* CAMBIOS */
+  max-height: 88vh;
+  overflow-y: auto;                 /* 👈 ahora sí deja scroll */
+  -webkit-overflow-scrolling: touch;/* 👈 scroll suave en iPhone/Android */
 }
 
 .gallery-close {
