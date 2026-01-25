@@ -365,6 +365,17 @@ p{font-size:1rem}
   border-color:var(--primary-dark);
 }
 
+/* =========================
+   UTILITIES (no inline styles)
+   ========================= */
+.gallery-tight-top{ padding-top:18px; padding-bottom:0; }
+.card-link{ text-decoration:none; color:inherit; }
+.card-footer-center{ justify-content:center; }
+.card-btn-wide{ min-width:220px; text-align:center; }
+.hero-buttons-left{ justify-content:flex-start; }
+.section-pad-top{ padding-top:40px; }
+.card-desc{ margin:0; }
+
 /* ABOUT */
 .about{
   background:linear-gradient(135deg,#fff 0%,#fef5f7 100%);
