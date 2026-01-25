@@ -1033,11 +1033,11 @@ body{
   justify-content: center;
   gap: 3px;
 
-  padding: 10px 10px;           /* 👈 menos grande */
-  border-radius: 14px;          /* 👈 más elegante */
+  padding: 8px 8px;           /* 👈 menos grande */
+  border-radius: 12px;          /* 👈 más elegante */
   text-decoration: none;
 
-  font-size: 13px;              /* 👈 más fino */
+  font-size: 12.5px;              /* 👈 más fino */
   line-height: 1.15;
   font-weight: 600;
 
@@ -1077,7 +1077,7 @@ body{
 .gallery-grid .card-actions .btn-action .es,
 #galleryGrid .card-actions .btn-action .es{
   margin-top: 0;
-  font-size: 11px;
+  font-size: 10.5px;
   opacity: .65;
   font-style: italic;
 }
