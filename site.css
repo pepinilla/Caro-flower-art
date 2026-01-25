@@ -172,6 +172,10 @@ p{font-size:1rem}
   opacity:.85;
 }
 
+.hero h1{
+  letter-spacing: .02em;
+}
+
 /* BOTONES */
 .btn-primary,
 .btn-secondary,
@@ -306,6 +310,18 @@ p{font-size:1rem}
   flex-grow:1;
   align-items:center;
   text-align:center;
+}
+
+.card-content h3{
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  margin: 0;
+}
+
+.card-content h3 .es{
+  font-size: .58em;
+  opacity: .72;
 }
 
 .card-content p{
