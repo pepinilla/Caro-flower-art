@@ -1101,41 +1101,47 @@ body{
     font-size: 10.5px;
   }
 }
+/* ===== Price button (collapsible) ===== */
+.price-details{
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  margin-top: 12px;
+}
 
-/* ---------- PRICE BOX (solo productos) ---------- */
-.gallery-grid .price-box,
-#galleryGrid .price-box {
-  margin: 14px auto 0;
-  padding: 14px 16px;
-  border-radius: 18px;
+.price-summary{
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+
+  padding: 10px 14px;
+  border-radius: 999px;
   border: 1px solid rgba(232,154,166,.35);
-  background: rgba(248, 232, 236, .55);
-  text-align: center;
+  background: rgba(255,255,255,.65);
+
+  font-weight: 700;
+  letter-spacing: .02em;
 }
 
-.gallery-grid .price-line,
-#galleryGrid .price-line {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin: 6px 0;
+.price-summary::-webkit-details-marker { display: none; }
+
+/* Cuando está abierto, que se vea “activo” */
+.price-details[open] .price-summary{
+  border-color: rgba(232,154,166,.55);
+  background: rgba(248, 232, 236, .45);
 }
 
-.gallery-grid .price-units,
-#galleryGrid .price-units {
-  margin-left: 6px;
-  font-size: .85rem;      /* 👈 más pequeño */
-  font-weight: 500;
-  opacity: .7;
-  white-space: nowrap;   /* 👈 clave: no se parte en 2 líneas */
+/* Animación suave al abrir */
+.price-details .price-box{
+  margin-top: 10px;
+  animation: priceDrop .18s ease-out both;
 }
 
-/* Ajuste fino SOLO en mobile */
-@media (max-width: 480px){
-  .gallery-grid .price-units,
-  #galleryGrid .price-units {
-    font-size: .78rem;   /* 👈 entra perfecto en 1 línea */
-  }
+@keyframes priceDrop{
+  from{ opacity:0; transform: translateY(-4px); }
+  to{ opacity:1; transform: translateY(0); }
 }
+
  ======================================================
    GALLERY MODAL – FULL IMAGE (no crop)
   en mobiles ====================================================== */
