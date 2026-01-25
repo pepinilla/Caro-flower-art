@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flowers | Caro Flower Art</title>
   <link rel="stylesheet" href="/site.css?v=20260115a" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-
 
 <div id="site-header"></div>
 
@@ -32,31 +31,27 @@
   </div>
 </section>
 
-<!-- 🌹 ROSES FEATURE CARD (same card styles, no inline hover hacks) -->
-<section class="gallery" style="padding-top: 18px; padding-bottom: 0;">
+<!-- 🌹 ROSES FEATURE CARD -->
+<section class="gallery gallery-tight-top">
   <div class="grid">
-    <a href="/roses.html" class="card" style="text-decoration:none; color:inherit;" aria-label="View Roses / Ver rosas">
+    <a href="/roses.html" class="card card-link" aria-label="View Roses / Ver rosas">
       <div class="card-image-wrapper">
-        <img
-          src="images/roses/Paper_roses_bouquet.webp"
-          alt="Roses Bouquet"
-          loading="lazy"
-        />
+        <img src="images/roses/Paper_roses_bouquet.webp" alt="Roses Bouquet" loading="lazy" />
         <span class="card-badge">Roses</span>
       </div>
 
-      <div class="card-content" style="text-align:center;">
+      <div class="card-content">
         <div class="category">
           Roses <span class="es">Rosas</span>
         </div>
 
-        <p style="margin:0;">
+        <p class="card-desc">
           View rose colors and bouquets in one place
           <span class="es">Ver colores de rosas y ramos en un solo lugar</span>
         </p>
 
-        <div class="card-footer" style="justify-content:center;">
-          <span class="card-btn" style="min-width:220px; text-align:center;">
+        <div class="card-footer card-footer-center">
+          <span class="card-btn card-btn-wide">
             View Roses <span class="es">Ver rosas</span>
           </span>
         </div>
@@ -65,13 +60,11 @@
   </div>
 </section>
 
-<!-- ✅ REAL FLOWERS GRID (only category: flowers) -->
+<!-- ✅ REAL FLOWERS GRID -->
 <section class="gallery" id="gallery">
   <div class="gallery-grid" id="galleryGrid"></div>
 </section>
 
-
-<!-- WHATSAPP FLOAT -->
 <a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank" rel="noopener">
   <i class="fab fa-whatsapp"></i>
 </a>
@@ -81,7 +74,6 @@
 <script src="/site.js?v=20260115a"></script>
 
 <script>
-  // Solo categoría "flowers" (NO roses-colors ni bouquets aquí)
   window.CARO_PAGE = { gridId: "galleryGrid", mode: "category", category: "flowers" };
 </script>
 
