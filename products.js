@@ -40,9 +40,9 @@ window.PRODUCTS = [
         { amount: 130000, label: "10 units", label_es: "10 unidades" }
       ])
     },
-    thumb: "images/products/rose-salmon/thumb/thumb.webp",
+    thumb: "images/roses/salmon roses/Paper-rose-salmon.webp",
     gallery: [
-      "images/products/rose-salmon/gallery/01.webp",
+      "images/roses/salmon roses/Paper-rose-salmon.webp",
       "images/roses/salmon roses/Paper-rose-salmon-5.webp",
       "images/roses/salmon roses/Paper-rose-salmon-4.webp",
       "images/roses/salmon roses/Paper-rose-salmon-3.webp"
