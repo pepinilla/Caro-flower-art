@@ -182,37 +182,49 @@
   }
 
   function priceHTML(p) {
-    // Portfolio mode: hide all prices
-    if (CFG.portfolioMode) {
-      return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
-    }
-
-    const cur = window.CARO_CURRENCY;
-    const list = getPrices(p);
-
-    if (list.length) {
-      const rows = list.slice(0, 2).map(x => `
-        <div class="price-line">
-          <strong>${formatMoney(x.amount, cur)}</strong>
-          <span class="price-units">/ ${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
-        </div>
-      `).join("");
-
-      return `<div class="price-box">${rows}</div>`;
-    }
-
-    const from = getPriceFrom(p);
-    if (from) {
-      return `
-        <div class="price-box">
-          <div class="price-line">
-            <strong>${formatMoney(from, cur)}</strong>
-          </div>
-        </div>`;
-    }
-
+  // ✅ MODO PORTFOLIO: ocultar precios SIEMPRE
+  if (CFG.portfolioMode) {
     return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
   }
+
+  const cur = window.CARO_CURRENCY;
+  const list = getPrices(p);
+
+  // Si hay lista de precios (unit, 10 units, etc.)
+  if (list.length) {
+    const rows = list.slice(0, 2).map(x => `
+      <div class="price-line">
+        <strong>${formatMoney(x.amount, cur)}</strong>
+        <span class="price-units">${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
+      </div>
+    `).join("");
+
+    return `
+      <details class="price-details">
+        <summary class="price-summary">Price</summary>
+        <div class="price-box">
+          ${rows}
+        </div>
+      </details>
+    `;
+  }
+
+  // Si solo hay "from"
+  const from = getPriceFrom(p);
+  if (from) {
+    return `
+      <details class="price-details">
+        <summary class="price-summary">Price</summary>
+        <div class="price-box">
+          <div class="price-line"><strong>${formatMoney(from, cur)}</strong></div>
+        </div>
+      </details>
+    `;
+  }
+
+  // Si no hay precios, igual muestra quote
+  return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
+}
 
   /* ======================
      CARD
