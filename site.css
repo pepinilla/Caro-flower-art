@@ -1112,7 +1112,7 @@ body{
   font-size: 10.5px;
   opacity: .6;
   font-style: normal;
-  font-family: var(--font-body);
+  font-family: var(--font-title);
 }
 
 /* Mobile fine-tune */
