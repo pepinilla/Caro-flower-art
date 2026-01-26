@@ -1066,7 +1066,7 @@ body{
 
   font-size: 12px;            
   line-height: 1.15;
-  font-weight: 500;           /* 👈 AQUÍ: menos negrilla */
+  font-weight: 550;           /* 👈 AQUÍ: menos negrilla */
 
   border: 1px solid rgba(0,0,0,.12);
   background: rgba(255,255,255,.65);
@@ -1125,7 +1125,7 @@ body{
   .gallery-grid .card-actions .btn-action,
   #galleryGrid .card-actions .btn-action{
     padding: 9px 8px;
-    border-radius: 13px;
+    border-radius: 12px;
     font-size: 10.5px;
   }
 
@@ -1148,7 +1148,7 @@ body{
   letter-spacing: .07em;
   text-transform: uppercase;
   color: rgba(0,0,0,.65);
-  font-weight: 590;
+  font-weight: 600;
   padding: 8px 14px;
   border-radius: 999px;
   display: inline-flex;
@@ -1156,7 +1156,7 @@ body{
   justify-content: center;
   background: rgba(248, 232, 236, .55);
   border: 1px solid rgba(232,154,166,.35);
-  transition: all .2s ease;
+  transition: all .3s ease;
 }
 
 /* Hover effect */
@@ -1177,8 +1177,8 @@ body{
 .price-summary::after{
   content: "＋";
   margin-left: 8px;
-  font-weight: 590;
-  opacity: .6;
+  font-weight: 600;
+  opacity: .7;
 }
 
 .price-details[open] .price-summary::after{
@@ -1189,20 +1189,20 @@ body{
 .price-box{
   margin: 14px auto 0;
   padding: 14px 16px;
-  border-radius: 17px;
-  border: 1px solid rgba(232,154,166,.35);
+  border-radius: 15px;
+  border: .8px solid rgba(232,154,166,.35);
   background: rgba(248, 232, 236, .55);
   text-align: center;
-  animation: fadePrice .30s ease;
+  animation: fadePrice .40s ease;
 }
 
 @keyframes fadePrice{
   from{opacity:0; transform: translateY(-4px)}
-  to{opacity:1; transform: translateY(0)}
+  to{opacity:2; transform: translateY(0)}
 }
 
 .price-line{
-  font-size: 1rem;
+  font-size: .9rem;
   font-weight: 600;
   margin: 6px 0;
 }
