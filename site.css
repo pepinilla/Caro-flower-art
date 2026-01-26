@@ -448,14 +448,19 @@ p{font-size:1rem}
 .testimonial-text{font-style:italic}
 .testimonial-author{margin-top:10px;font-weight:800;color:var(--dark-color)}
 
-/* CONTACT */
+/* =========================
+   CONTACT – PREMIUM CLEAN
+   ========================= */
+
 .contact-wrapper{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:26px;
+  grid-template-columns: 1fr 1fr;
+  gap:32px;
   align-items:start;
+  margin-top: 2rem;
 }
 
+/* ---- INFO CARDS ---- */
 .contact-info{
   display:flex;
   flex-direction:column;
@@ -464,87 +469,144 @@ p{font-size:1rem}
 
 .contact-item{
   display:flex;
-  gap:12px;
-  align-items:flex-start;
-  padding:16px;
-  border-radius:16px;
-  background:#fff;
-  box-shadow:var(--shadow-light);
-  border:1px solid rgba(0,0,0,.04);
-   border-color:var(--primary-color)
+  align-items:center;
+  gap:14px;
+  padding:18px 20px;
+  border-radius:20px;
+  background: rgba(255,255,255,.85);
+  border:1px solid rgba(232,154,166,.25);
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.contact-item:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0,0,0,.08);
 }
 
 .contact-item i{
-  font-size:1.4rem;
+  font-size:1.5rem;
   color:var(--primary-dark);
-  margin-top:3px;
+  flex-shrink:0;
+}
+
+.contact-item strong{
+  font-weight:800;
+  color:var(--dark-color);
+}
+
+.contact-item span{
+  display:block;
+  font-size:.9rem;
+  opacity:.7;
+  font-style:italic;
 }
 
 .contact-item a{
-  color:var(--primary-dark);
-  font-weight:800;
   text-decoration:none;
+  color:inherit;
 }
 
-.contact-item a:hover{text-decoration:underline}
-
+/* ---- FORM ---- */
 .contact-form{
-  background:#fff;
-  padding:18px;
-  border-radius:18px;
-  box-shadow:var(--shadow-light);
-  border:1px solid rgba(0,0,0,.04);
+  background: rgba(255,255,255,.9);
+  padding:26px;
+  border-radius:26px;
+  border:1px solid rgba(232,154,166,.25);
+  box-shadow: 0 14px 34px rgba(0,0,0,.08);
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:18px;
 }
 
-.form-group{display:flex;flex-direction:column;gap:7px}
-label{font-weight:800;color:var(--dark-color)}
+/* title inside form (si usas h3) */
+.contact-form h3{
+  font-family: var(--font-title);
+  font-size:1.4rem;
+  text-align:center;
+  margin-bottom:.2rem;
+}
 
-input,textarea{
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+label{
+  font-weight:700;
+  font-size:.9rem;
+  color:var(--dark-color);
+  letter-spacing:.02em;
+}
+
+input,
+textarea{
   width:100%;
-  padding:.9rem;
-  border-radius:14px;
+  padding:14px 16px;
+  border-radius:16px;
   border:1px solid rgba(0,0,0,.12);
   font-family:var(--font-body);
+  font-size:.95rem;
+  background: rgba(255,255,255,.95);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color: rgba(0,0,0,.35);
+}
+
+textarea{
+  min-height:140px;
+  resize:vertical;
+}
+
+input:focus,
+textarea:focus{
   outline:none;
+  border-color: rgba(232,154,166,.75);
+  box-shadow: 0 0 0 4px rgba(232,154,166,.16);
 }
 
-textarea{min-height:130px;resize:vertical}
-
-input:focus,textarea:focus{
-  border-color:rgba(232,154,166,.65);
-  box-shadow:0 0 0 4px rgba(232,154,166,.18);
-}
-
-button[type="submit"]{
-  margin-top:6px;
-  background:#fff;
-  color:var(--primary-color);
-  border:none;
-  padding:.95rem 1rem;
-  border-radius:999px;
-  font-weight:900;
-  cursor:pointer;
-  transition:all .2s ease;
-   border-color:var(--primary-color)
-}
-
-button[type="submit"]:hover{
-  background:var(--primary-dark);
-  transform:translateY(-1px);
-  box-shadow:var(--shadow);
-  color:var(--primary-color);
-   border-color:var(--primary-color)
-}
-
-.form-note{
+/* ---- SUBMIT BUTTON ---- */
+.contact-form button[type="submit"]{
   margin-top:10px;
-  font-size:.92rem;
-  opacity:.85;
+  background: var(--primary-color);
+  color:#fff;
+  border:none;
+  padding:14px;
+  border-radius:999px;
+  font-weight:800;
+  letter-spacing:.04em;
+  cursor:pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
+.contact-form button[type="submit"]:hover{
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* ---- NOTE ---- */
+.form-note{
+  text-align:center;
+  font-size:.85rem;
+  opacity:.7;
+  margin-top:6px;
+}
+
+/* ---- MOBILE ---- */
+@media (max-width: 900px){
+  .contact-wrapper{
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form{
+    padding:22px;
+  }
+}
 /* FOOTER */
 footer{
   max-width:100%;
