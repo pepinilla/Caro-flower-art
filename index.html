@@ -20,7 +20,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="/site.css?v=20260115a" />
+  <!-- 👇 Sube la versión para evitar cache y ver cambios -->
+  <link rel="stylesheet" href="/site.css?v=20260126a" />
 </head>
 
 <body>
@@ -135,33 +136,75 @@
     <span class="es">Cuéntame qué necesitas y te ayudo a elegir la mejor opción.</span>
   </p>
 
-  <div class="contact-cards">
-    <a class="contact-card" href="https://wa.me/573209781661" target="_blank" rel="noopener">
-      <i class="fab fa-whatsapp"></i>
-      <div class="contact-card-text">
-        <div class="contact-card-title">WhatsApp</div>
-        <div class="contact-card-sub">Fast reply <span class="es">Respuesta rápida</span></div>
-      </div>
-      <span class="contact-card-arrow">›</span>
-    </a>
+  <!-- ✅ Bloque PREMIUM (usa .contact-wrapper / .contact-item / .contact-form) -->
+  <div class="contact-wrapper">
 
-    <a class="contact-card" href="mailto:thrivingwomanandmom@gmail.com">
-      <i class="fa-solid fa-envelope"></i>
-      <div class="contact-card-text">
-        <div class="contact-card-title">Email</div>
-        <div class="contact-card-sub">Send details <span class="es">Enviar detalles</span></div>
-      </div>
-      <span class="contact-card-arrow">›</span>
-    </a>
+    <!-- IZQUIERDA: INFO -->
+    <div class="contact-info">
 
-    <a class="contact-card" href="https://instagram.com/caroflowerart" target="_blank" rel="noopener">
-      <i class="fab fa-instagram"></i>
-      <div class="contact-card-text">
-        <div class="contact-card-title">Instagram</div>
-        <div class="contact-card-sub">@caroflowerart <span class="es">Ver trabajos</span></div>
+      <div class="contact-item">
+        <i class="fab fa-whatsapp"></i>
+        <div>
+          <strong>WhatsApp</strong>
+          <span>Fast reply <span class="es">Respuesta rápida</span></span>
+          <a href="https://wa.me/573209781661" target="_blank" rel="noopener">
+            Open WhatsApp <span class="es">Abrir WhatsApp</span>
+          </a>
+        </div>
       </div>
-      <span class="contact-card-arrow">›</span>
-    </a>
+
+      <div class="contact-item">
+        <i class="fa-solid fa-envelope"></i>
+        <div>
+          <strong>Email</strong>
+          <span>Send details <span class="es">Enviar detalles</span></span>
+          <a href="mailto:thrivingwomanandmom@gmail.com">
+            Send email <span class="es">Enviar correo</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <i class="fab fa-instagram"></i>
+        <div>
+          <strong>Instagram</strong>
+          <span>@caroflowerart <span class="es">Ver trabajos</span></span>
+          <a href="https://instagram.com/caroflowerart" target="_blank" rel="noopener">
+            View profile <span class="es">Ver perfil</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DERECHA: FORM (por ahora visual; backend después) -->
+    <form class="contact-form" action="#" method="post">
+      <h3>Message me <span class="es">Escríbeme</span></h3>
+
+      <div class="form-group">
+        <label for="name">Name <span class="es">Nombre</span></label>
+        <input id="name" name="name" type="text" placeholder="Your name / Tu nombre" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email <span class="es">Correo</span></label>
+        <input id="email" name="email" type="email" placeholder="you@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="message">What do you need? <span class="es">¿Qué necesitas?</span></label>
+        <textarea id="message" name="message" placeholder="Tell me the product, quantity and date / Producto, cantidad y fecha" required></textarea>
+      </div>
+
+      <button type="submit">
+        Request a quote <span class="es">Pedir cotización</span>
+      </button>
+
+      <div class="form-note">
+        I usually reply within 24–48h. <span class="es">Respondo en 24–48h.</span>
+      </div>
+    </form>
+
   </div>
 </section>
 
