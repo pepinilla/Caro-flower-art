@@ -1067,13 +1067,13 @@ body{
 
   font-size: 12.5px;              /* 👈 más fino */
   line-height: 1.15;
-  font-weight: 600;
+  font-weight: 599;
 
   border: 1px solid rgba(0,0,0,.12);
   background: rgba(255,255,255,.65);
-  color: rgba(0,0,0,.78);
+  color: rgba(0,0,0,.75);
 
-  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+  transition: transform .20s ease, background .18s ease, border-color .20s ease;
 font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -1128,12 +1128,12 @@ font-family: var(--font-body);
   #galleryGrid .card-actions .btn-action{
     padding: 9px 8px;
     border-radius: 13px;
-    font-size: 12.5px;
+    font-size: 12px;
   }
 
   .gallery-grid .card-actions .btn-action .es,
   #galleryGrid .card-actions .btn-action .es{
-    font-size: 10.5px;
+    font-size: 10px;
   }
 }
 
@@ -1147,10 +1147,10 @@ font-family: var(--font-body);
 .price-summary{
   cursor: pointer;
   font-size: .9rem;
-  letter-spacing: .06em;
+  letter-spacing: .07em;
   text-transform: uppercase;
-  color: var(--primary-dark);
-  font-weight: 600;
+  color: rgba(0,0,0,.65);
+  font-weight: 590;
   padding: 8px 14px;
   border-radius: 999px;
   display: inline-flex;
@@ -1179,7 +1179,7 @@ font-family: var(--font-body);
 .price-summary::after{
   content: "＋";
   margin-left: 8px;
-  font-weight: 600;
+  font-weight: 590;
   opacity: .6;
 }
 
@@ -1191,11 +1191,11 @@ font-family: var(--font-body);
 .price-box{
   margin: 14px auto 0;
   padding: 14px 16px;
-  border-radius: 18px;
+  border-radius: 17px;
   border: 1px solid rgba(232,154,166,.35);
   background: rgba(248, 232, 236, .55);
   text-align: center;
-  animation: fadePrice .25s ease;
+  animation: fadePrice .30s ease;
 }
 
 @keyframes fadePrice{
@@ -1204,14 +1204,14 @@ font-family: var(--font-body);
 }
 
 .price-line{
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
   margin: 6px 0;
 }
 
 .price-units{
   margin-left: 6px;
-  font-size: .85rem;
+  font-size: .79rem;
   font-weight: 500;
   opacity: .7;
   white-space: nowrap;
