@@ -1074,6 +1074,12 @@ body{
   color: rgba(0,0,0,.78);
 
   transition: transform .18s ease, background .18s ease, border-color .18s ease;
+font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  font-weight: 700;          /* antes 600 */
+  letter-spacing: .01em;     /* sutil, se ve más “premium” */
 }
 
 .gallery-grid .card-actions .btn-action:hover,
@@ -1108,6 +1114,7 @@ body{
   font-size: 10.5px;
   opacity: .65;
   font-style: italic;
+font-family: var(--font-body);
 }
 
 /* Mobile fine-tune */
