@@ -1125,13 +1125,13 @@ body{
   .gallery-grid .card-actions .btn-action,
   #galleryGrid .card-actions .btn-action{
     padding: 9px 8px;
-    border-radius: 12px;
-    font-size: 11px;
+    border-radius: 11px;
+    font-size: 10.6px;
   }
 
   .gallery-grid .card-actions .btn-action .es,
   #galleryGrid .card-actions .btn-action .es{
-    font-size: 11px;
+    font-size: 10.6px;
   }
 }
 
@@ -1144,19 +1144,19 @@ body{
 
 .price-summary{
   cursor: pointer;
-  font-size: 1rem;
+  font-size: .9rem;
   letter-spacing: .09em;
   text-transform: uppercase;
   color: rgba(0,0,0,.65);
   font-weight: 600;
   padding: 8px 14px;
-  border-radius: 999px;
+  border-radius: 900px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: rgba(248, 232, 236, .55);
   border: 1px solid rgba(232,154,166,.35);
-  transition: all .3s ease;
+  transition: all .5s ease;
 }
 
 /* Hover effect */
@@ -1203,16 +1203,16 @@ font-family: var(--font-title);
 }
 
 .price-line{
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin: 6px 0;
 }
 
 .price-units{
   margin-left: 6px;
-  font-size: .8rem;
+  font-size: 1rem;
   font-weight: 500;
-  opacity: .8;
+  opacity: .9;
   white-space: nowrap;
 } ======================================================
    GALLERY MODAL – FULL IMAGE (no crop)
