@@ -343,9 +343,9 @@ p{font-size:1rem}
   padding:.85rem 1rem;
   border-radius:14px;
   background:rgba(232,154,166,.10);
-  border:1px solid rgba(232,154,166,.18);
-  font-size:1.1rem;
-  font-weight:900;
+  border:.9px solid rgba(232,154,166,.18);
+  font-size:1rem;
+  font-weight:700;
   color:var(--dark-color);
   align-items:center;
 }
@@ -1047,7 +1047,7 @@ body{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 14px;
+  margin-top: 13.5px;
   width: 100%;
 }
 
@@ -1058,10 +1058,10 @@ body{
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5.5px;
 
   padding: 8px 8px;           
-  border-radius: 11px;        
+  border-radius: 10.5px;        
   text-decoration: none;
 
   font-size: 12px;            
@@ -1096,7 +1096,7 @@ body{
 
 .gallery-grid .card-actions .btn-quote:hover,
 #galleryGrid .card-actions .btn-quote:hover{
-  background: rgba(232,154,166,.26);
+  background: rgba(232,154,166,.45);
 }
 
 /* Secondary (View Photos) */
@@ -1109,8 +1109,8 @@ body{
 .gallery-grid .card-actions .btn-action .es,
 #galleryGrid .card-actions .btn-action .es{
   margin-top: 0;
-  font-size: 10.5px;
-  opacity: .6;
+  font-size: 11px;
+  opacity: .9;
   font-style: normal;
   font-family: var(--font-title);
 }
@@ -1126,12 +1126,12 @@ body{
   #galleryGrid .card-actions .btn-action{
     padding: 9px 8px;
     border-radius: 12px;
-    font-size: 10.5px;
+    font-size: 11px;
   }
 
   .gallery-grid .card-actions .btn-action .es,
   #galleryGrid .card-actions .btn-action .es{
-    font-size: 10px;
+    font-size: 11px;
   }
 }
 
@@ -1144,8 +1144,8 @@ body{
 
 .price-summary{
   cursor: pointer;
-  font-size: .9rem;
-  letter-spacing: .07em;
+  font-size: 1rem;
+  letter-spacing: .09em;
   text-transform: uppercase;
   color: rgba(0,0,0,.65);
   font-weight: 600;
@@ -1178,7 +1178,7 @@ body{
   content: "＋";
   margin-left: 8px;
   font-weight: 600;
-  opacity: .7;
+  opacity: .9;
 }
 
 .price-details[open] .price-summary::after{
@@ -1203,16 +1203,16 @@ font-family: var(--font-title);
 }
 
 .price-line{
-  font-size: .9rem;
+  font-size: 1rem;
   font-weight: 600;
   margin: 6px 0;
 }
 
 .price-units{
   margin-left: 6px;
-  font-size: .79rem;
+  font-size: .8rem;
   font-weight: 500;
-  opacity: .7;
+  opacity: .8;
   white-space: nowrap;
 } ======================================================
    GALLERY MODAL – FULL IMAGE (no crop)
