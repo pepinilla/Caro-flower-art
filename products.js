@@ -144,7 +144,12 @@ window.PRODUCTS = [
       ])
     },
     thumb: "images/tulips/Tulips_bouquets.webp",
-    gallery: ["images/tulips/Tulips_bouquets.webp"],
+    gallery: ["images/tulips/Tulips_bouquets.webp",
+             "images/tulips/Clavel6.webp",
+             "images/tulips/Clavel3.webp",
+             "images/tulips/Clavel2.webp",
+             "images/tulips/Clavel.webp",
+             "images/tulips/Calebl5.webp"],
     badge: "Bestseller",
     available: true
   },
