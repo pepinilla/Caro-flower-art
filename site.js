@@ -77,7 +77,6 @@
       hint.textContent = CFG.currencyHint[window.CARO_CURRENCY] || "";
     }
 
-    // Optional: hide currency switch in portfolio mode
     const wrap = qs("#currencyWrap");
     if (wrap && CFG.portfolioMode) wrap.style.display = "none";
   }
@@ -163,7 +162,6 @@
 
   function getPrices(p) {
     const cur = window.CARO_CURRENCY;
-
     if (p.prices_by_currency && p.prices_by_currency[cur]) {
       return p.prices_by_currency[cur] || [];
     }
@@ -173,7 +171,6 @@
 
   function getPriceFrom(p) {
     const cur = window.CARO_CURRENCY;
-
     if (p.price_from_by_currency && typeof p.price_from_by_currency[cur] !== "undefined") {
       return Number(p.price_from_by_currency[cur] || 0);
     }
@@ -182,49 +179,49 @@
   }
 
   function priceHTML(p) {
-  // ✅ MODO PORTFOLIO: ocultar precios SIEMPRE
-  if (CFG.portfolioMode) {
+    // ✅ MODO PORTFOLIO: ocultar precios SIEMPRE
+    if (CFG.portfolioMode) {
+      return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
+    }
+
+    const cur = window.CARO_CURRENCY;
+    const list = getPrices(p);
+
+    // Si hay lista de precios (unit, 10 units, etc.)
+    if (list.length) {
+      const rows = list.slice(0, 2).map(x => `
+        <div class="price-line">
+          <strong>${formatMoney(x.amount, cur)}</strong>
+          <span class="price-units">${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
+        </div>
+      `).join("");
+
+      return `
+        <details class="price-details">
+          <summary class="price-summary">Price</summary>
+          <div class="price-box">
+            ${rows}
+          </div>
+        </details>
+      `;
+    }
+
+    // Si solo hay "from"
+    const from = getPriceFrom(p);
+    if (from) {
+      return `
+        <details class="price-details">
+          <summary class="price-summary">Price</summary>
+          <div class="price-box">
+            <div class="price-line"><strong>${formatMoney(from, cur)}</strong></div>
+          </div>
+        </details>
+      `;
+    }
+
+    // Si no hay precios, igual muestra quote
     return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
   }
-
-  const cur = window.CARO_CURRENCY;
-  const list = getPrices(p);
-
-  // Si hay lista de precios (unit, 10 units, etc.)
-  if (list.length) {
-    const rows = list.slice(0, 2).map(x => `
-      <div class="price-line">
-        <strong>${formatMoney(x.amount, cur)}</strong>
-        <span class="price-units">${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
-      </div>
-    `).join("");
-
-    return `
-      <details class="price-details">
-        <summary class="price-summary">Price</summary>
-        <div class="price-box">
-          ${rows}
-        </div>
-      </details>
-    `;
-  }
-
-  // Si solo hay "from"
-  const from = getPriceFrom(p);
-  if (from) {
-    return `
-      <details class="price-details">
-        <summary class="price-summary">Price</summary>
-        <div class="price-box">
-          <div class="price-line"><strong>${formatMoney(from, cur)}</strong></div>
-        </div>
-      </details>
-    `;
-  }
-
-  // Si no hay precios, igual muestra quote
-  return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
-}
 
   /* ======================
      CARD
@@ -316,6 +313,54 @@
 
   let galleryState = { photos: [], index: 0, isOpen: false };
 
+  /* ======================
+     GALLERY AUTOPLAY
+     ====================== */
+  let autoplayTimer = null;
+  let hoverBound = false;
+  let userPaused = false; // si el usuario interactúa, pausamos un ratito
+
+  function startAutoplay() {
+    stopAutoplay();
+    userPaused = false;
+    if (!galleryState.isOpen) return;
+    if (!galleryState.photos || galleryState.photos.length <= 1) return;
+
+    autoplayTimer = setInterval(() => {
+      nextPhoto();
+    }, 2200);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+
+  function userInteractedWithGallery() {
+    userPaused = true;
+    stopAutoplay();
+    // reanuda después de un momento
+    setTimeout(() => {
+      if (galleryState.isOpen) startAutoplay();
+    }, 3500);
+  }
+
+  function bindAutoplayHoverPause() {
+    if (hoverBound) return;
+    const panel = qs(".gallery-panel");
+    if (!panel) return;
+
+    panel.addEventListener("mouseenter", () => {
+      stopAutoplay();
+    });
+
+    panel.addEventListener("mouseleave", () => {
+      if (galleryState.isOpen) startAutoplay();
+    });
+
+    hoverBound = true;
+  }
+
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
@@ -349,7 +394,8 @@
 
     const btnPrev = qs(".gallery-prev");
     const btnNext = qs(".gallery-next");
-if (btnPrev) btnPrev.onclick = (e) => {
+
+    if (btnPrev) btnPrev.onclick = (e) => {
       e.preventDefault(); e.stopPropagation();
       userInteractedWithGallery();
       prevPhoto();
@@ -360,15 +406,18 @@ if (btnPrev) btnPrev.onclick = (e) => {
       userInteractedWithGallery();
       nextPhoto();
     };
+
     setupSwipe();
     bindAutoplayHoverPause();
     startAutoplay();
 
     qs("#galleryModal").classList.add("is-open");
+    document.body.style.overflow = "hidden";
   }
 
   function closeGallery() {
-     stopAutoplay();
+    stopAutoplay();
+
     const modal = qs("#galleryModal");
     if (!modal) return;
 
@@ -420,8 +469,11 @@ if (btnPrev) btnPrev.onclick = (e) => {
 
       if (Math.abs(dx) < 40) return;
       if (Math.abs(dy) > 120) return;
-if (dx < 0) { userInteractedWithGallery(); nextPhoto(); }
-      else { userInteractedWithGallery(); prevPhoto(); }, { passive: true });
+
+      userInteractedWithGallery();
+      if (dx < 0) nextPhoto();
+      else prevPhoto();
+    }, { passive: true });
 
     swipeBound = true;
   }
@@ -442,3 +494,4 @@ if (dx < 0) { userInteractedWithGallery(); nextPhoto(); }
     renderGrid(window.CARO_PAGE || {});
   });
 })();
+```0
