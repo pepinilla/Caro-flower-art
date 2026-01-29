@@ -1,8 +1,9 @@
 /* ======================================================
-   CARO FLOWER ART – GLOBAL JS (STABLE)
+   CARO FLOWER ART – GLOBAL JS (STABLE + AUTOPLAY GALLERY)
    - No BASE path logic
    - Header loads from /header.html
    - Gallery uses paths as-is (no modifications)
+   - Gallery autoplay (pauses on user interaction)
    ====================================================== */
 
 (function () {
@@ -93,11 +94,9 @@
     thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
 
-    // legacy
     prices: Array.isArray(p.prices) ? p.prices : [],
     price_from: Number(p.price_from || 0),
 
-    // new
     prices_by_currency: p.prices_by_currency || null,
     price_from_by_currency: p.price_from_by_currency || null,
   })).filter(p => p.id && p.thumb);
@@ -118,24 +117,21 @@
         location.pathname === "/" ||
         location.pathname.endsWith("/index.html");
 
-      // On internal pages: "/#contact" -> "/index.html#contact"
       qsa('a[href^="/#"]', host).forEach(a => {
         if (!onIndex) {
-          const raw = a.getAttribute("href"); // "/#contact"
+          const raw = a.getAttribute("href");
           if (!raw) return;
           const hash = raw.replace("/#", "#");
           a.setAttribute("href", "/index.html" + hash);
         }
       });
 
-      // Currency buttons
       qsa("[data-currency]", host).forEach(btn => {
         btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
       });
 
       updateCurrencyUI();
     } catch (err) {
-      // Fallback minimal header (so it never disappears)
       host.innerHTML = `
         <header class="site-header">
           <div class="header-inner">
@@ -162,6 +158,7 @@
 
   function getPrices(p) {
     const cur = window.CARO_CURRENCY;
+
     if (p.prices_by_currency && p.prices_by_currency[cur]) {
       return p.prices_by_currency[cur] || [];
     }
@@ -171,6 +168,7 @@
 
   function getPriceFrom(p) {
     const cur = window.CARO_CURRENCY;
+
     if (p.price_from_by_currency && typeof p.price_from_by_currency[cur] !== "undefined") {
       return Number(p.price_from_by_currency[cur] || 0);
     }
@@ -179,7 +177,6 @@
   }
 
   function priceHTML(p) {
-    // ✅ MODO PORTFOLIO: ocultar precios SIEMPRE
     if (CFG.portfolioMode) {
       return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
     }
@@ -187,7 +184,6 @@
     const cur = window.CARO_CURRENCY;
     const list = getPrices(p);
 
-    // Si hay lista de precios (unit, 10 units, etc.)
     if (list.length) {
       const rows = list.slice(0, 2).map(x => `
         <div class="price-line">
@@ -206,7 +202,6 @@
       `;
     }
 
-    // Si solo hay "from"
     const from = getPriceFrom(p);
     if (from) {
       return `
@@ -219,7 +214,6 @@
       `;
     }
 
-    // Si no hay precios, igual muestra quote
     return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
   }
 
@@ -313,58 +307,9 @@
 
   let galleryState = { photos: [], index: 0, isOpen: false };
 
-  /* ======================
-     GALLERY AUTOPLAY
-     ====================== */
-  let autoplayTimer = null;
-  let hoverBound = false;
-  let userPaused = false; // si el usuario interactúa, pausamos un ratito
-
-  function startAutoplay() {
-    stopAutoplay();
-    userPaused = false;
-    if (!galleryState.isOpen) return;
-    if (!galleryState.photos || galleryState.photos.length <= 1) return;
-
-    autoplayTimer = setInterval(() => {
-      nextPhoto();
-    }, 2200);
-  }
-
-  function stopAutoplay() {
-    if (autoplayTimer) clearInterval(autoplayTimer);
-    autoplayTimer = null;
-  }
-
-  function userInteractedWithGallery() {
-    userPaused = true;
-    stopAutoplay();
-    // reanuda después de un momento
-    setTimeout(() => {
-      if (galleryState.isOpen) startAutoplay();
-    }, 3500);
-  }
-
-  function bindAutoplayHoverPause() {
-    if (hoverBound) return;
-    const panel = qs(".gallery-panel");
-    if (!panel) return;
-
-    panel.addEventListener("mouseenter", () => {
-      stopAutoplay();
-    });
-
-    panel.addEventListener("mouseleave", () => {
-      if (galleryState.isOpen) startAutoplay();
-    });
-
-    hoverBound = true;
-  }
-
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
-    // ✅ IMPORTANT: use paths as-is (do NOT prepend slash/base)
     img.src = galleryState.photos[galleryState.index];
   }
 
@@ -381,6 +326,43 @@
     renderGalleryImage();
   }
 
+  // ---------- AUTOPLAY ----------
+  const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let autoplayTimer = null;
+  let userPaused = false;
+
+  function startAutoplay() {
+    if (prefersReduced) return;
+    stopAutoplay();
+    userPaused = false;
+    autoplayTimer = setInterval(() => {
+      if (!galleryState.isOpen || userPaused) return;
+      nextPhoto();
+    }, 2500);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+
+  function userInteractedWithGallery() {
+    userPaused = true;
+    // opcional: reanudar después de 8s
+    setTimeout(() => { userPaused = false; }, 8000);
+  }
+
+  function bindAutoplayHoverPause() {
+    const modal = qs("#galleryModal");
+    if (!modal || modal.dataset.autoplayBound) return;
+    modal.dataset.autoplayBound = "1";
+
+    modal.addEventListener("mouseenter", () => { userPaused = true; });
+    modal.addEventListener("mouseleave", () => { userPaused = false; });
+
+    modal.addEventListener("touchstart", () => { userInteractedWithGallery(); }, { passive: true });
+  }
+
   function openGallery(p) {
     ensureModal();
 
@@ -394,18 +376,8 @@
 
     const btnPrev = qs(".gallery-prev");
     const btnNext = qs(".gallery-next");
-
-    if (btnPrev) btnPrev.onclick = (e) => {
-      e.preventDefault(); e.stopPropagation();
-      userInteractedWithGallery();
-      prevPhoto();
-    };
-
-    if (btnNext) btnNext.onclick = (e) => {
-      e.preventDefault(); e.stopPropagation();
-      userInteractedWithGallery();
-      nextPhoto();
-    };
+    if (btnPrev) btnPrev.onclick = (e) => { e.preventDefault(); e.stopPropagation(); userInteractedWithGallery(); prevPhoto(); };
+    if (btnNext) btnNext.onclick = (e) => { e.preventDefault(); e.stopPropagation(); userInteractedWithGallery(); nextPhoto(); };
 
     setupSwipe();
     bindAutoplayHoverPause();
@@ -417,7 +389,6 @@
 
   function closeGallery() {
     stopAutoplay();
-
     const modal = qs("#galleryModal");
     if (!modal) return;
 
@@ -494,4 +465,3 @@
     renderGrid(window.CARO_PAGE || {});
   });
 })();
-```0
