@@ -220,7 +220,8 @@ window.PRODUCTS = [
              "images/carnations/Flower-carnations-bouquet.webp",
              "images/carnations/Carnations.webp",
              "images/carnations/Carnations2.webp",
-             "images/carnations/Carnations_bouquets.webp"],
+             "images/carnations/Carnations_bouquets.webp",
+             "images/carnations/Flower-carnation-bouquet-2.webp"],
     badge: "",
     available: true
   },
