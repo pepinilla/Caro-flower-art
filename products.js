@@ -263,6 +263,7 @@ window.PRODUCTS = [
       "images/bouquets/jar/Fkower_bouquet4.webp",
       "images/bouquets/jar/Flowerboiqtes.webp",
       "images/bouquets/jar/Fkower_bouquet4.webp",
+      "images/bouquets/jar/Hydrangeas3.webp"
     ],
     badge: "Bestseller",
     available: true
@@ -284,7 +285,8 @@ window.PRODUCTS = [
              "images/bouquets/mini/Mini_bpuquet.webp",
              "images/bouquets/mini/Mini-bouqurts4.webp",
              "images/bouquets/mini/Mini-bouquets3.webp",
-             "images/bouquets/mini/Mini-bouquets2.webp"],
+             "images/bouquets/mini/Mini-bouquets2.webp"
+    ],
     badge: "Nuevo",
     available: true
   },
