@@ -13,7 +13,7 @@
   <meta property="og:title" content="Handmade Paper Flowers" />
   <meta property="og:description" content="Handmade paper flowers crafted with love." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="images/hero-poster.webp" />
+  <meta property="og:image" content="images/Hero/hero-poster.webp" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -73,9 +73,15 @@
 
   <div class="grid">
 
+    <!-- FLOWERS CARD (slideshow) -->
     <div class="card">
       <a href="/flowers.html" class="card-image-wrapper">
-        <img src="images/carnations/Carnations_bouquets.webp" alt="Handmade paper flowers">
+        <img
+          class="card-slideshow flowers-slide"
+          src="images/carnations/Carnations_bouquets.webp"
+          alt="Handmade paper flowers"
+          loading="lazy"
+        >
         <span class="card-badge">Flowers</span>
       </a>
 
@@ -97,9 +103,15 @@
       </div>
     </div>
 
+    <!-- BOUQUETS CARD (slideshow) -->
     <div class="card">
       <a href="/bouquets.html" class="card-image-wrapper">
-        <img src="images/bouquets/hand/gallery/Wedding-bouquet.webp" alt="Paper flower bouquets">
+        <img
+          class="card-slideshow bouquets-slide"
+          src="images/bouquets/hand/gallery/Wedding-bouquet.webp"
+          alt="Paper flower bouquets"
+          loading="lazy"
+        >
         <span class="card-badge">Bouquets</span>
       </a>
 
@@ -210,6 +222,9 @@
 <script src="/config.js"></script>
 <script src="/products.js"></script>
 <script src="/site.js"></script>
+
+<!-- ✅ Slides ONLY for index cards -->
+<script src="/index-slides.js"></script>
 
 </body>
 </html>
