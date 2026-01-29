@@ -1286,3 +1286,13 @@ font-family: var(--font-title);
   .currency-btn{ padding: 7px 10px; font-size: 12px; }
   .currency-buttons{ padding: 3px; }
 }
+
+.card-slideshow {
+  width: 100%;
+  height: auto;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.card-slideshow.is-fading {
+  opacity: 0;
+}
