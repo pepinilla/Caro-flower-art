@@ -257,10 +257,12 @@ window.PRODUCTS = [
       COP: 200000,
       CAD: toCADfromCOP(200000)
     },
-    thumb: "images/bouquets/jar/thumb/Paper_flowers_bouquets.webp",
+    thumb: "images/bouquets/jar/Paper-flowers-bouquets.webp",
     gallery: [
-      "images/bouquets/jar/gallery/Paper-flowers-bouquets.webp",
-      "images/bouquets/jar/thumb/Paper_flowers_bouquets.webp"
+      "images/bouquets/jar/Paper-flowers-bouquets.webp",
+      "images/bouquets/jar/Fkower_bouquet4.webp",
+      "images/bouquets/jar/Flowerboiqtes.webp",
+      "images/bouquets/jar/Fkower_bouquet4.webp",
     ],
     badge: "Bestseller",
     available: true
