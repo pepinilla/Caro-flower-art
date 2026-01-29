@@ -170,7 +170,8 @@ window.PRODUCTS = [
       ])
     },
     thumb: "images/hydrangeas/Hydrangeas_bouquets.webp",
-    gallery: ["images/hydrangeas/Hydrangeas_bouquets.webp"],
+    gallery: ["images/hydrangeas/Hydrangeas_bouquets.webp",
+             "images/hydrangeas/Hydrangeas.webp"],
     badge: "Popular",
     available: true
   },
