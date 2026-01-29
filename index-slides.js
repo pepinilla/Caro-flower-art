@@ -1,40 +1,83 @@
-document.addEventListener("DOMContentLoaded", () => {
+/* ======================================================
+   index-slides.js
+   Slideshow ONLY for the 2 cards on index:
+   - .flowers-slide
+   - .bouquets-slide
+   Smooth fade without white flash
+   ====================================================== */
 
-  const slides = {
-    flowers: [
-      "images/roses/red roses/Paper_red_roses.webp",
-      "images/tulips/Tulips_bouquets.webp",
-      "images/hydrangeas/Hydrangeas_bouquets.webp",
-      "images/peonies/Bouquets_of_paper_peonies.webp",
-      "images/carnations/Carnations_bouquets.webp"
-    ],
-    bouquets: [
-      "images/bouquets/hand/thumb/Paper_flower_bouquets.webp",
-      "images/bouquets/jar/Paper-flowers-bouquets.webp",
-      "images/bouquets/mini/mini_paper_flower_bouquets.webp",
-      "images/wedding/Wedding_paper_flowers_bouquets.webp"
-    ]
-  };
+(function () {
+  const FLOWERS = [
+    "images/carnations/Carnations_bouquets.webp",
+    "images/tulips/Tulips_bouquets.webp",
+    "images/hydrangeas/Hydrangeas_bouquets.webp",
+    "images/peonies/Bouquets_of_paper_peonies.webp"
+  ];
 
-  function startSlideshow(selector, images, delay = 3500) {
-    const img = document.querySelector(selector);
-    if (!img || !images.length) return;
+  const BOUQUETS = [
+    "images/bouquets/hand/gallery/Wedding-bouquet.webp",
+    "images/bouquets/hand/thumb/Paper_flower_bouquets.webp",
+    "images/bouquets/jar/Paper-flowers-bouquets.webp",
+    "images/bouquets/mini/mini_paper_flower_bouquets.webp",
+    "images/wedding/Wedding_paper_flowers_bouquets.webp"
+  ];
 
-    let index = 0;
+  function startFadeSlideshow(imgEl, list, ms = 2800) {
+    if (!imgEl || !Array.isArray(list) || list.length < 2) return;
 
-    setInterval(() => {
-      img.classList.add("is-fading");
+    let i = 0;
+    let timer = null;
 
-      setTimeout(() => {
-        index = (index + 1) % images.length;
-        img.src = images[index];
-        img.classList.remove("is-fading");
-      }, 400);
+    // Start from current src if it matches
+    const cur = imgEl.getAttribute("src") || "";
+    const found = list.indexOf(cur);
+    if (found >= 0) i = found;
 
-    }, delay);
+    function next() {
+      i = (i + 1) % list.length;
+      const nextSrc = list[i];
+
+      const pre = new Image();
+      pre.onload = () => {
+        // fade out
+        imgEl.style.opacity = "0";
+
+        // swap while hidden
+        setTimeout(() => {
+          imgEl.src = nextSrc;
+
+          // fade in (next frame = smoother)
+          requestAnimationFrame(() => {
+            imgEl.style.opacity = "1";
+          });
+        }, 220);
+      };
+      pre.src = nextSrc;
+    }
+
+    timer = setInterval(next, ms);
+
+    // Pause on hover (desktop)
+    const wrapper = imgEl.closest(".card-image-wrapper");
+    if (wrapper) {
+      wrapper.addEventListener("mouseenter", () => clearInterval(timer));
+      wrapper.addEventListener("mouseleave", () => {
+        timer = setInterval(next, ms);
+      });
+    }
   }
 
-  startSlideshow(".flowers-slide", slides.flowers);
-  startSlideshow(".bouquets-slide", slides.bouquets);
+  document.addEventListener("DOMContentLoaded", () => {
+    // Ensure initial opacity is 1
+    const flowersImg = document.querySelector(".flowers-slide");
+    const bouquetsImg = document.querySelector(".bouquets-slide");
+    if (flowersImg) flowersImg.style.opacity = "1";
+    if (bouquetsImg) bouquetsImg.style.opacity = "1";
 
-});
+    // Small delay so layout loads first (prevents jank)
+    setTimeout(() => {
+      startFadeSlideshow(flowersImg, FLOWERS, 2800);
+      startFadeSlideshow(bouquetsImg, BOUQUETS, 2800);
+    }, 200);
+  });
+})();
