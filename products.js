@@ -215,7 +215,11 @@ window.PRODUCTS = [
       ])
     },
     thumb: "images/carnations/Carnations_bouquets.webp",
-    gallery: ["images/carnations/Carnations_bouquets.webp"],
+    gallery: ["images/carnations/Carnations_bouquets.webp",
+             "images/carnations/Flower-carnations-bouquet.webp",
+             "images/carnations/Carnations.webp",
+             "images/carnations/Carnations2.webp",
+             "images/carnations/Carnations_bouquets.webp"],
     badge: "",
     available: true
   },
