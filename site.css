@@ -1287,12 +1287,13 @@ font-family: var(--font-title);
   .currency-buttons{ padding: 3px; }
 }
 
-.card-slideshow {
+/* ===== Card slideshow (smooth fade, no flash) ===== */
+.card-slideshow{
   width: 100%;
-  height: auto;
-  transition: opacity 0.8s ease-in-out;
-}
+  height: 100%;
+  object-fit: cover;
 
-.card-slideshow.is-fading {
-  opacity: 0;
+  opacity: 1;
+  transition: opacity .6s ease-in-out;
+  will-change: opacity;
 }
