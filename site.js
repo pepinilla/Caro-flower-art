@@ -349,16 +349,26 @@
 
     const btnPrev = qs(".gallery-prev");
     const btnNext = qs(".gallery-next");
-    if (btnPrev) btnPrev.onclick = (e) => { e.preventDefault(); e.stopPropagation(); prevPhoto(); };
-    if (btnNext) btnNext.onclick = (e) => { e.preventDefault(); e.stopPropagation(); nextPhoto(); };
+if (btnPrev) btnPrev.onclick = (e) => {
+      e.preventDefault(); e.stopPropagation();
+      userInteractedWithGallery();
+      prevPhoto();
+    };
 
+    if (btnNext) btnNext.onclick = (e) => {
+      e.preventDefault(); e.stopPropagation();
+      userInteractedWithGallery();
+      nextPhoto();
+    };
     setupSwipe();
+    bindAutoplayHoverPause();
+    startAutoplay();
 
     qs("#galleryModal").classList.add("is-open");
-    document.body.style.overflow = "hidden";
   }
 
   function closeGallery() {
+     stopAutoplay();
     const modal = qs("#galleryModal");
     if (!modal) return;
 
@@ -374,8 +384,9 @@
   document.addEventListener("keydown", (e) => {
     if (!galleryState.isOpen) return;
     if (e.key === "Escape") closeGallery();
-    if (e.key === "ArrowRight") nextPhoto();
-    if (e.key === "ArrowLeft") prevPhoto();
+
+    if (e.key === "ArrowRight") { userInteractedWithGallery(); nextPhoto(); }
+    if (e.key === "ArrowLeft")  { userInteractedWithGallery(); prevPhoto(); }
   });
 
   let swipeBound = false;
@@ -409,10 +420,8 @@
 
       if (Math.abs(dx) < 40) return;
       if (Math.abs(dy) > 120) return;
-
-      if (dx < 0) nextPhoto();
-      else prevPhoto();
-    }, { passive: true });
+if (dx < 0) { userInteractedWithGallery(); nextPhoto(); }
+      else { userInteractedWithGallery(); prevPhoto(); }, { passive: true });
 
     swipeBound = true;
   }
