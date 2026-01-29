@@ -274,8 +274,14 @@ window.PRODUCTS = [
       COP: 45000,
       CAD: toCADfromCOP(45000)
     },
-    thumb: "images/bouquets/mini_paper_flower_bouquets.webp",
-    gallery: ["images/bouquets/mini_paper_flower_bouquets.webp"],
+    thumb: "images/bouquets/mini/mini_paper_flower_bouquets.webp",
+    gallery: ["images/bouquets/mini/mini_paper_flower_bouquets.webp",
+             "images/bouquets/mini/Mino-boiqurts5.webp",
+             "images/bouquets/mini/Minibouquets.webp",
+             "images/bouquets/mini/Mini_bpuquet.webp",
+             "images/bouquets/mini/Mini-bouqurts4.webp",
+             "images/bouquets/mini/Mini-bouquets3.webp",
+             "images/bouquets/mini/Mini-bouquets2.webp"],
     badge: "Nuevo",
     available: true
   },
