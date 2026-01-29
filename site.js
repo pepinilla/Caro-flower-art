@@ -464,4 +464,56 @@
     updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
   });
+
+/* ======================
+   CARD IMAGE SLIDESHOW (INDEX ONLY)
+   Smooth fade – no white flash
+   ====================== */
+
+function initCardSlideshows() {
+  const slideshows = document.querySelectorAll("[data-slideshow]");
+
+  slideshows.forEach(wrapper => {
+    const images = JSON.parse(wrapper.dataset.slideshow || "[]");
+    if (!images.length) return;
+
+    const img = wrapper.querySelector("img");
+    if (!img) return;
+
+    let index = 0;
+    let timer = null;
+
+    function changeImage() {
+      index = (index + 1) % images.length;
+      const nextSrc = images[index];
+
+      // preload next image
+      const pre = new Image();
+      pre.onload = () => {
+        img.style.opacity = "0";
+
+        setTimeout(() => {
+          img.src = nextSrc;
+          requestAnimationFrame(() => {
+            img.style.opacity = "1";
+          });
+        }, 250);
+      };
+      pre.src = nextSrc;
+    }
+
+    timer = setInterval(changeImage, 3000);
+
+    // pause on hover (desktop)
+    wrapper.addEventListener("mouseenter", () => clearInterval(timer));
+    wrapper.addEventListener("mouseleave", () => {
+      timer = setInterval(changeImage, 3000);
+    });
+  });
+}
+
+/* activar después de render */
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(initCardSlideshows, 300);
+});
 })();
