@@ -997,7 +997,7 @@ body{
 
 /* Cards: que no queden gigantes */
 #galleryGrid .card-image-wrapper{
-  height: 170px;
+  height: 260px;
 }
 
 /* Mobile: 1 columna */
@@ -1008,7 +1008,7 @@ body{
   }
 
   #galleryGrid .card-image-wrapper{
-    height: 220px;
+    height: 320px;
   }
 }
 
@@ -1427,4 +1427,18 @@ font-family: var(--font-title);
 .card-image-wrapper .card-badge{
   position: absolute;
   z-index: 3;
+}
+
+/* ---- Card title en una línea ---- */
+.card-content h3{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;   /* si es muy largo, baja solo si toca */
+}
+
+.card-content h3 .es{
+  display:inline;   /* override SOLO dentro del h3 */
+  margin:0;
 }
