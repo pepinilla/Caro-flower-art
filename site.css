@@ -352,11 +352,18 @@ p{font-size:1rem}
   font-weight: 600;
   letter-spacing: .02em;
   margin: 0;
+
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .card-content h3 .es{
-  font-size: .58em;
-  opacity: .72;
+  display: inline;
+  font-size: .6em;
+  opacity: .65;
+  margin: 0;
 }
 
 .card-content p{
@@ -1427,18 +1434,4 @@ font-family: var(--font-title);
 .card-image-wrapper .card-badge{
   position: absolute;
   z-index: 3;
-}
-
-/* ---- Card title en una línea ---- */
-.card-content h3{
-  display:flex;
-  align-items:baseline;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;   /* si es muy largo, baja solo si toca */
-}
-
-.card-content h3 .es{
-  display:inline;   /* override SOLO dentro del h3 */
-  margin:0;
 }
