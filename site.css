@@ -1357,3 +1357,9 @@ font-family: var(--font-title);
   position: absolute;
   z-index: 3;
 }
+
+#galleryImage{
+  opacity: 1;
+  transition: opacity .45s ease-in-out;
+  will-change: opacity;
+}
