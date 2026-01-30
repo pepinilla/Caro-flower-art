@@ -1390,3 +1390,8 @@ font-family: var(--font-title);
   position: absolute;
   z-index: 3;
 }
+@media (max-width: 768px){
+  .about-content{
+    grid-template-columns: 1fr;
+  }
+}
