@@ -4,7 +4,6 @@
    - Currency system (localStorage + auto)
    - Product grid
    - Gallery modal: autoplay + swipe + keyboard + safe close
-   - Index card slideshows: crossfade (no white flash)
    ====================================================== */
 
 (function () {
@@ -311,7 +310,6 @@
       requestAnimationFrame(() => { img.style.opacity = "1"; });
     };
     pre.onerror = () => {
-      // si falla, igual intenta ponerlo para ver el error en el navegador
       img.src = src;
       requestAnimationFrame(() => { img.style.opacity = "1"; });
     };
@@ -436,7 +434,7 @@
     galleryState.isOpen = false;
   }
 
-  // ✅ robust close: works for X + backdrop + any child inside them
+  // robust close: X + backdrop + any child inside them
   document.addEventListener("click", (e) => {
     const closeEl = e.target.closest && e.target.closest("[data-close]");
     if (closeEl) closeGallery();
@@ -450,107 +448,12 @@
   });
 
   /* ======================
-     INDEX CARD SLIDESHOWS (CROSSFADE)
-     Uses existing <img class="flowers-slide"> and <img class="bouquets-slide">
-     No white flash
-     ====================== */
-  function initIndexSlides() {
-    const slides = [
-      {
-        selector: ".flowers-slide",
-        images: [
-          "images/carnations/Carnations_bouquets.webp",
-          "images/tulips/Tulips_bouquets.webp",
-          "images/hydrangeas/Hydrangeas_bouquets.webp",
-          "images/peonies/Bouquets_of_paper_peonies.webp"
-        ]
-      },
-      {
-        selector: ".bouquets-slide",
-        images: [
-          "images/bouquets/hand/gallery/Wedding-bouquet.webp",
-          "images/bouquets/jar/Paper-flowers-bouquets.webp",
-          "images/bouquets/mini/mini_paper_flower_bouquets.webp"
-        ]
-      }
-    ];
-
-    slides.forEach(s => {
-      const baseImg = qs(s.selector);
-      if (!baseImg || !s.images || !s.images.length) return;
-
-      const wrapper = baseImg.closest(".card-image-wrapper") || baseImg.parentElement;
-      if (!wrapper) return;
-
-      // Make wrapper safe for absolute layers
-      wrapper.style.position = wrapper.style.position || "relative";
-      wrapper.style.overflow = wrapper.style.overflow || "hidden";
-
-      // Create two layers
-      const layerA = document.createElement("img");
-      const layerB = document.createElement("img");
-
-      layerA.className = "card-slide-layer is-visible";
-      layerB.className = "card-slide-layer";
-
-      layerA.alt = baseImg.alt || "";
-      layerB.alt = baseImg.alt || "";
-
-      // Start with current src if exists
-      layerA.src = baseImg.getAttribute("src") || s.images[0];
-
-      // Hide original img (keep it in DOM)
-      baseImg.style.display = "none";
-
-      wrapper.appendChild(layerA);
-      wrapper.appendChild(layerB);
-
-      let index = 0;
-      let showingA = true;
-      let timer = null;
-      const intervalMs = 3000;
-
-      function preload(src) {
-        return new Promise(resolve => {
-          const im = new Image();
-          im.onload = () => resolve(true);
-          im.onerror = () => resolve(false);
-          im.src = src;
-        });
-      }
-
-      async function tick() {
-        index = (index + 1) % s.images.length;
-        const nextSrc = s.images[index];
-        const ok = await preload(nextSrc);
-        if (!ok) return;
-
-        const front = showingA ? layerA : layerB;
-        const back  = showingA ? layerB : layerA;
-
-        back.src = nextSrc;
-        back.classList.add("is-visible");
-        front.classList.remove("is-visible");
-
-        showingA = !showingA;
-      }
-
-      timer = setInterval(tick, intervalMs);
-
-      wrapper.addEventListener("mouseenter", () => { if (timer) clearInterval(timer); timer = null; });
-      wrapper.addEventListener("mouseleave", () => { if (!timer) timer = setInterval(tick, intervalMs); });
-    });
-  }
-
-  /* ======================
      INIT
      ====================== */
   document.addEventListener("DOMContentLoaded", async () => {
     await injectHeader();
     updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
-    // index slides safe: if selectors not found, does nothing
-    setTimeout(initIndexSlides, 150);
   });
 
 })();
