@@ -1,10 +1,10 @@
 /* ======================================================
    CARO FLOWER ART – GLOBAL JS (FINAL STABLE)
-   - Header inject
-   - Currency system
+   - Header inject (/header.html)
+   - Currency system (localStorage + auto)
    - Product grid
-   - Gallery modal with autoplay + swipe
-   - Index card slideshows (fade, no flash)
+   - Gallery modal: autoplay + swipe + keyboard + safe close
+   - Index card slideshows: crossfade (no white flash)
    ====================================================== */
 
 (function () {
@@ -23,16 +23,29 @@
      CURRENCY
      ====================== */
   function guessCurrency() {
-    const lang = String(navigator.language || "").toLowerCase();
+    const lang = String((navigator.languages && navigator.languages[0]) || navigator.language || "").toLowerCase();
     const tz = String(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
-    if (lang.includes("en-ca") || tz.includes("Toronto") || tz.includes("Vancouver")) return "CAD";
+
+    const tzLooksCanada =
+      tz.includes("Vancouver") ||
+      tz.includes("Toronto") ||
+      tz.includes("Edmonton") ||
+      tz.includes("Winnipeg") ||
+      tz.includes("Halifax") ||
+      tz.includes("St_Johns") ||
+      tz.includes("Regina") ||
+      tz.includes("Calgary") ||
+      tz.includes("Montreal");
+
+    if (lang.includes("en-ca") || tzLooksCanada) return "CAD";
     return "COP";
   }
 
   function initCurrency() {
     const saved = localStorage.getItem("CARO_CURRENCY");
     if (saved) return saved;
-    const cur = CFG.autoCurrency ? guessCurrency() : CFG.defaultCurrency;
+
+    const cur = CFG.autoCurrency ? guessCurrency() : (CFG.defaultCurrency || "CAD");
     localStorage.setItem("CARO_CURRENCY", cur);
     return cur;
   }
@@ -40,6 +53,7 @@
   window.CARO_CURRENCY = initCurrency();
 
   function setCurrency(cur) {
+    if (!cur) return;
     window.CARO_CURRENCY = cur;
     localStorage.setItem("CARO_CURRENCY", cur);
     updateCurrencyUI();
@@ -48,18 +62,31 @@
   window.CARO_setCurrency = setCurrency;
 
   function updateCurrencyUI() {
-    qsa("[data-currency]").forEach(b => {
-      b.classList.toggle("is-active", b.dataset.currency === window.CARO_CURRENCY);
+    qsa("[data-currency]").forEach(btn => {
+      const isActive = btn.dataset.currency === window.CARO_CURRENCY;
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
+
+    const wrap = qs("#currencyWrap");
+    if (wrap && CFG.portfolioMode) wrap.style.display = "none";
   }
 
   /* ======================
-     PRODUCTS
+     PRODUCTS (normalize safely)
      ====================== */
   const PRODUCTS = (window.PRODUCTS || []).map(p => ({
     ...p,
     id: String(p.id || "").trim(),
+    name: p.name || "",
+    name_es: p.name_es || "",
+    category: String(p.category || "flowers").toLowerCase(),
+    thumb: p.thumb || "",
     gallery: Array.isArray(p.gallery) ? p.gallery : [],
+    prices: Array.isArray(p.prices) ? p.prices : [],
+    price_from: Number(p.price_from || 0),
+    prices_by_currency: p.prices_by_currency || null,
+    price_from_by_currency: p.price_from_by_currency || null
   })).filter(p => p.id && p.thumb);
 
   /* ======================
@@ -68,35 +95,115 @@
   async function injectHeader() {
     const host = qs("#site-header");
     if (!host) return;
+
     try {
       const res = await fetch("/header.html", { cache: "no-cache" });
+      if (!res.ok) throw new Error("header.html not found");
       host.innerHTML = await res.text();
-      qsa("[data-currency]", host).forEach(b =>
-        b.addEventListener("click", () => setCurrency(b.dataset.currency))
-      );
+
+      const onIndex =
+        location.pathname === "/" ||
+        location.pathname.endsWith("/index.html");
+
+      // On internal pages: "/#contact" -> "/index.html#contact"
+      qsa('a[href^="/#"]', host).forEach(a => {
+        if (!onIndex) {
+          const raw = a.getAttribute("href"); // "/#contact"
+          if (!raw) return;
+          const hash = raw.replace("/#", "#");
+          a.setAttribute("href", "/index.html" + hash);
+        }
+      });
+
+      // Currency buttons
+      qsa("[data-currency]", host).forEach(btn => {
+        btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
+      });
+
       updateCurrencyUI();
-    } catch {
-      host.innerHTML = `<header class="site-header"><a href="/index.html">Caro Flower Art</a></header>`;
+    } catch (err) {
+      host.innerHTML = `
+        <header class="site-header">
+          <div class="header-inner">
+            <a class="brand" href="/index.html" aria-label="Caro Flower Art">Caro Flower Art</a>
+          </div>
+        </header>
+      `;
     }
   }
 
   /* ======================
      PRICE HELPERS
      ====================== */
-  function formatMoney(v, c) {
-    return new Intl.NumberFormat(c === "COP" ? "es-CO" : "en-CA", {
-      style: "currency", currency: c, maximumFractionDigits: c === "COP" ? 0 : 2
-    }).format(v);
+  function escapeHtml(str) {
+    return String(str || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+  }
+
+  function formatMoney(amount, currency) {
+    const locale = currency === "COP" ? "es-CO" : "en-CA";
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency,
+      maximumFractionDigits: currency === "COP" ? 0 : 2
+    }).format(Number(amount || 0));
+  }
+
+  function getPrices(p) {
+    const cur = window.CARO_CURRENCY;
+    if (p.prices_by_currency && p.prices_by_currency[cur]) return p.prices_by_currency[cur] || [];
+    if (p.prices && p.prices.length) return p.prices;
+    return [];
+  }
+
+  function getPriceFrom(p) {
+    const cur = window.CARO_CURRENCY;
+    if (p.price_from_by_currency && typeof p.price_from_by_currency[cur] !== "undefined") {
+      return Number(p.price_from_by_currency[cur] || 0);
+    }
+    if (p.price_from) return Number(p.price_from || 0);
+    return 0;
   }
 
   function priceHTML(p) {
-    if (CFG.portfolioMode) return `<div class="price-box">Request quote</div>`;
-    if (p.price_from_by_currency) {
-      return `<div class="price-box"><strong>${
-        formatMoney(p.price_from_by_currency[window.CARO_CURRENCY], window.CARO_CURRENCY)
-      }</strong></div>`;
+    if (CFG.portfolioMode) {
+      return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
     }
-    return `<div class="price-box">Request quote</div>`;
+
+    const cur = window.CARO_CURRENCY;
+    const list = getPrices(p);
+
+    if (list.length) {
+      const rows = list.slice(0, 2).map(x => `
+        <div class="price-line">
+          <strong>${formatMoney(x.amount, cur)}</strong>
+          <span class="price-units">${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
+        </div>
+      `).join("");
+
+      return `
+        <details class="price-details">
+          <summary class="price-summary">Price</summary>
+          <div class="price-box">${rows}</div>
+        </details>
+      `;
+    }
+
+    const from = getPriceFrom(p);
+    if (from) {
+      return `
+        <details class="price-details">
+          <summary class="price-summary">Price</summary>
+          <div class="price-box">
+            <div class="price-line"><strong>${formatMoney(from, cur)}</strong></div>
+          </div>
+        </details>
+      `;
+    }
+
+    return `<div class="price-box"><div class="price-line">Request quote</div></div>`;
   }
 
   /* ======================
@@ -104,23 +211,30 @@
      ====================== */
   function cardHTML(p) {
     return `
-      <article class="card">
+      <article class="card" data-category="${escapeHtml(p.category)}" data-id="${escapeHtml(p.id)}">
         <div class="card-image-wrapper">
-          <img src="${p.thumb}" loading="lazy">
+          <img src="${escapeHtml(p.thumb)}" alt="${escapeHtml(p.name)}" loading="lazy">
         </div>
+
         <div class="card-content">
-          <h3>${p.name}<span class="es">${p.name_es || ""}</span></h3>
+          <h3>${escapeHtml(p.name)}<span class="es">${escapeHtml(p.name_es)}</span></h3>
+
           ${priceHTML(p)}
+
           <div class="card-actions actions-row">
-            <a href="/index.html#contact" class="btn-action btn-quote">
-              Request Quote<span class="es">Pedir cotización</span>
+            <a href="/index.html#contact" class="btn-action btn-quote" data-prefill="${escapeHtml(p.name)}">
+              Request Quote
+              <span class="es">Pedir cotización</span>
             </a>
-            <button class="btn-action btn-outline btn-photos" data-id="${p.id}">
-              View Photos<span class="es">Ver fotos</span>
+
+            <button class="btn-action btn-outline btn-photos" type="button" data-id="${escapeHtml(p.id)}">
+              View Photos
+              <span class="es">Ver fotos</span>
             </button>
           </div>
         </div>
-      </article>`;
+      </article>
+    `;
   }
 
   /* ======================
@@ -129,78 +243,216 @@
   function renderGrid(cfg) {
     const grid = qs("#" + (cfg.gridId || "galleryGrid"));
     if (!grid) return;
+
     let list = [...PRODUCTS];
-    if (cfg.category) list = list.filter(p => p.category === cfg.category);
+    if (cfg.mode === "category" && cfg.category) {
+      list = list.filter(p => p.category === String(cfg.category).toLowerCase());
+    }
+
     grid.innerHTML = list.map(cardHTML).join("");
-    qsa(".btn-photos", grid).forEach(b =>
-      b.onclick = () => openGallery(PRODUCTS.find(p => p.id === b.dataset.id))
-    );
+
+    qsa(".btn-photos", grid).forEach(btn => {
+      btn.onclick = () => {
+        const p = PRODUCTS.find(x => x.id === btn.dataset.id);
+        if (p) openGallery(p);
+      };
+    });
   }
 
   /* ======================
-     GALLERY MODAL + AUTOPLAY
+     GALLERY MODAL + AUTOPLAY + SWIPE
      ====================== */
-  let galleryState = { photos: [], index: 0, open: false };
+  const prefersReduced =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let galleryState = { photos: [], index: 0, isOpen: false };
   let autoplayTimer = null;
+  let userPaused = false;
+  let swipeBound = false;
 
   function ensureModal() {
     if (qs("#galleryModal")) return;
+
     document.body.insertAdjacentHTML("beforeend", `
       <div class="gallery-modal" id="galleryModal">
         <div class="gallery-backdrop" data-close></div>
-        <div class="gallery-panel">
-          <button class="gallery-close" data-close>×</button>
-          <img id="galleryImage">
+
+        <div class="gallery-panel" role="dialog" aria-modal="true">
+          <button class="gallery-close" type="button" data-close aria-label="Close">×</button>
+
+          <div class="gallery-body">
+            <button class="gallery-nav gallery-prev" type="button" aria-label="Previous">‹</button>
+            <button class="gallery-nav gallery-next" type="button" aria-label="Next">›</button>
+
+            <div class="gallery-image-wrap" id="gallerySwipeArea">
+              <img id="galleryImage" alt="">
+            </div>
+
+            <div class="gallery-meta">
+              <div id="galleryTitle" class="gallery-title"></div>
+              <div id="galleryPrice" class="gallery-price"></div>
+            </div>
+          </div>
         </div>
-      </div>`);
+      </div>
+    `);
   }
 
   function renderGalleryImage() {
     const img = qs("#galleryImage");
-    if (!img) return;
-    img.style.opacity = "0";
+    if (!img || !galleryState.photos.length) return;
+
     const src = galleryState.photos[galleryState.index];
+    img.style.opacity = "0";
+
     const pre = new Image();
     pre.onload = () => {
       img.src = src;
-      requestAnimationFrame(() => img.style.opacity = "1");
+      requestAnimationFrame(() => { img.style.opacity = "1"; });
+    };
+    pre.onerror = () => {
+      // si falla, igual intenta ponerlo para ver el error en el navegador
+      img.src = src;
+      requestAnimationFrame(() => { img.style.opacity = "1"; });
     };
     pre.src = src;
   }
 
   function nextPhoto() {
+    if (!galleryState.photos.length) return;
     galleryState.index = (galleryState.index + 1) % galleryState.photos.length;
     renderGalleryImage();
   }
 
+  function prevPhoto() {
+    if (!galleryState.photos.length) return;
+    galleryState.index = (galleryState.index - 1 + galleryState.photos.length) % galleryState.photos.length;
+    renderGalleryImage();
+  }
+
   function startAutoplay() {
+    if (prefersReduced) return;
     stopAutoplay();
-    autoplayTimer = setInterval(nextPhoto, 2600);
+    userPaused = false;
+
+    autoplayTimer = setInterval(() => {
+      if (!galleryState.isOpen || userPaused) return;
+      nextPhoto();
+    }, 2600);
   }
 
   function stopAutoplay() {
     if (autoplayTimer) clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+
+  function userInteractedWithGallery() {
+    userPaused = true;
+    setTimeout(() => { userPaused = false; }, 8000);
+  }
+
+  function bindAutoplayHoverPause() {
+    const modal = qs("#galleryModal");
+    if (!modal || modal.dataset.autoplayBound) return;
+    modal.dataset.autoplayBound = "1";
+
+    modal.addEventListener("mouseenter", () => { userPaused = true; });
+    modal.addEventListener("mouseleave", () => { userPaused = false; });
+
+    modal.addEventListener("touchstart", () => { userInteractedWithGallery(); }, { passive: true });
+  }
+
+  function setupSwipe() {
+    if (swipeBound) return;
+    const area = qs("#gallerySwipeArea");
+    if (!area) return;
+
+    let startX = 0, startY = 0, tracking = false;
+
+    area.addEventListener("touchstart", (ev) => {
+      if (!galleryState.isOpen) return;
+      const t = ev.touches && ev.touches[0];
+      if (!t) return;
+      tracking = true;
+      startX = t.clientX;
+      startY = t.clientY;
+    }, { passive: true });
+
+    area.addEventListener("touchend", (ev) => {
+      if (!galleryState.isOpen || !tracking) return;
+      tracking = false;
+
+      const t = ev.changedTouches && ev.changedTouches[0];
+      if (!t) return;
+
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+
+      if (Math.abs(dx) < 40) return;
+      if (Math.abs(dy) > 120) return;
+
+      userInteractedWithGallery();
+      if (dx < 0) nextPhoto();
+      else prevPhoto();
+    }, { passive: true });
+
+    swipeBound = true;
   }
 
   function openGallery(p) {
+    if (!p) return;
     ensureModal();
-    galleryState.photos = p.gallery.length ? p.gallery : [p.thumb];
+
+    galleryState.photos = (p.gallery && p.gallery.length) ? p.gallery : [p.thumb];
     galleryState.index = 0;
-    galleryState.open = true;
+    galleryState.isOpen = true;
+
     renderGalleryImage();
+    const title = qs("#galleryTitle");
+    const price = qs("#galleryPrice");
+    if (title) title.textContent = `${p.name} / ${p.name_es}`;
+    if (price) price.innerHTML = priceHTML(p);
+
+    const btnPrev = qs(".gallery-prev");
+    const btnNext = qs(".gallery-next");
+    if (btnPrev) btnPrev.onclick = (e) => { e.preventDefault(); e.stopPropagation(); userInteractedWithGallery(); prevPhoto(); };
+    if (btnNext) btnNext.onclick = (e) => { e.preventDefault(); e.stopPropagation(); userInteractedWithGallery(); nextPhoto(); };
+
+    setupSwipe();
+    bindAutoplayHoverPause();
     startAutoplay();
-    qs("#galleryModal").classList.add("is-open");
+
+    const modal = qs("#galleryModal");
+    if (modal) modal.classList.add("is-open");
+    document.body.style.overflow = "hidden";
   }
 
-  document.addEventListener("click", e => {
-    if (e.target?.dataset.close) {
-      stopAutoplay();
-      qs("#galleryModal")?.classList.remove("is-open");
-    }
+  function closeGallery() {
+    stopAutoplay();
+    const modal = qs("#galleryModal");
+    if (!modal) return;
+    modal.classList.remove("is-open");
+    document.body.style.overflow = "";
+    galleryState.isOpen = false;
+  }
+
+  // ✅ robust close: works for X + backdrop + any child inside them
+  document.addEventListener("click", (e) => {
+    const closeEl = e.target.closest && e.target.closest("[data-close]");
+    if (closeEl) closeGallery();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!galleryState.isOpen) return;
+    if (e.key === "Escape") closeGallery();
+    if (e.key === "ArrowRight") { userInteractedWithGallery(); nextPhoto(); }
+    if (e.key === "ArrowLeft")  { userInteractedWithGallery(); prevPhoto(); }
   });
 
   /* ======================
-     INDEX CARD SLIDESHOWS
+     INDEX CARD SLIDESHOWS (CROSSFADE)
+     Uses existing <img class="flowers-slide"> and <img class="bouquets-slide">
+     No white flash
      ====================== */
   function initIndexSlides() {
     const slides = [
@@ -224,21 +476,69 @@
     ];
 
     slides.forEach(s => {
-      const img = qs(s.selector);
-      if (!img) return;
-      let i = 0;
-      setInterval(() => {
-        i = (i + 1) % s.images.length;
-        const pre = new Image();
-        pre.onload = () => {
-          img.style.opacity = "0";
-          setTimeout(() => {
-            img.src = s.images[i];
-            img.style.opacity = "1";
-          }, 250);
-        };
-        pre.src = s.images[i];
-      }, 3000);
+      const baseImg = qs(s.selector);
+      if (!baseImg || !s.images || !s.images.length) return;
+
+      const wrapper = baseImg.closest(".card-image-wrapper") || baseImg.parentElement;
+      if (!wrapper) return;
+
+      // Make wrapper safe for absolute layers
+      wrapper.style.position = wrapper.style.position || "relative";
+      wrapper.style.overflow = wrapper.style.overflow || "hidden";
+
+      // Create two layers
+      const layerA = document.createElement("img");
+      const layerB = document.createElement("img");
+
+      layerA.className = "card-slide-layer is-visible";
+      layerB.className = "card-slide-layer";
+
+      layerA.alt = baseImg.alt || "";
+      layerB.alt = baseImg.alt || "";
+
+      // Start with current src if exists
+      layerA.src = baseImg.getAttribute("src") || s.images[0];
+
+      // Hide original img (keep it in DOM)
+      baseImg.style.display = "none";
+
+      wrapper.appendChild(layerA);
+      wrapper.appendChild(layerB);
+
+      let index = 0;
+      let showingA = true;
+      let timer = null;
+      const intervalMs = 3000;
+
+      function preload(src) {
+        return new Promise(resolve => {
+          const im = new Image();
+          im.onload = () => resolve(true);
+          im.onerror = () => resolve(false);
+          im.src = src;
+        });
+      }
+
+      async function tick() {
+        index = (index + 1) % s.images.length;
+        const nextSrc = s.images[index];
+        const ok = await preload(nextSrc);
+        if (!ok) return;
+
+        const front = showingA ? layerA : layerB;
+        const back  = showingA ? layerB : layerA;
+
+        back.src = nextSrc;
+        back.classList.add("is-visible");
+        front.classList.remove("is-visible");
+
+        showingA = !showingA;
+      }
+
+      timer = setInterval(tick, intervalMs);
+
+      wrapper.addEventListener("mouseenter", () => { if (timer) clearInterval(timer); timer = null; });
+      wrapper.addEventListener("mouseleave", () => { if (!timer) timer = setInterval(tick, intervalMs); });
     });
   }
 
@@ -247,8 +547,10 @@
      ====================== */
   document.addEventListener("DOMContentLoaded", async () => {
     await injectHeader();
+    updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
-    initIndexSlides();
+    // index slides safe: if selectors not found, does nothing
+    setTimeout(initIndexSlides, 150);
   });
 
 })();
