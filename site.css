@@ -1347,6 +1347,12 @@ font-family: var(--font-title);
   filter: blur(1.4px) saturate(1.02);
 }
 
+/* 👈 ESTA ES LA CLAVE QUE FALTABA */
+.card-image-wrapper.is-slideshow img.card-slide-layer{
+  position: absolute;
+  inset: 0;
+}
+
 /* la visible queda nítida */
 .card-image-wrapper.is-slideshow .card-slide-layer.is-visible{
   opacity: 1;
@@ -1358,6 +1364,7 @@ font-family: var(--font-title);
   z-index: 3;
 }
 
+/* gallery fade (esto está bien así) */
 #galleryImage{
   opacity: 1;
   transition: opacity .45s ease-in-out;
