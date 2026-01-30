@@ -273,48 +273,57 @@ p{font-size:1rem}
   transform:translateY(-6px);
   box-shadow:var(--shadow);
 }
-
 .card-image-wrapper{
-  position:relative;
-  height:270px;
-  overflow:hidden;
+  position: relative;
+  height: 270px;
+  overflow: hidden;
 }
 
+/* ===== IMÁGENES (fill elegante) ===== */
+.card-image-wrapper img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* 👈 imágenes llenan el card */
+  transform: scale(1.01);
+  transition: transform .35s ease;
+  display: block;
+}
 
-/* img + video como "media" */
-.card-image-wrapper img,
+/* ===== VIDEOS (completos, sin recorte) ===== */
 .card-image-wrapper video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transform:scale(1.01);
-  transition:transform .35s ease;
-  display:block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      /* 👈 video completo */
+  background: #fff;         /* fondo limpio */
+  transform: scale(1.04);
+  transition: transform .35s ease;
+  display: block;
 }
 
 /* video cards (index) */
 .card-image-wrapper .card-video{
-  position:absolute;
-  inset:0;
-  z-index:1;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
-/* fallback image detrás */
+/* fallback image detrás del video (si lo usas) */
 .card-image-wrapper .card-fallback{
-  position:absolute;
-  inset:0;
-  z-index:0;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
-/* badge arriba */
+/* badge siempre arriba */
 .card-image-wrapper .card-badge{
-  position:absolute;
-  z-index:3;
+  position: absolute;
+  z-index: 3;
 }
 
+/* hover suave para ambos */
 .card:hover .card-image-wrapper img,
 .card:hover .card-image-wrapper video{
-  transform:scale(1.06);
+  transform: scale(1.06);
 }
 .card-badge{
   position:absolute;
