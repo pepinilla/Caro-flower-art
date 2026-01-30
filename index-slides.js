@@ -38,7 +38,6 @@
       layerB = imgEl.cloneNode(false);
       layerB.className = "card-slide-layer layer-b";
       layerB.removeAttribute("loading");
-      // put under badge but above background
       wrapper.insertBefore(layerB, imgEl);
     }
 
@@ -84,7 +83,6 @@
 
       show.src = nextSrc;
 
-      // crossfade (CSS handles opacity + dissolve)
       show.classList.add("is-visible");
       hide.classList.remove("is-visible");
 
@@ -101,7 +99,6 @@
       setTimeout(() => { paused = false; }, 2500);
     }, { passive: true });
 
-    // safety: if tab hidden, pause
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         clearInterval(timer);
