@@ -73,15 +73,21 @@
 
   <div class="grid">
 
-    <!-- FLOWERS CARD (slideshow) -->
+    <!-- FLOWERS CARD (VIDEO + fallback poster) -->
     <div class="card">
       <a href="/flowers.html" class="card-image-wrapper">
-        <img
-          class="card-slideshow flowers-slide"
-          src="images/carnations/Carnations_bouquets.webp"
-          alt="Handmade paper flowers"
-          loading="lazy"
+        <video
+          class="card-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="images/carnations/Carnations_bouquets.webp"
         >
+          <source src="videos/Flowers.mp4" type="video/mp4" />
+        </video>
+
         <span class="card-badge">Flowers</span>
       </a>
 
@@ -103,15 +109,21 @@
       </div>
     </div>
 
-    <!-- BOUQUETS CARD (slideshow) -->
+    <!-- BOUQUETS CARD (VIDEO + fallback poster) -->
     <div class="card">
       <a href="/bouquets.html" class="card-image-wrapper">
-        <img
-          class="card-slideshow bouquets-slide"
-          src="images/bouquets/hand/gallery/Wedding-bouquet.webp"
-          alt="Paper flower bouquets"
-          loading="lazy"
+        <video
+          class="card-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="images/bouquets/hand/gallery/Wedding-bouquet.webp"
         >
+          <source src="videos/Bouquets.mp4" type="video/mp4" />
+        </video>
+
         <span class="card-badge">Bouquets</span>
       </a>
 
@@ -222,9 +234,6 @@
 <script src="/config.js"></script>
 <script src="/products.js"></script>
 <script src="/site.js"></script>
-
-<!-- ✅ Slides ONLY for index cards -->
-<script src="/index-slides.js"></script>
 
 </body>
 </html>
