@@ -3,7 +3,7 @@
    Slideshow ONLY for the 2 cards on index:
    - .flowers-slide
    - .bouquets-slide
-   Smooth fade without white flash
+   Crossfade PRO (2-layer), no white flash
    ====================================================== */
 
 (function () {
@@ -22,62 +22,102 @@
     "images/wedding/Wedding_paper_flowers_bouquets.webp"
   ];
 
-  function startFadeSlideshow(imgEl, list, ms = 2800) {
+  function ensureSlideshowLayers(imgEl) {
+    const wrapper = imgEl?.closest(".card-image-wrapper");
+    if (!imgEl || !wrapper) return null;
+
+    // mark wrapper
+    wrapper.classList.add("is-slideshow");
+
+    // create 2 layers (reuse original as layer A)
+    imgEl.classList.add("card-slide-layer", "is-visible");
+    imgEl.style.opacity = ""; // we will control via classes, not inline opacity
+
+    // Create layer B only once
+    let layerB = wrapper.querySelector(".card-slide-layer.layer-b");
+    if (!layerB) {
+      layerB = imgEl.cloneNode(false);
+      layerB.className = "card-slide-layer layer-b"; // NOT visible initially
+      layerB.removeAttribute("loading"); // avoid weird lazy behavior during crossfade
+      wrapper.insertBefore(layerB, wrapper.firstChild);
+    }
+
+    // Ensure layer A is first as well (optional)
+    imgEl.classList.add("layer-a");
+
+    return { wrapper, layerA: imgEl, layerB };
+  }
+
+  function preload(src) {
+    return new Promise((resolve) => {
+      const im = new Image();
+      im.onload = () => resolve(true);
+      im.onerror = () => resolve(false);
+      im.src = src;
+    });
+  }
+
+  function startCrossfade(imgEl, list, ms = 2800) {
     if (!imgEl || !Array.isArray(list) || list.length < 2) return;
 
-    let i = 0;
-    let timer = null;
+    const layers = ensureSlideshowLayers(imgEl);
+    if (!layers) return;
 
-    // Start from current src if it matches
-    const cur = imgEl.getAttribute("src") || "";
+    const { wrapper, layerA, layerB } = layers;
+
+    // pick start index based on current src
+    let i = 0;
+    const cur = layerA.getAttribute("src") || "";
     const found = list.indexOf(cur);
     if (found >= 0) i = found;
 
-    function next() {
+    let showingA = true;
+    let timer = null;
+    let paused = false;
+
+    async function next() {
+      if (paused) return;
+
       i = (i + 1) % list.length;
       const nextSrc = list[i];
 
-      const pre = new Image();
-      pre.onload = () => {
-        // fade out
-        imgEl.style.opacity = "0";
+      // load image before showing it
+      const ok = await preload(nextSrc);
+      if (!ok) return;
 
-        // swap while hidden
-        setTimeout(() => {
-          imgEl.src = nextSrc;
+      const show = showingA ? layerB : layerA;
+      const hide = showingA ? layerA : layerB;
 
-          // fade in (next frame = smoother)
-          requestAnimationFrame(() => {
-            imgEl.style.opacity = "1";
-          });
-        }, 220);
-      };
-      pre.src = nextSrc;
+      show.src = nextSrc;
+
+      // crossfade via classes (CSS controls opacity)
+      show.classList.add("is-visible");
+      hide.classList.remove("is-visible");
+
+      showingA = !showingA;
     }
 
     timer = setInterval(next, ms);
 
     // Pause on hover (desktop)
-    const wrapper = imgEl.closest(".card-image-wrapper");
-    if (wrapper) {
-      wrapper.addEventListener("mouseenter", () => clearInterval(timer));
-      wrapper.addEventListener("mouseleave", () => {
-        timer = setInterval(next, ms);
-      });
-    }
+    wrapper.addEventListener("mouseenter", () => { paused = true; });
+    wrapper.addEventListener("mouseleave", () => { paused = false; });
+
+    // Pause briefly after any touch (mobile)
+    wrapper.addEventListener("touchstart", () => {
+      paused = true;
+      setTimeout(() => { paused = false; }, 2500);
+    }, { passive: true });
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Ensure initial opacity is 1
     const flowersImg = document.querySelector(".flowers-slide");
     const bouquetsImg = document.querySelector(".bouquets-slide");
-    if (flowersImg) flowersImg.style.opacity = "1";
-    if (bouquetsImg) bouquetsImg.style.opacity = "1";
 
-    // Small delay so layout loads first (prevents jank)
+    // Small delay so layout settles
     setTimeout(() => {
-      startFadeSlideshow(flowersImg, FLOWERS, 2800);
-      startFadeSlideshow(bouquetsImg, BOUQUETS, 2800);
-    }, 200);
+      startCrossfade(flowersImg, FLOWERS, 2800);
+      startCrossfade(bouquetsImg, BOUQUETS, 2800);
+    }, 150);
   });
 })();
