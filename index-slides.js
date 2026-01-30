@@ -9,16 +9,16 @@
 (function () {
   const FLOWERS = [
     "images/carnations/Carnations_bouquets.webp",
-    "images/tulips/Tulips_bouquets.webp",
+    "images/bouquets/jar/Hydrangeas3.webp",
     "images/hydrangeas/Hydrangeas_bouquets.webp",
-    "images/peonies/Bouquets_of_paper_peonies.webp"
+    "images/bouquets/jar/Flowerboiqtes.webp"
   ];
 
   const BOUQUETS = [
-    "images/bouquets/hand/gallery/Wedding-bouquet.webp",
+    "images/bouquets/jar/Fkower_bouquet5.webp",
     "images/bouquets/hand/thumb/Paper_flower_bouquets.webp",
     "images/bouquets/jar/Paper-flowers-bouquets.webp",
-    "images/bouquets/mini/mini_paper_flower_bouquets.webp",
+    "images/bouquets/hand/gallery/Wedding-bouquet-2.webp",
     "images/wedding/Wedding_paper_flowers_bouquets.webp"
   ];
 
