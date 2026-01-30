@@ -22,28 +22,25 @@
     "images/wedding/Wedding_paper_flowers_bouquets.webp"
   ];
 
-  function ensureSlideshowLayers(imgEl) {
+  function ensureLayers(imgEl) {
     const wrapper = imgEl?.closest(".card-image-wrapper");
     if (!imgEl || !wrapper) return null;
 
-    // mark wrapper
     wrapper.classList.add("is-slideshow");
 
-    // create 2 layers (reuse original as layer A)
-    imgEl.classList.add("card-slide-layer", "is-visible");
-    imgEl.style.opacity = ""; // we will control via classes, not inline opacity
+    // layer A = original image
+    imgEl.classList.add("card-slide-layer", "layer-a", "is-visible");
+    imgEl.removeAttribute("loading"); // avoid lazy flicker
 
-    // Create layer B only once
+    // layer B = clone
     let layerB = wrapper.querySelector(".card-slide-layer.layer-b");
     if (!layerB) {
       layerB = imgEl.cloneNode(false);
-      layerB.className = "card-slide-layer layer-b"; // NOT visible initially
-      layerB.removeAttribute("loading"); // avoid weird lazy behavior during crossfade
-      wrapper.insertBefore(layerB, wrapper.firstChild);
+      layerB.className = "card-slide-layer layer-b";
+      layerB.removeAttribute("loading");
+      // put under badge but above background
+      wrapper.insertBefore(layerB, imgEl);
     }
-
-    // Ensure layer A is first as well (optional)
-    imgEl.classList.add("layer-a");
 
     return { wrapper, layerA: imgEl, layerB };
   }
@@ -60,19 +57,17 @@
   function startCrossfade(imgEl, list, ms = 2800) {
     if (!imgEl || !Array.isArray(list) || list.length < 2) return;
 
-    const layers = ensureSlideshowLayers(imgEl);
+    const layers = ensureLayers(imgEl);
     if (!layers) return;
 
     const { wrapper, layerA, layerB } = layers;
 
-    // pick start index based on current src
     let i = 0;
     const cur = layerA.getAttribute("src") || "";
     const found = list.indexOf(cur);
     if (found >= 0) i = found;
 
     let showingA = true;
-    let timer = null;
     let paused = false;
 
     async function next() {
@@ -81,7 +76,6 @@
       i = (i + 1) % list.length;
       const nextSrc = list[i];
 
-      // load image before showing it
       const ok = await preload(nextSrc);
       if (!ok) return;
 
@@ -90,31 +84,38 @@
 
       show.src = nextSrc;
 
-      // crossfade via classes (CSS controls opacity)
+      // crossfade (CSS handles opacity + dissolve)
       show.classList.add("is-visible");
       hide.classList.remove("is-visible");
 
       showingA = !showingA;
     }
 
-    timer = setInterval(next, ms);
+    let timer = setInterval(next, ms);
 
-    // Pause on hover (desktop)
     wrapper.addEventListener("mouseenter", () => { paused = true; });
     wrapper.addEventListener("mouseleave", () => { paused = false; });
 
-    // Pause briefly after any touch (mobile)
     wrapper.addEventListener("touchstart", () => {
       paused = true;
       setTimeout(() => { paused = false; }, 2500);
     }, { passive: true });
+
+    // safety: if tab hidden, pause
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        clearInterval(timer);
+      } else {
+        clearInterval(timer);
+        timer = setInterval(next, ms);
+      }
+    });
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     const flowersImg = document.querySelector(".flowers-slide");
     const bouquetsImg = document.querySelector(".bouquets-slide");
 
-    // Small delay so layout settles
     setTimeout(() => {
       startCrossfade(flowersImg, FLOWERS, 2800);
       startCrossfade(bouquetsImg, BOUQUETS, 2800);
