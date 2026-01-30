@@ -275,7 +275,7 @@ p{font-size:1rem}
 }
 .card-image-wrapper{
   position: relative;
-  height: 270px;
+  height: 320px;
   overflow: hidden;
 }
 
@@ -769,7 +769,7 @@ footer{
 
 @media (max-width: 480px){
   section{padding:56px 15px}
-  .card-image-wrapper{height:240px}
+  .card-image-wrapper{height:280px}
   .hero-pill{width:100%;justify-content:center}
   .btn-primary,.btn-secondary{width:100%}
 }
