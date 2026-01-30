@@ -1254,9 +1254,11 @@ font-family: var(--font-title);
   font-weight: 500;
   opacity: .9;
   white-space: nowrap;
-} ======================================================
-   GALLERY MODAL – FULL IMAGE (no crop)
-  en mobiles ====================================================== */
+} 
+
+/* ======================================================
+   GALLERY MODAL – FULL IMAGE (no crop) en mobiles
+   ====================================================== */
 @media (max-width: 480px){
   .gallery-image-wrap{
     max-height: 85vh;
@@ -1267,8 +1269,9 @@ font-family: var(--font-title);
   }
 }
 
-/* =========================
-  /* ===== CURRENCY SWITCH (premium pill) ===== */
+/* ======================================================
+   CURRENCY SWITCH (premium pill)
+   ====================================================== */
 .currency-wrap{
   display: flex;
   align-items: center;
@@ -1312,64 +1315,27 @@ font-family: var(--font-title);
   box-shadow: 0 10px 20px rgba(0,0,0,.18);
 }
 
-.currency-btn:focus{
-  outline: none;
-}
+.currency-btn:focus{ outline: none; }
 
 .currency-btn:focus-visible{
   outline: 3px solid rgba(0,0,0,.18);
   outline-offset: 2px;
 }
 
-/* Mobile: que no se vea gigante */
 @media (max-width: 640px){
   .currency-btn{ padding: 7px 10px; font-size: 12px; }
   .currency-buttons{ padding: 3px; }
 }
 
-/* =========================
-   INDEX CARDS – SLIDESHOW (CROSSFADE PRO, NO WHITE FLASH)
-   ========================= */
-
+/* ======================================================
+   INDEX CARD SLIDESHOW — dissolve pro (NO WHITE FLASH)
+   ====================================================== */
 .card-image-wrapper.is-slideshow{
   position: relative;
   overflow: hidden;
+  background: #fff;
 }
 
-.card-image-wrapper.is-slideshow .card-slide-layer{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  opacity: 0;
-  transition: opacity .75s ease-in-out;
-  will-change: opacity;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-.card-image-wrapper.is-slideshow .card-slide-layer.is-visible{
-  opacity: 1;
-}
-
-.card-image-wrapper.is-slideshow img{
-  transform: none !important;
-  transition: none !important;
-}
-
-/* =========================================
-   INDEX CARD SLIDESHOW — dissolve pro
-   ========================================= */
-
-.card-image-wrapper.is-slideshow{
-  position: relative;
-  overflow: hidden;
-  background: #fff;              /* evita sensación de "fondo raro" */
-}
-
-/* capas */
 .card-image-wrapper.is-slideshow .card-slide-layer{
   position: absolute;
   inset: 0;
@@ -1383,46 +1349,36 @@ font-family: var(--font-title);
   transform: translateZ(0);
   backface-visibility: hidden;
 
-  /* dissolve: arranca levemente “suave” */
   filter: blur(1.4px) saturate(1.02);
 }
 
-/* 👈 ESTA ES LA CLAVE QUE FALTABA */
 .card-image-wrapper.is-slideshow img.card-slide-layer{
   position: absolute;
   inset: 0;
 }
 
-/* la visible queda nítida */
 .card-image-wrapper.is-slideshow .card-slide-layer.is-visible{
   opacity: 1;
   filter: blur(0) saturate(1);
 }
 
-.card-image-wrapper .card-badge{
-  position: absolute;
-  z-index: 3;
-}
-
-/* gallery fade (esto está bien así) */
+/* gallery fade */
 #galleryImage{
   opacity: 1;
-  transition: opacity .55s ease-in-out; /* un poco más largo */
+  transition: opacity .55s ease-in-out;
   will-change: opacity;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
-/* =========================================
-   INDEX CARD VIDEO (Flowers / Bouquets)
-   ========================================= */
 
-/* asegura que el wrapper recorte bien */
+/* ======================================================
+   INDEX CARD VIDEO (Flowers / Bouquets)
+   ====================================================== */
 .card-image-wrapper{
   position: relative;
   overflow: hidden;
 }
 
-/* el video ocupa toda el área como una imagen */
 .card-image-wrapper .card-video{
   width: 100%;
   height: 100%;
@@ -1430,7 +1386,6 @@ font-family: var(--font-title);
   object-fit: cover;
 }
 
-/* el badge siempre encima del video */
 .card-image-wrapper .card-badge{
   position: absolute;
   z-index: 3;
