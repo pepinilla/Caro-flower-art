@@ -4,6 +4,7 @@
    - Currency system (localStorage + auto)
    - Product grid
    - Gallery modal: autoplay + swipe + keyboard + safe close
+   - Gallery image fade: improved (no “lost” transition)
    ====================================================== */
 
 (function () {
@@ -297,22 +298,44 @@
     `);
   }
 
+  // ✅ Improved fade: prevents “lost transition” on mobile browsers
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
 
     const src = galleryState.photos[galleryState.index];
+
+    // Fade out
     img.style.opacity = "0";
 
+    // Preload next image
     const pre = new Image();
+
     pre.onload = () => {
-      img.src = src;
-      requestAnimationFrame(() => { img.style.opacity = "1"; });
+      // Ensure opacity=0 is applied first
+      requestAnimationFrame(() => {
+        img.src = src;
+
+        // Force reflow so the browser commits the new src before fading in
+        img.offsetHeight; // eslint-disable-line no-unused-expressions
+
+        requestAnimationFrame(() => {
+          img.style.opacity = "1";
+        });
+      });
     };
+
     pre.onerror = () => {
-      img.src = src;
-      requestAnimationFrame(() => { img.style.opacity = "1"; });
+      // Even if preload fails, still try to swap with fade
+      requestAnimationFrame(() => {
+        img.src = src;
+        img.offsetHeight; // eslint-disable-line no-unused-expressions
+        requestAnimationFrame(() => {
+          img.style.opacity = "1";
+        });
+      });
     };
+
     pre.src = src;
   }
 
@@ -457,3 +480,4 @@
   });
 
 })();
+```0
