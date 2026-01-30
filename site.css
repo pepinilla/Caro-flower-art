@@ -280,15 +280,26 @@ p{font-size:1rem}
   overflow:hidden;
 }
 
-.card-image-wrapper img{
+.card-image-wrapper img,
+.card-image-wrapper video{
   width:100%;
   height:100%;
   object-fit:cover;
   transform:scale(1.01);
   transition:transform .35s ease;
+  display:block;
 }
 
-.card:hover .card-image-wrapper img{
+/* video cards (index) */
+.card-image-wrapper .card-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.card:hover .card-image-wrapper img,
+.card:hover .card-image-wrapper video{
   transform:scale(1.06);
 }
 
