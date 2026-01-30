@@ -4,7 +4,6 @@
    - Currency system (localStorage + auto)
    - Product grid
    - Gallery modal: autoplay + swipe + keyboard + safe close
-   - Gallery image fade: improved (no “lost” transition)
    ====================================================== */
 
 (function () {
@@ -298,44 +297,30 @@
     `);
   }
 
-  // ✅ Improved fade: prevents “lost transition” on mobile browsers
+  // ✅ ONLY CHANGE: smoother fade (stable)
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
 
     const src = galleryState.photos[galleryState.index];
 
-    // Fade out
-    img.style.opacity = "0";
+    // fade out via class (uses your CSS transition)
+    img.classList.add("is-fading");
 
-    // Preload next image
     const pre = new Image();
-
     pre.onload = () => {
-      // Ensure opacity=0 is applied first
-      requestAnimationFrame(() => {
+      // small delay helps the fade actually show on fast loads
+      setTimeout(() => {
         img.src = src;
-
-        // Force reflow so the browser commits the new src before fading in
-        img.offsetHeight; // eslint-disable-line no-unused-expressions
-
-        requestAnimationFrame(() => {
-          img.style.opacity = "1";
-        });
-      });
+        requestAnimationFrame(() => img.classList.remove("is-fading"));
+      }, 80);
     };
-
     pre.onerror = () => {
-      // Even if preload fails, still try to swap with fade
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         img.src = src;
-        img.offsetHeight; // eslint-disable-line no-unused-expressions
-        requestAnimationFrame(() => {
-          img.style.opacity = "1";
-        });
-      });
+        requestAnimationFrame(() => img.classList.remove("is-fading"));
+      }, 80);
     };
-
     pre.src = src;
   }
 
@@ -480,4 +465,3 @@
   });
 
 })();
-```0
