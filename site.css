@@ -1287,15 +1287,34 @@ font-family: var(--font-title);
   .currency-buttons{ padding: 3px; }
 }
 
-/* ===== Card slideshow (smooth fade, no flash) ===== */
-.card-slideshow{
+/* =========================
+   INDEX CARDS – SLIDESHOW (CROSSFADE PRO, NO WHITE FLASH)
+   ========================= */
+
+.card-image-wrapper.is-slideshow{
+  position: relative;
+  overflow: hidden;
+}
+
+.card-image-wrapper.is-slideshow .card-slide-layer{
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 
-  opacity: 1;
-  transition: opacity .6s ease-in-out;
+  opacity: 0;
+  transition: opacity .75s ease-in-out;
   will-change: opacity;
   backface-visibility: hidden;
   transform: translateZ(0);
+}
+
+.card-image-wrapper.is-slideshow .card-slide-layer.is-visible{
+  opacity: 1;
+}
+
+.card-image-wrapper.is-slideshow img{
+  transform: none !important;
+  transition: none !important;
 }
