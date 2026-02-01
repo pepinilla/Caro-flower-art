@@ -41,14 +41,14 @@ body{
 
   background: linear-gradient(
     180deg,
-    #fdecef 0%,      /* rosa muy light arriba */
-    #fff6ee 45%,     /* crema rosado */
-    #fffaf5 100%     /* crema casi blanco abajo */
+    #f2c1ca 0%,     /* rosa más notorio arriba */
+    #f7d6dc 25%,    /* rosado suave */
+    #fdf0ea 55%,    /* crema rosado */
+    #fffaf5 100%   /* blanco crema abajo */
   );
 
   overflow-x:hidden;
 }
-
 a{color:inherit}
 img{max-width:100%;display:block}
 section{
