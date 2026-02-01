@@ -38,7 +38,14 @@ body{
   font-family:var(--font-body);
   color:var(--text-color);
   line-height:1.6;
-  background:linear-gradient(135deg,#fff 0%,#fef5f7 100%);
+
+  background: linear-gradient(
+    180deg,
+    #fdecef 0%,      /* rosa muy light arriba */
+    #fff6ee 45%,     /* crema rosado */
+    #fffaf5 100%     /* crema casi blanco abajo */
+  );
+
   overflow-x:hidden;
 }
 
