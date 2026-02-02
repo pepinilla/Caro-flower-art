@@ -118,14 +118,16 @@ p{font-size:1rem}
 }
 
 .hero-overlay{
+.hero-overlay{
   position:absolute;
   inset:0;
   z-index:1;
-  background:linear-gradient(
-    to bottom,
-    rgba(255,245,248,.82),
-    rgba(255,245,248,.55),
-    rgba(255,245,248,.82)
+
+  background: linear-gradient(
+    180deg,
+    rgba(232,154,166,0.55) 0%,   /* rosa floral arriba */
+    rgba(255,255,255,0.35) 38%,  /* luz central */
+    rgba(255,245,238,0.85) 100%  /* crema rosado abajo */
   );
 }
 
