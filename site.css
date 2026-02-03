@@ -184,7 +184,24 @@ p{font-size:1rem}
 
 .hero h1{
   letter-spacing: .02em;
+  color:#3b2a2e;   /* marrón rosado elegante */
 }
+
+.hero p{
+  margin-top:.6rem;
+  color:#5a3f45;   /* rosado más visible */
+}
+
+.hero-subtitle{
+  font-weight:650;
+  color:#c26073;   /* rosado floral más fuerte */
+}
+
+.hero .es{
+  color:#7a4c55;
+  opacity:1;       /* 👈 importante: que no se vea apagado */
+}
+
 
 /* BOTONES */
 .btn-primary,
