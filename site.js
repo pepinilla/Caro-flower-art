@@ -459,35 +459,30 @@
      ====================== */
 
   async function submitQuoteForm(payload) {
-    const sb = (CFG.supabase || {});
-    const url = sb.url;
-    const anonKey = sb.anonKey;
+  const url = window.CARO_CONFIG?.supabase?.functionUrl;
 
-    if (!url || !anonKey) {
-      throw new Error("Missing Supabase config (url/anonKey) in config.js");
-    }
-
-    const res = await fetch(`${url}/functions/v1/quotes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": anonKey,
-        "Authorization": `Bearer ${anonKey}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const text = await res.text();
-    let data = null;
-    try { data = JSON.parse(text); } catch (_) {}
-
-    if (!res.ok) {
-      const msg = (data && (data.error || data.message)) ? (data.error || data.message) : text;
-      throw new Error(msg || `Request failed (${res.status})`);
-    }
-
-    return data;
+  if (!url) {
+    throw new Error("Missing Supabase functionUrl in config.js");
   }
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const text = await res.text();
+  let data = null;
+  try { data = JSON.parse(text); } catch (_) {}
+
+  if (!res.ok) {
+    throw new Error(data?.error || data?.message || "Request failed");
+  }
+
+  return data;
+}
 
   function ensureFormStatusEl(form) {
     let el = form.querySelector(".form-status");
