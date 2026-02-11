@@ -459,7 +459,7 @@
      ====================== */
 
   async function submitQuoteForm(payload) {
-  const url = window.CARO_CONFIG?.supabase?.functionUrl;
+  const url = CFG?.supabase?.functionUrl;
 
   if (!url) {
     throw new Error("Missing Supabase functionUrl in config.js");
