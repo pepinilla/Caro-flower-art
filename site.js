@@ -454,7 +454,130 @@
     if (e.key === "ArrowRight") { userInteractedWithGallery(); nextPhoto(); }
     if (e.key === "ArrowLeft")  { userInteractedWithGallery(); prevPhoto(); }
   });
+/* ======================
+     CONTACT FORM (SUPABASE EDGE FUNCTION)
+     ====================== */
 
+  async function submitQuoteForm(payload) {
+    const sb = (CFG.supabase || {});
+    const url = sb.url;
+    const anonKey = sb.anonKey;
+
+    if (!url || !anonKey) {
+      throw new Error("Missing Supabase config (url/anonKey) in config.js");
+    }
+
+    const res = await fetch(`${url}/functions/v1/quotes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": anonKey,
+        "Authorization": `Bearer ${anonKey}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const text = await res.text();
+    let data = null;
+    try { data = JSON.parse(text); } catch (_) {}
+
+    if (!res.ok) {
+      const msg = (data && (data.error || data.message)) ? (data.error || data.message) : text;
+      throw new Error(msg || `Request failed (${res.status})`);
+    }
+
+    return data;
+  }
+
+  function ensureFormStatusEl(form) {
+    let el = form.querySelector(".form-status");
+    if (!el) {
+      el = document.createElement("div");
+      el.className = "form-status";
+      el.setAttribute("aria-live", "polite");
+      el.style.marginTop = "10px";
+      el.style.fontSize = "14px";
+      form.appendChild(el);
+    }
+    return el;
+  }
+
+  function setFormStatus(form, kind, msg) {
+    const el = ensureFormStatusEl(form);
+    el.textContent = msg || "";
+    el.dataset.kind = kind || "info";
+
+    // colores sin tocar tu CSS (si quieres luego lo metemos a site.css)
+    el.style.color =
+      kind === "success" ? "#1f7a1f" :
+      kind === "error"   ? "#b00020" :
+      "#333";
+  }
+
+  function initContactForm() {
+    const form = qs("#contactForm");
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = "1";
+
+    const btn = form.querySelector('button[type="submit"]');
+    const nameEl = form.querySelector('[name="name"]');
+    const emailEl = form.querySelector('[name="email"]');
+    const needEl = form.querySelector('[name="need"]');
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = (nameEl?.value || "").trim();
+      const email = (emailEl?.value || "").trim();
+      const need = (needEl?.value || "").trim();
+
+      if (!name || !email || !need) {
+        setFormStatus(form, "error", "Please fill all fields / Por favor completa todos los campos.");
+        return;
+      }
+
+      // UI: loading
+      const oldBtnText = btn ? btn.textContent : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Sending... / Enviando...";
+      }
+      setFormStatus(form, "info", "Sending... / Enviando...");
+
+      try {
+        await submitQuoteForm({ name, email, need });
+
+        setFormStatus(form, "success", "Sent ✓  / Enviado ✓  — I’ll reply soon. / Te responderé pronto.");
+        form.reset();
+      } catch (err) {
+        setFormStatus(form, "error", `Error: ${err?.message || "Could not send"}`);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = oldBtnText || "Request a quote";
+        }
+      }
+    });
+  }
+
+  // Optional: prefill textarea when clicking "Request Quote" from a product card
+  function initQuotePrefill() {
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest && e.target.closest(".btn-quote[data-prefill]");
+      if (!a) return;
+
+      const prefill = a.getAttribute("data-prefill");
+      if (!prefill) return;
+
+      // If we are on another page, your link goes to /index.html#contact
+      // so this will only run on index page
+      const form = qs("#contactForm");
+      const needEl = form && form.querySelector('[name="need"]');
+      if (needEl && !needEl.value.trim()) {
+        needEl.value = `I want: ${prefill} / Quiero: ${prefill}\nQuantity / Cantidad:\nDate / Fecha:`;
+      }
+    });
+  }
   /* ======================
      INIT
      ====================== */
@@ -462,6 +585,8 @@
     await injectHeader();
     updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
+     initContactForm();
+    initQuotePrefill();
   });
 
 })();
