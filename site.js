@@ -460,22 +460,19 @@
 
 async function submitQuoteForm(payload) {
   const url = CFG?.supabase?.functionUrl;
-  if (!url) throw new Error("Missing Supabase functionUrl in config.js");
+  if (!url) throw new Error("Missing functionUrl");
 
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload)
   });
 
   const text = await res.text();
   let data = null;
-  try { data = JSON.parse(text); } catch (_) {}
+  try { data = JSON.parse(text); } catch {}
 
-  if (!res.ok) {
-    throw new Error(data?.error || data?.message || "Request failed");
-  }
-
+  if (!res.ok) throw new Error(data?.error || data?.message || text || "Request failed");
   return data;
 }
 
