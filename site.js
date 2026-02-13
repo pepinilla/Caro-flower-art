@@ -520,7 +520,7 @@ function initContactForm() {
     setFormStatus(form, "info", "Sending... / Enviando...");
 
     try {
-      await submitQuoteForm({ name, email, need });
+      await submitQuoteForm({ name, email, need, currency: window.CARO_CURRENCY || "CAD" });
       setFormStatus(form, "success", "Sent ✓ / Enviado ✓ — I’ll reply soon. / Te responderé pronto.");
       form.reset();
     } catch (err) {
