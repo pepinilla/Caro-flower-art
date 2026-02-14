@@ -210,32 +210,53 @@
 
     </div>
 
-    <!-- FORM -->
-<form class="contact-form" id="contactForm">
+    
+
+<!-- FORM -->
+<form class="contact-form" id="contactForm" novalidate>
   <h3>Message me <span class="es">Escríbeme</span></h3>
 
   <div class="form-group">
-    <label>Name <span class="es">Nombre</span></label>
-    <input id="quote-name" name="name" type="text" placeholder="Your name / Tu nombre" required />
+    <label for="quote-name">Name <span class="es">Nombre</span></label>
+    <input
+      id="quote-name"
+      name="name"
+      type="text"
+      placeholder="Your name / Tu nombre"
+      autocomplete="name"
+      required
+    />
   </div>
 
   <div class="form-group">
-    <label>Email <span class="es">Correo</span></label>
-    <input id="quote-email" name="email" type="email" placeholder="you@email.com" required />
+    <label for="quote-email">Email <span class="es">Correo</span></label>
+    <input
+      id="quote-email"
+      name="email"
+      type="email"
+      placeholder="you@email.com"
+      autocomplete="email"
+      required
+    />
   </div>
 
   <div class="form-group">
-    <label>What do you need? <span class="es">¿Qué necesitas?</span></label>
-    <textarea id="quote-need" name="need" placeholder="Product, quantity and date / Producto, cantidad y fecha" required></textarea>
+    <label for="quote-need">What do you need? <span class="es">¿Qué necesitas?</span></label>
+    <textarea
+      id="quote-need"
+      name="message"
+      placeholder="Product, quantity and date / Producto, cantidad y fecha"
+      rows="4"
+      required
+    ></textarea>
   </div>
 
   <button id="quote-submit" type="submit">
     Request a quote <span class="es">Pedir cotización</span>
   </button>
 
-  <p id="quote-status"></p>
-</form>    
-
+  <p id="quote-status" role="status" aria-live="polite" style="margin-top:10px;"></p>
+</form>
   </div>
 </section>
 
