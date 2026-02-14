@@ -458,14 +458,16 @@
    CONTACT FORM (SUPABASE EDGE FUNCTION)
    ====================== */
 
+const CFG = window.CARO_CONFIG || {};
+
 async function submitQuoteForm(payload) {
   const url = CFG?.supabase?.functionUrl;
-  if (!url) throw new Error("Missing functionUrl");
+  if (!url) throw new Error("Missing functionUrl in config.js");
 
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   });
 
   const text = await res.text();
@@ -481,6 +483,7 @@ function setFormStatus(form, kind, msg) {
   if (!el) return;
 
   el.textContent = msg || "";
+  el.style.marginTop = "10px";
   el.style.color =
     kind === "success" ? "#1f7a1f" :
     kind === "error"   ? "#b00020" :
@@ -488,16 +491,15 @@ function setFormStatus(form, kind, msg) {
 }
 
 function initContactForm() {
-  const form = qs("#contactForm");
+  const form = document.querySelector("#contactForm");
   if (!form || form.dataset.bound) return;
   form.dataset.bound = "1";
 
   const btn = form.querySelector('button[type="submit"]');
-  const nameEl = form.querySelector('[name="name"]');
-  const emailEl = form.querySelector('[name="email"]');
-  const needEl = form.querySelector('[name="need"]');
+  const nameEl = form.querySelector("#quote-name");
+  const emailEl = form.querySelector("#quote-email");
+  const needEl = form.querySelector("#quote-need");
 
-  // Limpia el status al cargar
   setFormStatus(form, "info", "");
 
   form.addEventListener("submit", async (e) => {
@@ -505,9 +507,9 @@ function initContactForm() {
 
     const name = (nameEl?.value || "").trim();
     const email = (emailEl?.value || "").trim();
-    const need = (needEl?.value || "").trim();
+    const message = (needEl?.value || "").trim();
 
-    if (!name || !email || !need) {
+    if (!name || !email || !message) {
       setFormStatus(form, "error", "Please fill all fields / Por favor completa todos los campos.");
       return;
     }
@@ -520,33 +522,23 @@ function initContactForm() {
     setFormStatus(form, "info", "Sending... / Enviando...");
 
     try {
-      await submitQuoteForm({ name, email, need, currency: window.CARO_CURRENCY || "CAD" });
+      await submitQuoteForm({
+        name,
+        email,
+        message,
+        currency: window.CARO_CURRENCY || "CAD",
+      });
+
       setFormStatus(form, "success", "Sent ✓ / Enviado ✓ — I’ll reply soon. / Te responderé pronto.");
       form.reset();
     } catch (err) {
-      setFormStatus(form, "error", err?.message ? `Error: ${err.message}` : "");
+      console.error("Error submitting form:", err);
+      setFormStatus(form, "error", `Error: ${err?.message || "Request failed"}`);
     } finally {
       if (btn) {
         btn.disabled = false;
         btn.textContent = oldBtnText || "Request a quote";
       }
-    }
-  });
-}
-
-// Optional: prefill textarea when clicking "Request Quote" from a product card
-function initQuotePrefill() {
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest && e.target.closest(".btn-quote[data-prefill]");
-    if (!a) return;
-
-    const prefill = a.getAttribute("data-prefill");
-    if (!prefill) return;
-
-    const form = qs("#contactForm");
-    const needEl = form && form.querySelector('[name="need"]');
-    if (needEl && !needEl.value.trim()) {
-      needEl.value = `I want: ${prefill} / Quiero: ${prefill}\nQuantity / Cantidad:\nDate / Fecha:`;
     }
   });
 }
