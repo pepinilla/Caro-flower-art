@@ -503,6 +503,29 @@ p{font-size:1rem}
   object-fit:cover;
 }
 
+/* ✅ About: más “pro” sin romper lo que ya tienes */
+.about-kicker{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  justify-content:center;
+  margin: 0 auto 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(232,154,166,.25);
+  font-weight: 800;
+  color: rgba(0,0,0,.70);
+  max-width: fit-content;
+}
+
+.about .highlight-p{
+  background: rgba(232,154,166,.10);
+  border-left: 3px solid rgba(232,154,166,.75);
+  padding: 12px 14px;
+  border-radius: 14px;
+}
+
 /* TESTIMONIALS */
 .testimonials-grid{
   display:grid;
