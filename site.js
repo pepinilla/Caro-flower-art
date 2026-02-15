@@ -455,12 +455,12 @@
     if (e.key === "ArrowLeft")  { userInteractedWithGallery(); prevPhoto(); }
   });
 
-  /* ======================
+ /* ======================
    CONTACT FORM (SUPABASE EDGE FUNCTION)
    ====================== */
 
 async function submitQuoteForm(payload) {
-  const url = CFG?.supabase?.functionUrl; // usa CFG (ya existe arriba)
+  const url = CFG?.supabase?.functionUrl;
   if (!url) throw new Error("Missing functionUrl in config.js");
 
   const res = await fetch(url, {
@@ -547,10 +547,8 @@ function initContactForm() {
    INIT (ROBUST LOAD)
    ====================== */
 document.addEventListener("DOMContentLoaded", () => {
-  // Form primero
   initContactForm();
 
-  // Lo demás después, sin tumbar el form si algo falla
   (async () => {
     try {
       await injectHeader();
@@ -561,4 +559,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn("Carga secundaria falló, pero el formulario quedó activo.", err);
     }
   })();
-}); 
+});
+
+})(); // ✅ ESTE CIERRE ES OBLIGATORIO
