@@ -100,6 +100,17 @@
       if (!res.ok) throw new Error("header.html not found");
       host.innerHTML = await res.text();
 
+       // ✅ Highlight active page
+    
+const currentPath = window.location.pathname.replace(/\/index\.html$/, "/");
+
+qsa(".nav-link", host).forEach(link => {
+  const linkPath = new URL(link.href).pathname.replace(/\/index\.html$/, "/");
+
+  if (linkPath === currentPath) {
+    link.classList.add("active");
+  }
+});
       const onIndex =
         location.pathname === "/" ||
         location.pathname.endsWith("/index.html");
