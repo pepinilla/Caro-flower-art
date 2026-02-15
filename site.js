@@ -454,15 +454,14 @@
     if (e.key === "ArrowRight") { userInteractedWithGallery(); nextPhoto(); }
     if (e.key === "ArrowLeft")  { userInteractedWithGallery(); prevPhoto(); }
   });
-/* ======================
+
+  /* ======================
    CONTACT FORM (SUPABASE EDGE FUNCTION)
    ====================== */
-async function submitQuoteForm(payload) {
-  const url = window.CARO_CONFIG?.supabase?.functionUrl;
-  if (!url) throw new Error("Missing functionUrl in config.js");
-  ...
-}
 
+async function submitQuoteForm(payload) {
+  const url = CFG?.supabase?.functionUrl; // usa CFG (ya existe arriba)
+  if (!url) throw new Error("Missing functionUrl in config.js");
 
   const res = await fetch(url, {
     method: "POST",
@@ -484,6 +483,8 @@ function setFormStatus(form, kind, msg) {
 
   el.textContent = msg || "";
   el.style.marginTop = "10px";
+  el.style.fontWeight = "500";
+  el.style.textAlign = "center";
   el.style.color =
     kind === "success" ? "#1f7a1f" :
     kind === "error"   ? "#b00020" :
@@ -495,15 +496,14 @@ function initContactForm() {
   if (!form || form.dataset.bound) return;
   form.dataset.bound = "1";
 
-  const btn = form.querySelector('button[type="submit"]');
+  const btn = form.querySelector("#quote-submit") || form.querySelector('button[type="submit"]');
   const nameEl = form.querySelector("#quote-name");
   const emailEl = form.querySelector("#quote-email");
   const needEl = form.querySelector("#quote-need");
 
-  setFormStatus(form, "info", "");
-
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     const name = (nameEl?.value || "").trim();
     const email = (emailEl?.value || "").trim();
@@ -514,10 +514,10 @@ function initContactForm() {
       return;
     }
 
-    const oldBtnText = btn ? btn.textContent : "";
+    const oldBtnHtml = btn ? btn.innerHTML : "";
     if (btn) {
       btn.disabled = true;
-      btn.textContent = "Sending... / Enviando...";
+      btn.innerHTML = "Sending... / Enviando...";
     }
     setFormStatus(form, "info", "Sending... / Enviando...");
 
@@ -537,19 +537,28 @@ function initContactForm() {
     } finally {
       if (btn) {
         btn.disabled = false;
-        btn.textContent = oldBtnText || "Request a quote";
+        btn.innerHTML = oldBtnHtml || "Request a quote";
       }
     }
   });
 }
 
 /* ======================
-   INIT
+   INIT (ROBUST LOAD)
    ====================== */
-document.addEventListener("DOMContentLoaded", async () => {
-  await injectHeader();
-  updateCurrencyUI();
-  renderGrid(window.CARO_PAGE || {});
+document.addEventListener("DOMContentLoaded", () => {
+  // Form primero
   initContactForm();
-  initQuotePrefill();
-});
+
+  // Lo demás después, sin tumbar el form si algo falla
+  (async () => {
+    try {
+      await injectHeader();
+      updateCurrencyUI();
+      renderGrid(window.CARO_PAGE || {});
+      if (typeof initQuotePrefill === "function") initQuotePrefill();
+    } catch (err) {
+      console.warn("Carga secundaria falló, pero el formulario quedó activo.", err);
+    }
+  })();
+}); 
