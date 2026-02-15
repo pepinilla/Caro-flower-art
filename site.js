@@ -457,12 +457,12 @@
 /* ======================
    CONTACT FORM (SUPABASE EDGE FUNCTION)
    ====================== */
-
-const CFG = window.CARO_CONFIG || {};
-
 async function submitQuoteForm(payload) {
-  const url = CFG?.supabase?.functionUrl;
+  const url = window.CARO_CONFIG?.supabase?.functionUrl;
   if (!url) throw new Error("Missing functionUrl in config.js");
+  ...
+}
+
 
   const res = await fetch(url, {
     method: "POST",
