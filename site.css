@@ -938,27 +938,10 @@ footer{
 .gallery-prev { left: 12px; }
 .gallery-next { right: 12px; }
 
+/* ======================================================
+   HEADER (PRO, single source of truth)
+   ====================================================== */
 
-/* --- Header logo safety --- */
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-
-.brand-logo {
-  width: 50px;
-  height: 50px;
-  display: block;
-}
-
-.brand-name {
-  font-weight: 800;
-}
-
-
-/* ===== Header (fix mobile layout) ===== */
 :root { --header-h: 64px; }
 
 .site-header{
@@ -967,7 +950,9 @@ footer{
   z-index: 9999;
   background: rgba(255,255,255,.92);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,.06);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(232,154,166,0.22);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
 }
 
 .header-inner{
@@ -979,6 +964,16 @@ footer{
   padding: 10px 14px;
 }
 
+/* desktop breathing room */
+@media (min-width: 900px){
+  .header-inner{
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 10px 40px;
+  }
+}
+
+/* Brand */
 .brand{
   display:flex;
   align-items:center;
@@ -992,6 +987,11 @@ footer{
   width: 40px;
   height: 40px;
   display:block;
+  transition: transform .25s ease;
+}
+
+.brand:hover .brand-logo{
+  transform: scale(1.03);
 }
 
 .brand-name{
@@ -1002,15 +1002,19 @@ footer{
   text-overflow: ellipsis;
 }
 
+/* Nav */
 .nav{
   display:flex;
   gap: 14px;
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.nav::-webkit-scrollbar{ display:none; }
 
 .nav-link{
+  position: relative;
   text-decoration: none;
   color: inherit;
   font-weight: 600;
@@ -1018,13 +1022,35 @@ footer{
   padding: 8px 10px;
   border-radius: 999px;
   white-space: nowrap;
+  transition: background .2s ease, transform .2s ease;
 }
 
 .nav-link:hover{
-  background: rgba(0,0,0,.05);
+  background: rgba(232,154,166,0.12);
+  transform: translateY(-1px);
 }
 
-/* Make sure page content doesn't hide behind sticky header */
+.nav-link:focus-visible{
+  outline: 2px solid rgba(232,154,166,0.55);
+  outline-offset: 2px;
+}
+
+/* Active state (underline elegante) */
+.nav-link.active{
+  background: rgba(232,154,166,0.12);
+}
+.nav-link.active::after{
+  content:"";
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:4px;
+  height:2px;
+  border-radius:999px;
+  background: rgba(232,154,166,0.95);
+}
+
+/* Make sure anchor scroll doesn't hide behind sticky header */
 body{
   scroll-padding-top: calc(var(--header-h) + 12px);
 }
