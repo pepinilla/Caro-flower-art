@@ -3,7 +3,7 @@ type ClientEmailArgs = {
   email?: string;
   message?: string;
   currency?: string;
-  websiteUrl?: string; // optional override
+  websiteUrl?: string; // optional override.
   logoUrl?: string;    // optional override
 };
 
