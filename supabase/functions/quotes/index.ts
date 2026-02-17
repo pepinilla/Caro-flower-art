@@ -2,7 +2,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2";
 
-// ✅ templates luxury
+// ✅ templates luxury .
 import { emailTemplateAdmin, emailTemplateClient } from "./emailTemplates.ts";
 
 const corsHeaders = {
