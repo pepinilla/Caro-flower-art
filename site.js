@@ -471,10 +471,14 @@ qsa(".nav-link", host).forEach(link => {
    ====================== */
 
 async function submitQuoteForm(payload) {
-  const url = CFG?.supabase?.functionUrl;
-  if (!url) throw new Error("Missing functionUrl in config.js");
+  const baseUrl = CFG.supabase?.functionUrl;
+if (!baseUrl) throw new Error("Missing functionUrl in config.js");
 
-  const res = await fetch(url, {
+const url = baseUrl.includes("?")
+  ? `${baseUrl}&action=create-quote`
+  : `${baseUrl}?action=create-quote`;
+
+const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
