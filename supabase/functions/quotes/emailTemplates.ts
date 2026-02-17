@@ -3,7 +3,7 @@ type ClientEmailArgs = {
   email?: string;
   message?: string;
   currency?: string;
-  websiteUrl?: string; // optional override.
+  websiteUrl?: string; // optional override
   logoUrl?: string;    // optional override
 };
 
@@ -14,7 +14,8 @@ type AdminEmailArgs = ClientEmailArgs & {
 const BRAND = {
   name: "Caro Flower Art",
   website: "https://caroflower.com",
-  logo: "https://caroflower.com/logo.svg",
+  // ✅ Mejor PNG para emails:
+  logo: "https://caroflower.com/logo.png",
   primary: "#e89aa6",
   dark: "#2f2323",
   text: "#4f3f3f",
@@ -34,7 +35,6 @@ function esc(s: unknown) {
 function baseStyles() {
   return `
     <style>
-      /* Reset-ish for email */
       body{margin:0;padding:0;background:${BRAND.bg1};font-family:Arial,Helvetica,sans-serif;color:${BRAND.text}}
       a{color:inherit}
       .wrap{width:100%;background:linear-gradient(180deg, ${BRAND.bg2} 0%, ${BRAND.bg1} 60%)}
@@ -56,8 +56,10 @@ function baseStyles() {
         width:44px;height:44px;border-radius:12px;
         background:#fff; border:1px solid rgba(0,0,0,.06);
         display:flex;align-items:center;justify-content:center;
+        overflow:hidden;
       }
-      .logo img{max-width:30px;max-height:30px;display:block}
+      /* ✅ Forzar tamaño y compatibilidad email */
+      .logo img{width:30px;height:30px;display:block;object-fit:contain}
       .brand h1{margin:0;font-size:16px;letter-spacing:.3px;color:${BRAND.dark}}
       .badge{
         display:inline-block;margin-top:10px;
@@ -85,7 +87,6 @@ function baseStyles() {
       .btn:hover{opacity:.95}
       .foot{padding:16px 20px 22px 20px;font-size:12px;opacity:.75}
       .small{font-size:12px}
-      /* Mobile */
       @media (max-width:480px){
         .content{padding:18px 16px}
         .topbar{padding:16px}
@@ -95,7 +96,33 @@ function baseStyles() {
   `;
 }
 
-function shell(opts: { badge: string; title: string; bodyHtml: string; ctaLabel?: string; ctaUrl?: string }) {
+function brandLogoHtml(logoUrl: string, brandName: string) {
+  // ✅ Fallback: si imagen falla, muestra una “C”
+  // (onerror a veces lo bloquean, pero no estorba)
+  const fallback = esc(brandName.trim().slice(0, 1).toUpperCase() || "C");
+  return `
+    <div class="logo">
+      <img
+        src="${esc(logoUrl)}"
+        alt="${esc(brandName)}"
+        onerror="this.style.display='none'; this.parentElement.innerHTML='${fallback}';"
+      />
+    </div>
+  `;
+}
+
+function shell(opts: {
+  badge: string;
+  title: string;
+  bodyHtml: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  websiteUrl?: string;
+  logoUrl?: string;
+}) {
+  const websiteUrl = opts.websiteUrl || BRAND.website;
+  const logoUrl = opts.logoUrl || BRAND.logo;
+
   return `
   <!doctype html>
   <html>
@@ -110,9 +137,7 @@ function shell(opts: { badge: string; title: string; bodyHtml: string; ctaLabel?
           <div class="card">
             <div class="topbar">
               <div class="brand">
-                <div class="logo">
-                  <img src="${esc(BRAND.logo)}" alt="${esc(BRAND.name)}" />
-                </div>
+                ${brandLogoHtml(logoUrl, BRAND.name)}
                 <div>
                   <h1>${esc(BRAND.name)}</h1>
                   <div class="badge">${esc(opts.badge)}</div>
@@ -128,13 +153,15 @@ function shell(opts: { badge: string; title: string; bodyHtml: string; ctaLabel?
             ${
               opts.ctaUrl
                 ? `<div class="ctaRow">
-                    <a class="btn" href="${esc(opts.ctaUrl)}" target="_blank" rel="noopener">${esc(opts.ctaLabel || "Visit website")}</a>
+                    <a class="btn" href="${esc(opts.ctaUrl)}" target="_blank" rel="noopener">
+                      ${esc(opts.ctaLabel || "Visit website")}
+                    </a>
                   </div>`
                 : ""
             }
 
             <div class="foot">
-              <div class="muted">Caro Flower Art • Handmade paper flowers • ${esc(BRAND.website)}</div>
+              <div class="muted">${esc(BRAND.name)} • Handmade paper flowers • ${esc(websiteUrl)}</div>
               <div class="muted small">If you didn’t request this, you can ignore this email.</div>
             </div>
           </div>
@@ -150,6 +177,7 @@ export function emailTemplateClient(args: ClientEmailArgs) {
   const name = args.name?.trim() || "there";
   const currency = args.currency || "CAD";
   const websiteUrl = args.websiteUrl || BRAND.website;
+  const logoUrl = args.logoUrl || BRAND.logo;
 
   const body = `
     <p class="p">Hi ${esc(name)} ✨</p>
@@ -175,12 +203,16 @@ export function emailTemplateClient(args: ClientEmailArgs) {
     bodyHtml: body,
     ctaLabel: "Visit website",
     ctaUrl: websiteUrl,
+    websiteUrl,
+    logoUrl,
   });
 }
 
 /** Email que te llega a ti (admin) */
 export function emailTemplateAdmin(args: AdminEmailArgs) {
   const websiteUrl = args.websiteUrl || BRAND.website;
+  const logoUrl = args.logoUrl || BRAND.logo;
+
   const body = `
     <p class="p"><b>New quote request ✨</b></p>
     <p class="p muted">A customer submitted the contact form.</p>
@@ -202,5 +234,7 @@ export function emailTemplateAdmin(args: AdminEmailArgs) {
     bodyHtml: body,
     ctaLabel: "Visit website",
     ctaUrl: websiteUrl,
+    websiteUrl,
+    logoUrl,
   });
 }
