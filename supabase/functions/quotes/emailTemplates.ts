@@ -14,7 +14,7 @@ type AdminEmailArgs = ClientEmailArgs & {
 const BRAND = {
   name: "Caro Flower Art",
   website: "https://caroflower.com",
-  logo: "https://caroflower.com/logo.png", // PNG mejor para email
+  logo: "https://caroflower.com/logo.png",
   primary: "#e89aa6",
   accent: "#d67d8a",
   dark: "#2f2323",
@@ -34,10 +34,30 @@ function esc(s: unknown) {
     .replaceAll("'", "&#39;");
 }
 
+/** Formatea la fecha de ISO a algo legible: Feb 18, 2026 - 06:11 AM */
+function formatDate(dateStr?: string) {
+  if (!dateStr) return "";
+  try {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    };
+    return date.toLocaleString('en-US', options);
+  } catch (e) {
+    return dateStr;
+  }
+}
+
 function baseStyles() {
   return `
   <style>
-    /* Importación de fuentes elegantes */
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
 
     body {
@@ -55,8 +75,6 @@ function baseStyles() {
     .wrapper {
       width: 100%;
       background-color: ${BRAND.bg1};
-      background-image: radial-gradient(${BRAND.bg2} 2px, transparent 2px);
-      background-size: 32px 32px;
       padding: 40px 0;
     }
 
@@ -71,31 +89,35 @@ function baseStyles() {
       text-align: center;
     }
 
-    /* Header con elementos florales */
+    /* Header con flores arregladas (posicionamiento absoluto real) */
     .header {
       background-color: ${BRAND.bg2};
-      padding: 56px 40px 40px;
+      padding: 60px 40px 40px;
       position: relative;
-      overflow: hidden;
     }
 
+    /* Flores decorativas en las esquinas para evitar que se amontonen */
     .flower-decor {
       position: absolute;
-      font-size: 40px;
-      opacity: 0.2;
+      font-size: 44px;
+      opacity: 0.25;
+      line-height: 1;
     }
-    .f1 { top: 10px; left: 10px; transform: rotate(-15deg); }
-    .f2 { bottom: 10px; right: 10px; transform: rotate(15deg); }
+    .f-top-left { top: 15px; left: 15px; transform: rotate(-15deg); }
+    .f-bottom-right { bottom: 15px; right: 15px; transform: rotate(15deg); }
 
     .logo-wrap {
       margin-bottom: 20px;
+      display: inline-block;
     }
 
     .logo-wrap img {
-      width: 100px;
+      width: 110px;
       height: auto;
       margin: 0 auto;
-      filter: drop-shadow(0 4px 8px rgba(232, 154, 166, 0.2));
+      /* Eliminamos bordes o fondos extraños */
+      background: transparent;
+      display: block;
     }
 
     .brand-name {
@@ -108,8 +130,8 @@ function baseStyles() {
 
     .badge {
       display: inline-block;
-      margin-top: 18px;
-      padding: 10px 28px;
+      margin-top: 20px;
+      padding: 10px 30px;
       background: linear-gradient(135deg, ${BRAND.primary} 0%, ${BRAND.accent} 100%);
       color: #ffffff;
       border-radius: 999px;
@@ -257,7 +279,7 @@ function shell(opts: {
 }) {
   return `
   <!DOCTYPE html>
-  <html lang="es">
+  <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -270,8 +292,10 @@ function shell(opts: {
       <div class="container">
         
         <div class="header">
-          <div class="flower-decor f1">🌸</div>
-          <div class="flower-decor f2">🌺</div>
+          <!-- Flores posicionadas en las esquinas para evitar amontonamiento -->
+          <div class="flower-decor f-top-left">🌸</div>
+          <div class="flower-decor f-bottom-right">🌺</div>
+          
           <div class="logo-wrap">
             <img src="${esc(BRAND.logo)}" alt="${esc(BRAND.name)}">
           </div>
@@ -286,7 +310,7 @@ function shell(opts: {
           ${opts.ctaUrl ? `
           <div style="margin-top: 40px;">
             <a href="${esc(opts.ctaUrl)}" class="btn" target="_blank">
-              ${esc(opts.ctaLabel || "Visitar Web")}
+              ${esc(opts.ctaLabel || "Visit Website")}
             </a>
           </div>
           ` : ''}
@@ -309,26 +333,26 @@ function shell(opts: {
 
 /* CLIENT EMAIL */
 export function emailTemplateClient(args: ClientEmailArgs) {
-  const name = args.name?.trim() || "amiga/o";
+  const name = args.name?.trim() || "there";
   const currency = args.currency || "CAD";
 
   const body = `
     <div class="message">
-      ¡Hola <strong>${esc(name)}</strong>! ✨<br><br>
-      ¡Muchas gracias por contactarme! He recibido tu solicitud y me hace mucha ilusión ayudarte a crear algo mágico con mis flores de papel hechas a mano.
+      Hi <strong>${esc(name)}</strong>! ✨<br><br>
+      Thank you so much for reaching out! I’ve received your request and I’m excited to help bring your vision to life with beautiful handmade paper flowers.
       
       <div class="translation">
-        Thank you for reaching out! I’ve received your request and I’ll reply soon with options and pricing.
+        ¡Muchas gracias por contactarme! He recibido tu solicitud y me hace mucha ilusión ayudarte a crear algo mágico con mis flores de papel hechas a mano.
       </div>
     </div>
 
     <div class="divider"></div>
 
     <div class="info-card">
-      <div class="info-title">Resumen de tu Solicitud</div>
+      <div class="info-title">Request Summary</div>
 
       <div class="kv-item">
-        <span class="kv-label">Nombre</span>
+        <span class="kv-label">Name</span>
         <span class="kv-value">${esc(args.name)}</span>
       </div>
 
@@ -338,26 +362,27 @@ export function emailTemplateClient(args: ClientEmailArgs) {
       </div>
 
       <div class="kv-item">
-        <span class="kv-label">Moneda</span>
+        <span class="kv-label">Currency</span>
         <span class="kv-value">${esc(currency)}</span>
       </div>
 
       <div class="kv-item">
-        <span class="kv-label">Detalles</span>
+        <span class="kv-label">Details</span>
         <span class="kv-value">${esc(args.message).replaceAll("\n", "<br/>")}</span>
       </div>
     </div>
 
     <div class="message">
-      ¡Espero que podamos crear algo hermoso juntas! 🌸
+      I look forward to creating something beautiful for you! 🌸
+      <div class="translation">¡Espero que podamos crear algo hermoso juntas!</div>
     </div>
   `;
 
   return shell({
-    badge: "SOLICITUD RECIBIDA",
-    title: "¡Recibí tu mensaje! ✿",
+    badge: "REQUEST RECEIVED",
+    title: "I got your message! ✿",
     bodyHtml: body,
-    ctaLabel: "Ver mi Galería",
+    ctaLabel: "View My Gallery",
     ctaUrl: BRAND.website
   });
 }
@@ -366,21 +391,21 @@ export function emailTemplateClient(args: ClientEmailArgs) {
 export function emailTemplateAdmin(args: AdminEmailArgs) {
   const body = `
     <div class="message">
-      <strong>¡Tienes un nuevo cliente!</strong> ✨<br><br>
-      Alguien ha completado el formulario de contacto en tu web. Aquí tienes los detalles para que puedas responderle pronto.
+      <strong>You have a new client!</strong> ✨<br><br>
+      A customer has submitted the contact form on your website. Here are the details so you can respond promptly.
 
       <div class="translation">
-        A customer submitted the contact form. Here are the details:
+        Alguien ha completado el formulario de contacto en tu web. Aquí tienes los detalles para que puedas responderle pronto.
       </div>
     </div>
 
     <div class="divider"></div>
 
     <div class="info-card">
-      <div class="info-title">Datos del Cliente</div>
+      <div class="info-title">Lead Details</div>
 
       <div class="kv-item">
-        <span class="kv-label">Nombre</span>
+        <span class="kv-label">Name</span>
         <span class="kv-value">${esc(args.name)}</span>
       </div>
 
@@ -390,33 +415,34 @@ export function emailTemplateAdmin(args: AdminEmailArgs) {
       </div>
 
       <div class="kv-item">
-        <span class="kv-label">Moneda</span>
+        <span class="kv-label">Currency</span>
         <span class="kv-value">${esc(args.currency || "CAD")}</span>
       </div>
 
       ${args.createdAt ? `
       <div class="kv-item">
-        <span class="kv-label">Fecha</span>
-        <span class="kv-value">${esc(args.createdAt)}</span>
+        <span class="kv-label">Submitted At</span>
+        <span class="kv-value">${esc(formatDate(args.createdAt))}</span>
       </div>
       ` : ""}
 
       <div class="kv-item">
-        <span class="kv-label">Mensaje</span>
+        <span class="kv-label">Message</span>
         <span class="kv-value">${esc(args.message).replaceAll("\n", "<br/>")}</span>
       </div>
     </div>
 
     <div class="message">
-      <strong>Siguiente paso:</strong> Responde a este cliente con presupuesto y disponibilidad.
+      <strong>Next step:</strong> Reply to this customer with pricing and availability.
+      <div class="translation"><strong>Siguiente paso:</strong> Responde a este cliente con presupuesto y disponibilidad.</div>
     </div>
   `;
 
   return shell({
-    badge: "NUEVO CLIENTE",
-    title: "Nueva Solicitud de Cotización 📬",
+    badge: "NEW LEAD",
+    title: "New Quote Request 📬",
     bodyHtml: body,
-    ctaLabel: "Ir a la Web",
+    ctaLabel: "Go to Website",
     ctaUrl: BRAND.website
   });
 }
