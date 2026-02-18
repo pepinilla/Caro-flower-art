@@ -34,25 +34,17 @@ function esc(s: unknown) {
     .replaceAll("'", "&#39;");
 }
 
-/** Formatea la fecha de ISO a algo legible: Feb 18, 2026 - 06:11 AM */
 function formatDate(dateStr?: string) {
   if (!dateStr) return "";
   try {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return dateStr;
-    
     const options: Intl.DateTimeFormatOptions = {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true
     };
     return date.toLocaleString('en-US', options);
-  } catch (e) {
-    return dateStr;
-  }
+  } catch (e) { return dateStr; }
 }
 
 function baseStyles() {
@@ -61,388 +53,241 @@ function baseStyles() {
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
 
     body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0; width: 100% !important;
       background-color: ${BRAND.bg1};
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      font-family: 'Inter', Arial, sans-serif;
       color: ${BRAND.text};
-      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;
     }
 
-    table { border-collapse: collapse; border-spacing: 0; width: 100%; }
-    img { border: 0; display: block; }
+    table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; }
     
-    .wrapper {
-      width: 100%;
-      background-color: ${BRAND.bg1};
-      padding: 40px 0;
-    }
-
+    .wrapper { width: 100%; background-color: ${BRAND.bg1}; padding: 30px 0; }
     .container {
-      max-width: 600px;
-      margin: 0 auto;
+      max-width: 600px; margin: 0 auto;
       background-color: #ffffff;
       border-radius: 32px;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(232, 154, 166, 0.15);
-      border: 1px solid rgba(232, 154, 166, 0.1);
-      text-align: center;
+      border: 1px solid rgba(232, 154, 166, 0.15);
     }
 
-    /* Header con flores arregladas (posicionamiento absoluto real) */
-    .header {
+    /* Header con Tabla para asegurar que las flores NO se amontonen */
+    .header-table {
+      width: 100%;
       background-color: ${BRAND.bg2};
-      padding: 60px 40px 40px;
-      position: relative;
+      padding: 40px 20px;
     }
 
-    /* Flores decorativas en las esquinas para evitar que se amontonen */
-    .flower-decor {
-      position: absolute;
-      font-size: 44px;
-      opacity: 0.25;
-      line-height: 1;
-    }
-    .f-top-left { top: 15px; left: 15px; transform: rotate(-15deg); }
-    .f-bottom-right { bottom: 15px; right: 15px; transform: rotate(15deg); }
-
-    .logo-wrap {
-      margin-bottom: 20px;
-      display: inline-block;
+    .flower-cell {
+      width: 60px;
+      font-size: 40px;
+      vertical-align: middle;
+      opacity: 0.3;
     }
 
-    .logo-wrap img {
-      width: 110px;
-      height: auto;
+    .logo-cell {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .logo-img {
+      width: 100px;
       margin: 0 auto;
-      /* Eliminamos bordes o fondos extraños */
-      background: transparent;
-      display: block;
+      /* Forzamos que el fondo blanco del logo se vea como parte del diseño si no es transparente */
+      border-radius: 12px;
     }
 
     .brand-name {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
+      font-size: 26px;
       color: ${BRAND.dark};
-      margin: 0;
-      letter-spacing: 0.5px;
+      margin: 15px 0 0 0;
+      text-align: center;
     }
 
+    .badge-wrap { text-align: center; padding-top: 15px; }
     .badge {
       display: inline-block;
-      margin-top: 20px;
-      padding: 10px 30px;
-      background: linear-gradient(135deg, ${BRAND.primary} 0%, ${BRAND.accent} 100%);
+      padding: 8px 24px;
+      background-color: ${BRAND.primary};
       color: #ffffff;
-      border-radius: 999px;
+      border-radius: 50px;
       font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
-      box-shadow: 0 4px 12px rgba(232, 154, 166, 0.3);
+      letter-spacing: 1px;
     }
 
-    .content {
-      padding: 56px 40px;
-    }
-
+    .content { padding: 40px 30px; text-align: center; }
     .title {
       font-family: 'Playfair Display', serif;
-      font-size: 34px;
-      line-height: 1.2;
+      font-size: 30px;
       color: ${BRAND.dark};
-      margin: 0 0 28px 0;
+      margin: 0 0 20px 0;
     }
 
-    .message {
-      font-size: 17px;
-      line-height: 1.8;
-      color: ${BRAND.text};
-      margin-bottom: 36px;
-    }
-
-    .translation {
-      margin-top: 18px;
-      font-style: italic;
-      color: ${BRAND.textLight};
-      font-size: 14px;
-      line-height: 1.6;
-    }
+    .message { font-size: 16px; line-height: 1.6; color: ${BRAND.text}; margin-bottom: 30px; }
+    .translation { font-style: italic; color: ${BRAND.textLight}; font-size: 14px; margin-top: 10px; }
 
     .divider {
+      border-top: 1px solid rgba(232, 154, 166, 0.3);
+      margin: 30px 0;
+      text-align: center;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(232, 154, 166, 0.4), transparent);
-      margin: 44px 0;
-      position: relative;
-    }
-
-    .divider::after {
-      content: '✿';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #ffffff;
-      padding: 0 15px;
-      color: ${BRAND.primary};
-      font-size: 20px;
     }
 
     .info-card {
       background-color: ${BRAND.bg3};
-      border-radius: 26px;
-      padding: 36px;
-      margin-bottom: 44px;
-      border: 1px solid rgba(232, 154, 166, 0.1);
+      border-radius: 24px;
+      padding: 30px 20px;
+      margin-bottom: 30px;
     }
 
     .info-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: ${BRAND.accent};
       text-transform: uppercase;
-      letter-spacing: 1.8px;
-      margin-bottom: 24px;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
     }
 
-    .kv-item {
-      margin-bottom: 18px;
-    }
+    .kv-item { margin-bottom: 15px; }
+    .kv-label { font-size: 11px; font-weight: 600; color: ${BRAND.textLight}; text-transform: uppercase; display: block; }
+    .kv-value { font-size: 15px; color: ${BRAND.dark}; font-weight: 500; }
 
-    .kv-item:last-child { margin-bottom: 0; }
-
-    .kv-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: ${BRAND.textLight};
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .kv-value {
-      font-size: 16px;
-      color: ${BRAND.dark};
-      font-weight: 500;
-      word-break: break-word;
-    }
-
+    .btn-wrap { text-align: center; margin-top: 30px; }
     .btn {
       display: inline-block;
-      padding: 20px 44px;
-      background: linear-gradient(135deg, ${BRAND.primary} 0%, ${BRAND.accent} 100%);
+      padding: 16px 36px;
+      background-color: ${BRAND.primary};
       color: #ffffff !important;
       text-decoration: none;
-      border-radius: 999px;
+      border-radius: 50px;
       font-weight: 700;
-      font-size: 16px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 12px 28px rgba(232, 154, 166, 0.4);
+      font-size: 15px;
     }
 
     .footer {
-      padding: 48px 40px;
+      padding: 30px;
       background-color: ${BRAND.bg2};
-      border-top: 1px solid rgba(232, 154, 166, 0.1);
-    }
-
-    .footer-text {
-      font-size: 14px;
+      text-align: center;
+      font-size: 13px;
       color: ${BRAND.textLight};
-      line-height: 1.7;
-      margin: 0;
     }
 
-    .footer-link {
-      color: ${BRAND.primary};
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 480px) {
       .container { border-radius: 0; }
-      .content, .header, .footer { padding: 40px 24px; }
-      .title { font-size: 28px; }
-      .message { font-size: 16px; }
+      .title { font-size: 26px; }
+      .flower-cell { width: 40px; font-size: 30px; }
     }
   </style>
   `;
 }
 
-function shell(opts: {
-  badge: string;
-  title: string;
-  bodyHtml: string;
-  ctaLabel?: string;
-  ctaUrl?: string;
-}) {
+function shell(opts: { badge: string; title: string; bodyHtml: string; ctaLabel?: string; ctaUrl?: string }) {
   return `
   <!DOCTYPE html>
-  <html lang="en">
+  <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>${esc(opts.title)}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     ${baseStyles()}
   </head>
   <body>
     <div class="wrapper">
-      <div class="container">
-        
-        <div class="header">
-          <!-- Flores posicionadas en las esquinas para evitar amontonamiento -->
-          <div class="flower-decor f-top-left">🌸</div>
-          <div class="flower-decor f-bottom-right">🌺</div>
-          
-          <div class="logo-wrap">
-            <img src="${esc(BRAND.logo)}" alt="${esc(BRAND.name)}">
-          </div>
-          <h1 class="brand-name">${esc(BRAND.name)}</h1>
-          <div class="badge">${esc(opts.badge)}</div>
-        </div>
+      <table class="container" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td>
+            <!-- Header con Tabla para flores a los lados -->
+            <table class="header-table" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="flower-cell" align="left">🌸</td>
+                <td class="logo-cell">
+                  <img src="${esc(BRAND.logo)}" alt="${esc(BRAND.name)}" class="logo-img" />
+                </td>
+                <td class="flower-cell" align="right">🌺</td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <h1 class="brand-name">${esc(BRAND.name)}</h1>
+                  <div class="badge-wrap">
+                    <span class="badge">${esc(opts.badge)}</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
 
-        <div class="content">
-          <h2 class="title">${esc(opts.title)}</h2>
-          ${opts.bodyHtml}
+            <!-- Contenido -->
+            <div class="content">
+              <h2 class="title">${esc(opts.title)}</h2>
+              ${opts.bodyHtml}
 
-          ${opts.ctaUrl ? `
-          <div style="margin-top: 40px;">
-            <a href="${esc(opts.ctaUrl)}" class="btn" target="_blank">
-              ${esc(opts.ctaLabel || "Visit Website")}
-            </a>
-          </div>
-          ` : ''}
-        </div>
+              ${opts.ctaUrl ? `
+              <div class="btn-wrap">
+                <a href="${esc(opts.ctaUrl)}" class="btn" target="_blank">${esc(opts.ctaLabel || "Visit Website")}</a>
+              </div>
+              ` : ''}
+            </div>
 
-        <div class="footer">
-          <p class="footer-text">
-            <strong>${esc(BRAND.name)}</strong><br>
-            Handmade Paper Flower Art<br>
-            <a href="${esc(BRAND.website)}" class="footer-link">${esc(BRAND.website)}</a>
-          </p>
-        </div>
-
-      </div>
+            <!-- Footer -->
+            <div class="footer">
+              <strong>${esc(BRAND.name)}</strong><br/>
+              Handmade Paper Flower Art<br/>
+              <a href="${esc(BRAND.website)}" style="color:${BRAND.primary}; text-decoration:none;">${esc(BRAND.website)}</a>
+            </div>
+          </td>
+        </tr>
+      </table>
     </div>
   </body>
   </html>
   `;
 }
 
-/* CLIENT EMAIL */
 export function emailTemplateClient(args: ClientEmailArgs) {
   const name = args.name?.trim() || "there";
-  const currency = args.currency || "CAD";
-
   const body = `
     <div class="message">
-      Hi <strong>${esc(name)}</strong>! ✨<br><br>
+      Hi <strong>${esc(name)}</strong>! ✨<br/><br/>
       Thank you so much for reaching out! I’ve received your request and I’m excited to help bring your vision to life with beautiful handmade paper flowers.
-      
-      <div class="translation">
-        ¡Muchas gracias por contactarme! He recibido tu solicitud y me hace mucha ilusión ayudarte a crear algo mágico con mis flores de papel hechas a mano.
-      </div>
+      <div class="translation">¡Muchas gracias por contactarme! He recibido tu solicitud y me hace mucha ilusión ayudarte a crear algo mágico.</div>
     </div>
-
-    <div class="divider"></div>
-
+    <div class="divider">✿</div>
     <div class="info-card">
       <div class="info-title">Request Summary</div>
-
-      <div class="kv-item">
-        <span class="kv-label">Name</span>
-        <span class="kv-value">${esc(args.name)}</span>
-      </div>
-
-      <div class="kv-item">
-        <span class="kv-label">Email</span>
-        <span class="kv-value">${esc(args.email)}</span>
-      </div>
-
-      <div class="kv-item">
-        <span class="kv-label">Currency</span>
-        <span class="kv-value">${esc(currency)}</span>
-      </div>
-
-      <div class="kv-item">
-        <span class="kv-label">Details</span>
-        <span class="kv-value">${esc(args.message).replaceAll("\n", "<br/>")}</span>
-      </div>
+      <div class="kv-item"><span class="kv-label">Name</span><span class="kv-value">${esc(args.name)}</span></div>
+      <div class="kv-item"><span class="kv-label">Email</span><span class="kv-value">${esc(args.email)}</span></div>
+      <div class="kv-item"><span class="kv-label">Details</span><span class="kv-value">${esc(args.message).replaceAll("\n", "<br/>")}</span></div>
     </div>
-
     <div class="message">
       I look forward to creating something beautiful for you! 🌸
       <div class="translation">¡Espero que podamos crear algo hermoso juntas!</div>
     </div>
   `;
-
-  return shell({
-    badge: "REQUEST RECEIVED",
-    title: "I got your message! ✿",
-    bodyHtml: body,
-    ctaLabel: "View My Gallery",
-    ctaUrl: BRAND.website
-  });
+  return shell({ badge: "REQUEST RECEIVED", title: "I got your message! ✿", bodyHtml: body, ctaLabel: "View My Gallery", ctaUrl: BRAND.website });
 }
 
-/* ADMIN EMAIL */
 export function emailTemplateAdmin(args: AdminEmailArgs) {
   const body = `
     <div class="message">
-      <strong>You have a new client!</strong> ✨<br><br>
-      A customer has submitted the contact form on your website. Here are the details so you can respond promptly.
-
-      <div class="translation">
-        Alguien ha completado el formulario de contacto en tu web. Aquí tienes los detalles para que puedas responderle pronto.
-      </div>
+      <strong>You have a new client!</strong> ✨<br/><br/>
+      A customer has submitted the contact form on your website.
+      <div class="translation">Alguien ha completado el formulario de contacto en tu web.</div>
     </div>
-
-    <div class="divider"></div>
-
+    <div class="divider">✿</div>
     <div class="info-card">
       <div class="info-title">Lead Details</div>
-
-      <div class="kv-item">
-        <span class="kv-label">Name</span>
-        <span class="kv-value">${esc(args.name)}</span>
-      </div>
-
-      <div class="kv-item">
-        <span class="kv-label">Email</span>
-        <span class="kv-value">${esc(args.email)}</span>
-      </div>
-
-      <div class="kv-item">
-        <span class="kv-label">Currency</span>
-        <span class="kv-value">${esc(args.currency || "CAD")}</span>
-      </div>
-
-      ${args.createdAt ? `
-      <div class="kv-item">
-        <span class="kv-label">Submitted At</span>
-        <span class="kv-value">${esc(formatDate(args.createdAt))}</span>
-      </div>
-      ` : ""}
-
-      <div class="kv-item">
-        <span class="kv-label">Message</span>
-        <span class="kv-value">${esc(args.message).replaceAll("\n", "<br/>")}</span>
-      </div>
+      <div class="kv-item"><span class="kv-label">Name</span><span class="kv-value">${esc(args.name)}</span></div>
+      <div class="kv-item"><span class="kv-label">Email</span><span class="kv-value">${esc(args.email)}</span></div>
+      ${args.createdAt ? `<div class="kv-item"><span class="kv-label">Submitted At</span><span class="kv-value">${esc(formatDate(args.createdAt))}</span></div>` : ""}
+      <div class="kv-item"><span class="kv-label">Message</span><span class="kv-value">${esc(args.message).replaceAll("\n", "<br/>")}</span></div>
     </div>
-
     <div class="message">
       <strong>Next step:</strong> Reply to this customer with pricing and availability.
       <div class="translation"><strong>Siguiente paso:</strong> Responde a este cliente con presupuesto y disponibilidad.</div>
     </div>
   `;
-
-  return shell({
-    badge: "NEW LEAD",
-    title: "New Quote Request 📬",
-    bodyHtml: body,
-    ctaLabel: "Go to Website",
-    ctaUrl: BRAND.website
-  });
+  return shell({ badge: "NEW LEAD", title: "New Quote Request 📬", bodyHtml: body, ctaLabel: "Go to Website", ctaUrl: BRAND.website });
 }
