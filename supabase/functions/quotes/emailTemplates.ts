@@ -72,21 +72,23 @@ function baseStyles() {
       border: 1px solid rgba(232, 154, 166, 0.15);
     }
 
-    /* Header con Tabla para asegurar que las flores NO se amontonen */
+    /* Header con alineación perfecta */
     .header-table {
       width: 100%;
       background-color: ${BRAND.bg2};
-      padding: 40px 20px;
+      padding: 40px 0;
     }
 
     .flower-cell {
-      width: 60px;
-      font-size: 40px;
+      width: 20%;
+      font-size: 36px;
       vertical-align: middle;
-      opacity: 0.3;
+      opacity: 0.35;
+      line-height: 1;
     }
 
     .logo-cell {
+      width: 60%;
       text-align: center;
       vertical-align: middle;
     }
@@ -94,7 +96,6 @@ function baseStyles() {
     .logo-img {
       width: 100px;
       margin: 0 auto;
-      /* Forzamos que el fondo blanco del logo se vea como parte del diseño si no es transparente */
       border-radius: 12px;
     }
 
@@ -180,7 +181,8 @@ function baseStyles() {
     @media only screen and (max-width: 480px) {
       .container { border-radius: 0; }
       .title { font-size: 26px; }
-      .flower-cell { width: 40px; font-size: 30px; }
+      .flower-cell { font-size: 28px; }
+      .logo-img { width: 90px; }
     }
   </style>
   `;
@@ -200,17 +202,17 @@ function shell(opts: { badge: string; title: string; bodyHtml: string; ctaLabel?
       <table class="container" align="center" cellpadding="0" cellspacing="0">
         <tr>
           <td>
-            <!-- Header con Tabla para flores a los lados -->
-            <table class="header-table" cellpadding="0" cellspacing="0">
+            <!-- Header con alineación de emojis mejorada -->
+            <table class="header-table" cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td class="flower-cell" align="left">🌸</td>
+                <td class="flower-cell" align="right" style="padding-right: 10px;">🌸</td>
                 <td class="logo-cell">
                   <img src="${esc(BRAND.logo)}" alt="${esc(BRAND.name)}" class="logo-img" />
                 </td>
-                <td class="flower-cell" align="right">🌺</td>
+                <td class="flower-cell" align="left" style="padding-left: 10px;">🌺</td>
               </tr>
               <tr>
-                <td colspan="3">
+                <td colspan="3" align="center">
                   <h1 class="brand-name">${esc(BRAND.name)}</h1>
                   <div class="badge-wrap">
                     <span class="badge">${esc(opts.badge)}</span>
