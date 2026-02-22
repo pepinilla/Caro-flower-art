@@ -115,12 +115,11 @@ window.PRODUCTS = [
         { amount: 130000, label: "10 units", label_es: "10 unidades" }
       ])
     },
-    thumb: "images/roses/purple roses/Purple-flowers.webp",
+    thumb: "images/roses/purple roses/Purple-roses-1.webp",
     gallery: [
-      "images/roses/purple roses/Purple-flowers.webp",
-      "images/roses/purple roses/Pink-purple_roses_3.webp",
-      "images/roses/purple roses/Pink-purple_roses.webp",
       "images/roses/purple roses/Purple-roses-1.webp",
+      "images/roses/purple roses/Pink-purple_roses_3.webp",
+      "images/roses/purple roses/Purple-flowers.webp",
       "images/roses/purple roses/Purple-roses-2.webp",
       "images/roses/purple roses/Purple-roses-3.webp",
       "images/roses/purple roses/Purple-roses-4.webp"
