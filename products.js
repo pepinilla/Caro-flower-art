@@ -119,7 +119,11 @@ window.PRODUCTS = [
     gallery: [
       "images/roses/purple roses/Purple-flowers.webp",
       "images/roses/purple roses/Pink-purple_roses_3.webp",
-      "images/roses/purple roses/Pink-purple_roses.webp"
+      "images/roses/purple roses/Pink-purple_roses.webp",
+      "images/roses/purple roses/Purple-roses-1.webp",
+      "images/roses/purple roses/Purple-roses-2.webp",
+      "images/roses/purple roses/Purple-roses-3.webp",
+      "images/roses/purple roses/Purple-roses-4.webp"
     ],
     badge: "Nuevo",
     available: true
@@ -149,7 +153,8 @@ window.PRODUCTS = [
              "images/tulips/Clavel3.webp",
              "images/tulips/Clavel2.webp",
              "images/tulips/Clavel.webp",
-             "images/tulips/Calebl5.webp"],
+             "images/tulips/Calebl5.webp",
+             "images/tulips/Pink-tulips.webp"],
     badge: "Bestseller",
     available: true
   },
