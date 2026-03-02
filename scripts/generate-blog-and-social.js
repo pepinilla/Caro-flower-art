@@ -183,10 +183,9 @@ CTA_ES: ...
 // ===== Post HTML (bonito + tu CSS) =====
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
-  const desc =
-    copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
+  const desc = copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
   const canonical = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
-  const datePretty = formatPrettyDate(dateISO);
+
   const heroImage = imageUrls[0] || "";
 
   const gallery = imageUrls
@@ -197,6 +196,18 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
       </figure>`
     )
     .join("\n");
+
+  const enParagraphs = escapeHtml(copy.blogEn)
+    .split("\n")
+    .filter(Boolean)
+    .map(p => `<p class="post-p">${p}</p>`)
+    .join("");
+
+  const esParagraphs = escapeHtml(copy.blogEs)
+    .split("\n")
+    .filter(Boolean)
+    .map(p => `<p class="post-p">${p}</p>`)
+    .join("");
 
   return `<!doctype html>
 <html lang="en">
@@ -222,19 +233,18 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
     .post-meta{opacity:.75;font-size:14px;margin-top:6px}
     .post-hero{border-radius:18px;overflow:hidden;margin:14px 0 22px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
     .post-hero img{width:100%;height:auto;display:block}
-    .post-grid{display:grid;grid-template-columns:1fr;gap:16px}
+
     .post-card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.06)}
-    .post-card h2{margin:0 0 10px}
-    .post-card p{margin:0 0 10px;line-height:1.7}
+    .post-gallery{display:grid;grid-template-columns:1fr;gap:12px;margin:10px 0 6px}
+    @media(min-width:720px){ .post-gallery{grid-template-columns:repeat(3,1fr)} }
     .post-figure{margin:0}
     .post-figure img{width:100%;display:block;border-radius:16px;border:1px solid rgba(0,0,0,.06)}
-    .post-gallery{display:grid;grid-template-columns:1fr;gap:12px;margin:10px 0 6px}
-    @media(min-width:720px){
-      .post-gallery{grid-template-columns:repeat(3,1fr)}
-    }
+
+    /* Aquí el “justificado” */
+    .post-p{margin:0 0 12px;line-height:1.85;text-align:justify;text-justify:inter-word}
+
+    /* Separador suave entre EN y ES */
     .divider{height:1px;background:rgba(0,0,0,.10);margin:18px 0}
-    .social{display:grid;gap:10px}
-    .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;border:1px solid rgba(0,0,0,.12);opacity:.9}
   </style>
 </head>
 
@@ -244,46 +254,22 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   <main class="post-wrap">
     <div class="post-top">
       <a class="post-back" href="/blog/">← Back to Blog</a>
-      <span class="pill">${escapeHtml(category)}</span>
     </div>
 
     <h1 style="margin:0">${escapeHtml(copy.titleEn)}</h1>
-    <div class="post-meta">${escapeHtml(datePretty)} · Caro Flower Art</div>
+    <div class="post-meta">${escapeHtml(new Date(dateISO).toDateString())} · Caro Flower Art</div>
 
     ${heroImage ? `<div class="post-hero"><img src="${heroImage}" alt="${escapeHtml(copy.titleEn)}" loading="lazy"/></div>` : ""}
 
-    <div class="post-card">
-      <div class="post-gallery">
-        ${gallery}
-      </div>
-    </div>
+    <section class="post-card">
+      <div class="post-gallery">${gallery}</div>
+    </section>
 
-    <div class="post-grid" style="margin-top:16px">
-      <section class="post-card">
-        <h2>English</h2>
-        ${escapeHtml(copy.blogEn).split("\n").filter(Boolean).map(p => `<p>${p}</p>`).join("")}
-        <div class="divider"></div>
-        <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEn)}</p>
-      </section>
-
-      <section class="post-card">
-        <h2>Español</h2>
-        ${escapeHtml(copy.blogEs).split("\n").filter(Boolean).map(p => `<p>${p}</p>`).join("")}
-        <div class="divider"></div>
-        <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEs)}</p>
-      </section>
-
-      <section class="post-card">
-        <h2>Social (Generated)</h2>
-        <div class="social">
-          <div><strong>Instagram (EN):</strong> ${escapeHtml(copy.igEn)}</div>
-          <div><strong>Instagram (ES):</strong> ${escapeHtml(copy.igEs)}</div>
-          <div><strong>TikTok (EN):</strong> ${escapeHtml(copy.tiktokEn)}</div>
-          <div><strong>TikTok (ES):</strong> ${escapeHtml(copy.tiktokEs)}</div>
-          <div><strong>Hashtags:</strong> ${escapeHtml(copy.hashtags)}</div>
-        </div>
-      </section>
-    </div>
+    <section class="post-card" style="margin-top:16px">
+      ${enParagraphs}
+      <div class="divider"></div>
+      ${esParagraphs}
+    </section>
   </main>
 
   <script>
