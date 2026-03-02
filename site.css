@@ -1547,3 +1547,54 @@ font-family: var(--font-title);
   position: absolute;
   z-index: 3;
 }
+
+/* BLOG */
+
+.blog-grid{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:28px;
+margin-top:40px;
+
+}
+
+.blog-card{
+
+text-decoration:none;
+color:inherit;
+
+}
+
+.blog-card-inner{
+
+padding:28px;
+border-radius:16px;
+background:#fff;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:all .25s;
+
+}
+
+.blog-card-inner:hover{
+
+transform:translateY(-6px);
+box-shadow:0 16px 40px rgba(0,0,0,0.15);
+
+}
+
+.blog-card h3{
+
+font-family:"Cormorant Garamond",serif;
+font-size:26px;
+margin-bottom:10px;
+
+}
+
+.blog-card p{
+
+opacity:.75;
+font-size:15px;
+
+}
+
