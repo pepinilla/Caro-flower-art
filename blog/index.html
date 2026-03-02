@@ -1,29 +1,24 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>Blog | Caro Flower Art</title>
+  <title>Blog | Caro Flower Art</title>
+  <meta name="description" content="Behind the scenes of handmade paper flowers. English first · Español después."/>
+  <link rel="canonical" href="https://caroflower.com/blog/"/>
 
-<meta name="description" content="Behind the scenes of handmade paper flowers."/>
-<link rel="canonical" href="https://caroflower.com/blog/"/>
-
-<link rel="stylesheet" href="/site.css?v=20260126b"/>
-
+  <link rel="stylesheet" href="/site.css?v=20260126b"/>
 </head>
-
 
 <body>
 
 <div id="site-header"></div>
 
-<section class="hero hero-small">
+<section class="hero hero-small blog-hero">
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
-
     <h1>
       Blog
       <span class="es">Historias</span>
@@ -33,83 +28,106 @@
       English first · Español después
       <span class="es">Inglés primero · Español después</span>
     </p>
-
   </div>
 </section>
 
-
-
 <section class="gallery">
+  <div class="section-head">
+    <h2>
+      Latest Stories
+      <span class="es">Historias recientes</span>
+    </h2>
 
-<h2>
-Latest Stories
-<span class="es">Historias recientes</span>
-</h2>
+    <p class="section-subtitle">
+      Short behind-the-scenes stories, materials, and process.
+      <span class="es">Historias cortas del proceso, materiales y detalles.</span>
+    </p>
+  </div>
 
-<div id="blog-grid" class="blog-grid"></div>
-
+  <div id="blog-grid" class="blog-grid"></div>
 </section>
 
-
-
-<script src="/site.js"></script>
+<script src="/site.js?v=20260126b"></script>
 
 <script>
+  async function loadPosts() {
+    const res = await fetch("/sitemap.xml", { cache: "no-store" });
+    const xml = await res.text();
 
-async function loadPosts(){
+    const parser = new DOMParser();
+    const data = parser.parseFromString(xml, "text/xml");
 
-const res = await fetch("/sitemap.xml")
-const xml = await res.text()
+    const urls = [...data.querySelectorAll("loc")]
+      .map(n => n.textContent.trim())
+      .filter(u => u.includes("/blog/posts/"));
 
-const parser = new DOMParser()
-const data = parser.parseFromString(xml,"text/xml")
+    // newest first
+    urls.reverse();
 
-const urls = [...data.querySelectorAll("loc")]
-.filter(el=>el.textContent.includes("/blog/posts/"))
+    const container = document.getElementById("blog-grid");
+    container.innerHTML = "";
 
-const container = document.getElementById("blog-grid")
+    // limit to last 24 (cambia si quieres)
+    const limited = urls.slice(0, 24);
 
-urls.reverse().forEach(url=>{
+    // Get real title + cover image from each post (fast enough for 24)
+    for (const link of limited) {
+      try {
+        const html = await (await fetch(link, { cache: "no-store" })).text();
+        const doc = parser.parseFromString(html, "text/html");
 
-const link = url.textContent
+        const title =
+          (doc.querySelector("meta[property='og:title']")?.content || "").trim() ||
+          (doc.querySelector("title")?.textContent || "").replace(" | Caro Flower Art","").trim() ||
+          "Caro Flower Art";
 
-const slug = link.split("/").pop().replace(".html","")
+        const cover =
+          doc.querySelector("meta[property='og:image']")?.content ||
+          doc.querySelector("img")?.src ||
+          "";
 
-const title = slug
-.replaceAll("-"," ")
-.replace(/\b\w/g,l=>l.toUpperCase())
+        const date =
+          (doc.querySelector("meta[name='article:published_time']")?.content || "").slice(0,10);
 
-const card = document.createElement("a")
+        const card = document.createElement("a");
+        card.href = link;
+        card.className = "blog-card";
 
-card.href = link
-card.className = "blog-card"
+        card.innerHTML = `
+          <div class="blog-card-media">
+            ${cover ? `<img src="${cover}" alt="${title}" loading="lazy"/>` : `<div class="blog-card-placeholder"></div>`}
+          </div>
 
-card.innerHTML = `
+          <div class="blog-card-body">
+            <div class="blog-card-meta">
+              ${date ? `<span>${date}</span>` : `<span>New</span>`}
+              <span class="dot">•</span>
+              <span>Caro Flower Art</span>
+            </div>
 
-<div class="blog-card-inner">
+            <h3 class="blog-card-title">${title}</h3>
 
-<h3>${title}</h3>
+            <p class="blog-card-desc">
+              Read the story behind this handmade flower.
+              <span class="es">Lee la historia detrás de esta flor hecha a mano.</span>
+            </p>
 
-<p>
-Read the story behind this handmade flower.
-<span class="es">Lee la historia detrás de esta flor hecha a mano.</span>
-</p>
+            <div class="blog-card-cta">
+              <span class="blog-read">Read</span>
+              <span class="es blog-read">Leer</span>
+            </div>
+          </div>
+        `;
 
-</div>
+        container.appendChild(card);
+      } catch (e) {
+        // skip broken post
+      }
+    }
+  }
 
-`
-
-container.appendChild(card)
-
-})
-
-}
-
-loadPosts()
-
+  loadPosts();
 </script>
-
-
 
 </body>
 </html>
