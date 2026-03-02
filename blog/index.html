@@ -1,28 +1,82 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-  <title>Blog | Caro Flower Art</title>
-  <meta name="description" content="Behind the scenes of handmade paper flowers."/>
-  <link rel="canonical" href="https://caroflower.com/blog/"/>
+<title>Blog | Caro Flower Art</title>
+<meta name="description" content="Stories behind handmade paper flowers."/>
 
-  <link rel="stylesheet" href="/site.css?v=20260126b"/>
+<link rel="stylesheet" href="/site.css?v=20260126b"/>
 
-  <style>
-    /* Centrado general */
-    .hero-content, .section-head { text-align: center; }
-    .blog-grid { justify-items: center; }
-    .blog-card { text-align: center; }
-    .blog-card-body { text-align: center; }
+<style>
 
-    /* Botón Read centrado */
-    .blog-card-cta { display:flex; justify-content:center; gap:10px; }
+.blog-hero h1{
+text-align:center;
+font-size:42px;
+margin-bottom:10px;
+}
 
-    /* Si tu CSS ya tiene estos, no pasa nada: esto solo refuerza */
-    .section-subtitle { margin-left:auto; margin-right:auto; max-width: 720px; }
-  </style>
+.blog-hero p{
+text-align:center;
+opacity:.7;
+}
+
+.section-head{
+text-align:center;
+margin-bottom:40px;
+}
+
+.blog-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+}
+
+.blog-card{
+background:#fff;
+border-radius:18px;
+overflow:hidden;
+text-decoration:none;
+color:inherit;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+transition:.2s;
+}
+
+.blog-card:hover{
+transform:translateY(-3px);
+}
+
+.blog-card-media img{
+width:100%;
+display:block;
+}
+
+.blog-card-body{
+padding:18px;
+text-align:center;
+}
+
+.blog-card-title{
+font-size:20px;
+margin:10px 0;
+}
+
+.blog-card-desc{
+opacity:.7;
+}
+
+.blog-read{
+display:inline-block;
+margin-top:12px;
+padding:8px 16px;
+border-radius:20px;
+background:#eee;
+font-weight:600;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -30,109 +84,117 @@
 <div id="site-header"></div>
 
 <section class="hero hero-small blog-hero">
-  <div class="hero-overlay"></div>
 
-  <div class="hero-content">
-    <h1>Blog</h1>
+<h1>Blog</h1>
 
-    <!-- (Quitado “English first… / Español después”) -->
-  </div>
+<p>
+Stories behind handmade paper flowers
+</p>
+
 </section>
+
 
 <section class="gallery">
-  <div class="section-head">
-    <h2>Latest Stories</h2>
 
-    <p class="section-subtitle">
-      Short behind-the-scenes stories, materials, and process.
-    </p>
-  </div>
+<div class="section-head">
 
-  <div id="blog-grid" class="blog-grid"></div>
+<h2>Latest Stories</h2>
+
+<p>
+Behind the scenes, materials, and process.
+</p>
+
+</div>
+
+<div id="blog-grid" class="blog-grid"></div>
+
 </section>
+
 
 <script src="/site.js?v=20260126b"></script>
 
 <script>
-  async function loadPosts() {
-    const res = await fetch("/sitemap.xml", { cache: "no-store" });
-    const xml = await res.text();
 
-    const parser = new DOMParser();
-    const data = parser.parseFromString(xml, "text/xml");
+async function loadPosts(){
 
-    const urls = [...data.querySelectorAll("loc")]
-      .map(n => n.textContent.trim())
-      .filter(u => u.includes("/blog/posts/"));
+const res = await fetch("/sitemap.xml",{cache:"no-store"});
+const xml = await res.text();
 
-    // newest first
-    urls.reverse();
+const parser = new DOMParser();
+const data = parser.parseFromString(xml,"text/xml");
 
-    const container = document.getElementById("blog-grid");
-    container.innerHTML = "";
+const urls=[...data.querySelectorAll("loc")]
+.map(n=>n.textContent.trim())
+.filter(u=>u.includes("/blog/posts/"));
 
-    // limit (cambia si quieres)
-    const limited = urls.slice(0, 24);
+urls.reverse();
 
-    for (const link of limited) {
-      try {
-        // Importante: si el post fue borrado (404), lo saltamos
-        const postRes = await fetch(link, { cache: "no-store" });
-        if (!postRes.ok) continue;
+const container=document.getElementById("blog-grid");
+container.innerHTML="";
 
-        const html = await postRes.text();
-        const doc = parser.parseFromString(html, "text/html");
+const limited=urls.slice(0,24);
 
-        const title =
-          (doc.querySelector("meta[property='og:title']")?.content || "").trim() ||
-          (doc.querySelector("title")?.textContent || "").replace(" | Caro Flower Art","").trim() ||
-          "Caro Flower Art";
+for(const link of limited){
 
-        const cover =
-          doc.querySelector("meta[property='og:image']")?.content ||
-          doc.querySelector("img")?.src ||
-          "";
+try{
 
-        // intenta sacar fecha del contenido si existe
-        const dateText =
-          (doc.querySelector(".post-meta")?.textContent || "").trim();
+const html=await (await fetch(link,{cache:"no-store"})).text();
+const doc=parser.parseFromString(html,"text/html");
 
-        const card = document.createElement("a");
-        card.href = link;
-        card.className = "blog-card";
+const title=
+doc.querySelector("meta[property='og:title']")?.content ||
+doc.querySelector("title")?.textContent ||
+"Caro Flower Art";
 
-        card.innerHTML = `
-          <div class="blog-card-media">
-            ${cover ? `<img src="${cover}" alt="${title}" loading="lazy"/>` : `<div class="blog-card-placeholder"></div>`}
-          </div>
+const cover=
+doc.querySelector("meta[property='og:image']")?.content ||
+doc.querySelector("img")?.src ||
+"";
 
-          <div class="blog-card-body">
-            <div class="blog-card-meta">
-              <span>${dateText || "New"}</span>
-              <span class="dot">•</span>
-              <span>Caro Flower Art</span>
-            </div>
+const card=document.createElement("a");
+card.href=link;
+card.className="blog-card";
 
-            <h3 class="blog-card-title">${title}</h3>
+card.innerHTML=`
 
-            <p class="blog-card-desc">
-              Read the story behind this handmade flower.
-            </p>
+<div class="blog-card-media">
 
-            <div class="blog-card-cta">
-              <span class="blog-read">Read</span>
-            </div>
-          </div>
-        `;
+${cover ? `<img src="${cover}" alt="${title}" loading="lazy"/>` : ``}
 
-        container.appendChild(card);
-      } catch (e) {
-        // skip broken post
-      }
-    }
-  }
+</div>
 
-  loadPosts();
+<div class="blog-card-body">
+
+<h3 class="blog-card-title">${title}</h3>
+
+<p class="blog-card-desc">
+
+Read the story behind this handmade flower.
+
+</p>
+
+<span class="blog-read">
+
+Read
+
+</span>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+}catch(e){
+
+}
+
+}
+
+}
+
+loadPosts();
+
 </script>
 
 </body>
