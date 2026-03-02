@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
@@ -6,12 +7,27 @@ import crypto from "crypto";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SITE_BASE_URL = process.env.SITE_BASE_URL || "https://caroflower.com";
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+// Si no configuras Supabase aún, el script igual funciona y solo crea el blog.
+const supabase =
+  SUPABASE_URL && SUPABASE_SERVICE_KEY
+    ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    : null;
+
 const IMAGES_ROOT = path.join(process.cwd(), "images");
 const BLOG_DIR = path.join(process.cwd(), "blog");
 const POSTS_DIR = path.join(BLOG_DIR, "posts");
 
 const IMAGES_PER_POST = 3;
-const MAX_POSTS_ON_INDEX = 30;
+
+// ===== Helpers =====
+function ensureDirs() {
+  if (!fs.existsSync(BLOG_DIR)) fs.mkdirSync(BLOG_DIR);
+  if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR, { recursive: true });
+}
 
 function listAllImages(dir) {
   const out = [];
@@ -52,16 +68,6 @@ function hashSlug(input) {
   return crypto.createHash("sha1").update(input).digest("hex").slice(0, 10);
 }
 
-function ensureDirs() {
-  if (!fs.existsSync(BLOG_DIR)) fs.mkdirSync(BLOG_DIR);
-  if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR, { recursive: true });
-}
-
-function readJsonSafe(file, fallback) {
-  try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
-  catch { return fallback; }
-}
-
 function writeFile(filePath, content) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, content, "utf-8");
@@ -74,6 +80,17 @@ function escapeHtml(s) {
     .replaceAll(">", "&gt;");
 }
 
+function formatPrettyDate(dateISO) {
+  // Para que no salga “Mon Mar 02 2026”
+  try {
+    const d = new Date(dateISO);
+    return d.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "2-digit" });
+  } catch {
+    return dateISO.slice(0, 10);
+  }
+}
+
+// ===== OpenAI generation =====
 async function generateBilingualCopy({ category, imageUrls }) {
   const prompt = `
 You are the brand copywriter for "Caro Flower Art" (handmade paper flowers).
@@ -82,12 +99,12 @@ Generate bilingual content (EN first, then ES):
 - Blog post: 220–320 words per language
 - Tone: warm, human storytelling about process, handmade details, dedication
 - No emojis
-- Include a short CTA in each language (1 line)
+- Add a short CTA in each language (1 line)
 - Create IG copy: 120–180 characters per language
 - Create TikTok copy: 1–2 lines per language
 - Provide 6 hashtags (neutral/bilingual is fine)
 
-Today's category: ${category}
+Category: ${category}
 Image URLs:
 ${imageUrls.map(u => `- ${u}`).join("\n")}
 
@@ -110,9 +127,9 @@ CTA_ES: ...
 
   const resp = await openai.chat.completions.create({
     model: "gpt-4o-mini",
-    max_tokens: 1200,
+    max_tokens: 1300,
     messages: [
-      { role: "system", content: "Write natural, elegant marketing copy. No emojis. EN first." },
+      { role: "system", content: "Write natural, elegant brand copy. No emojis. EN first." },
       { role: "user", content: prompt },
     ],
   });
@@ -125,9 +142,18 @@ CTA_ES: ...
   };
 
   const getBlock = (key) => {
-    const re = new RegExp(`^${key}:\\s*([\\s\\S]*?)(^\\w+_\\w+:\\s|^HASHTAGS:\\s)`, "m");
+    // Captura hasta el siguiente KEY:
+    const re = new RegExp(
+      `^${key}:\\s*([\\s\\S]*?)(^TITLE_EN:|^TITLE_ES:|^EXCERPT_EN:|^EXCERPT_ES:|^BLOG_EN:|^BLOG_ES:|^IG_EN:|^IG_ES:|^TIKTOK_EN:|^TIKTOK_ES:|^HASHTAGS:|^CTA_EN:|^CTA_ES:)`,
+      "m"
+    );
     const m = text.match(re);
-    return m ? m[1].trim() : "";
+    if (m) return m[1].trim();
+
+    // fallback: si el modelo no puso el siguiente key perfecto
+    const re2 = new RegExp(`^${key}:\\s*([\\s\\S]*)$`, "m");
+    const m2 = text.match(re2);
+    return m2 ? m2[1].trim() : "";
   };
 
   return {
@@ -148,17 +174,26 @@ CTA_ES: ...
   };
 }
 
+// ===== Post HTML (bonito + tu CSS) =====
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
   const desc = copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
   const canonical = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
+  const datePretty = formatPrettyDate(dateISO);
 
-  const imagesHtml = imageUrls.map(u => `
-    <figure style="margin:16px 0">
-      <img src="${u}" alt="${escapeHtml(category)} handmade paper flowers" style="max-width:100%;border-radius:12px" loading="lazy">
-    </figure>
-  `).join("\n");
+  const heroImage = imageUrls[0] || "";
 
+  const gallery = imageUrls
+    .map(
+      (u) => `
+      <figure class="post-figure">
+        <img src="${u}" alt="${escapeHtml(category)} handmade paper flowers" loading="lazy"/>
+      </figure>`
+    )
+    .join("\n");
+
+  // Nota: no dependemos de clases nuevas en site.css; usamos un <style> pequeño solo para el post.
+  // Tu site.css sigue mandando (header, botones, tipografías, etc.).
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -172,104 +207,180 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   <meta property="og:description" content="${escapeHtml(desc)}" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="${canonical}" />
-  ${imageUrls[0] ? `<meta property="og:image" content="${imageUrls[0]}" />` : ""}
+  ${heroImage ? `<meta property="og:image" content="${heroImage}" />` : ""}
+
+  <link rel="stylesheet" href="/site.css?v=20260126b" />
+
+  <style>
+    .post-wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+    .post-top{display:flex;gap:14px;align-items:center;margin:10px 0 16px}
+    .post-back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600}
+    .post-meta{opacity:.75;font-size:14px;margin-top:6px}
+    .post-hero{border-radius:18px;overflow:hidden;margin:14px 0 22px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
+    .post-hero img{width:100%;height:auto;display:block}
+    .post-grid{display:grid;grid-template-columns:1fr;gap:16px}
+    .post-card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.06)}
+    .post-card h2{margin:0 0 10px}
+    .post-card p{margin:0 0 10px;line-height:1.7}
+    .post-figure{margin:0}
+    .post-figure img{width:100%;display:block;border-radius:16px;border:1px solid rgba(0,0,0,.06)}
+    .post-gallery{display:grid;grid-template-columns:1fr;gap:12px;margin:10px 0 6px}
+    @media(min-width:720px){
+      .post-gallery{grid-template-columns:repeat(3,1fr)}
+    }
+    .divider{height:1px;background:rgba(0,0,0,.10);margin:18px 0}
+    .social{display:grid;gap:10px}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;border:1px solid rgba(0,0,0,.12);opacity:.9}
+  </style>
 </head>
-<body style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;max-width:980px;margin:0 auto;padding:20px;line-height:1.6">
 
-  <div id="siteHeader"></div>
+<body>
+  <div id="site-header"></div>
 
-  <main style="max-width:860px;margin:0 auto;">
-    <p><a href="/blog/">← Back to Blog</a></p>
-    <h1>${escapeHtml(copy.titleEn)}</h1>
-    <p style="opacity:.7">${escapeHtml(new Date(dateISO).toDateString())} · ${escapeHtml(category)}</p>
+  <main class="post-wrap">
+    <div class="post-top">
+      <a class="post-back" href="/blog/">← Back to Blog</a>
+      <span class="pill">${escapeHtml(category)}</span>
+    </div>
 
-    ${imagesHtml}
+    <h1 style="margin:0">${escapeHtml(copy.titleEn)}</h1>
+    <div class="post-meta">${escapeHtml(datePretty)} · Caro Flower Art</div>
 
-    <h2>English</h2>
-    <p>${escapeHtml(copy.blogEn).replaceAll("\n", "<br/>")}</p>
-    <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEn)}</p>
+    ${heroImage ? `<div class="post-hero"><img src="${heroImage}" alt="${escapeHtml(copy.titleEn)}" loading="lazy"/></div>` : ""}
 
-    <hr style="margin:24px 0"/>
+    <div class="post-card">
+      <div class="post-gallery">
+        ${gallery}
+      </div>
+    </div>
 
-    <h2>Español</h2>
-    <p>${escapeHtml(copy.blogEs).replaceAll("\n", "<br/>")}</p>
-    <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEs)}</p>
+    <div class="post-grid" style="margin-top:16px">
+      <section class="post-card">
+        <h2>English</h2>
+        ${escapeHtml(copy.blogEn).split("\n").filter(Boolean).map(p => `<p>${p}</p>`).join("")}
+        <div class="divider"></div>
+        <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEn)}</p>
+      </section>
 
-    <hr style="margin:24px 0"/>
-    <h3>Social (Generated)</h3>
-    <p><strong>Instagram (EN):</strong> ${escapeHtml(copy.igEn)}</p>
-    <p><strong>Instagram (ES):</strong> ${escapeHtml(copy.igEs)}</p>
-    <p><strong>TikTok (EN):</strong> ${escapeHtml(copy.tiktokEn)}</p>
-    <p><strong>TikTok (ES):</strong> ${escapeHtml(copy.tiktokEs)}</p>
-    <p><strong>Hashtags:</strong> ${escapeHtml(copy.hashtags)}</p>
+      <section class="post-card">
+        <h2>Español</h2>
+        ${escapeHtml(copy.blogEs).split("\n").filter(Boolean).map(p => `<p>${p}</p>`).join("")}
+        <div class="divider"></div>
+        <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEs)}</p>
+      </section>
+
+      <section class="post-card">
+        <h2>Social (Generated)</h2>
+        <div class="social">
+          <div><strong>Instagram (EN):</strong> ${escapeHtml(copy.igEn)}</div>
+          <div><strong>Instagram (ES):</strong> ${escapeHtml(copy.igEs)}</div>
+          <div><strong>TikTok (EN):</strong> ${escapeHtml(copy.tiktokEn)}</div>
+          <div><strong>TikTok (ES):</strong> ${escapeHtml(copy.tiktokEs)}</div>
+          <div><strong>Hashtags:</strong> ${escapeHtml(copy.hashtags)}</div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script>
     fetch("/header.html")
       .then(r => r.text())
-      .then(html => { document.getElementById("siteHeader").innerHTML = html; })
+      .then(html => { document.getElementById("site-header").innerHTML = html; })
       .catch(() => {});
   </script>
 </body>
 </html>`;
 }
 
-function updateBlogIndex(feed) {
-  const items = feed.slice(0, MAX_POSTS_ON_INDEX).map(p => `
-    <article style="padding:14px 0;border-bottom:1px solid #eee">
-      <h2 style="margin:0 0 6px 0">
-        <a href="/blog/posts/${p.slug}.html">${escapeHtml(p.titleEn)}</a>
-      </h2>
-      <div style="opacity:.7;font-size:14px">${escapeHtml(p.date)} · ${escapeHtml(p.category)}</div>
-      ${p.heroImage ? `<img src="${p.heroImage}" style="max-width:100%;border-radius:12px;margin-top:10px" loading="lazy">` : ""}
-      <p style="margin-top:10px">${escapeHtml(p.excerptEn || "")}</p>
-    </article>
-  `).join("\n");
+// ===== Sitemap (para que el index los “descubra”) =====
+function updateSitemapAddPost({ postUrl }) {
+  const sitemapPath = path.join(process.cwd(), "sitemap.xml");
 
-  const html = `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blog | Caro Flower Art</title>
-  <meta name="description" content="Behind-the-scenes stories and process of handmade paper flowers. New posts every 3 days." />
-  <link rel="canonical" href="${SITE_BASE_URL}/blog/" />
-</head>
-<body style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;max-width:980px;margin:0 auto;padding:20px;line-height:1.6">
-  <div id="siteHeader"></div>
+  let xml = "";
+  if (fs.existsSync(sitemapPath)) {
+    xml = fs.readFileSync(sitemapPath, "utf-8");
+  } else {
+    xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+</urlset>`;
+  }
 
-  <main class="page" style="max-width: 980px; margin: 0 auto; padding: 20px;">
-    <h1>Blog</h1>
-    <p>English first · Español después. New post every 3 days.</p>
-    ${items || "<p>No posts yet.</p>"}
-  </main>
+  // Si ya está, no lo duplica:
+  if (xml.includes(`<loc>${postUrl}</loc>`)) return;
 
-  <script>
-    fetch("/header.html")
-      .then(r => r.text())
-      .then(html => { document.getElementById("siteHeader").innerHTML = html; })
-      .catch(() => {});
-  </script>
-</body>
-</html>`;
-  writeFile(path.join(BLOG_DIR, "index.html"), html);
+  // Inserta antes de </urlset>
+  const entry = `  <url><loc>${postUrl}</loc></url>\n`;
+  xml = xml.replace("</urlset>", `${entry}</urlset>`);
+  writeFile(sitemapPath, xml);
 }
 
-function updateSitemap(feed) {
-  const urls = [
-    `${SITE_BASE_URL}/`,
-    `${SITE_BASE_URL}/blog/`,
-    ...feed.map(p => `${SITE_BASE_URL}/blog/posts/${p.slug}.html`)
+// ===== Supabase insert (captions) =====
+// Tabla sugerida: social_posts
+// Campos sugeridos:
+// - id (uuid)
+// - created_at (timestamp)
+// - status (text)  -> "pending"
+// - platform (text) -> "instagram" | "tiktok"
+// - lang (text) -> "en" | "es"
+// - content (text)
+// - hashtags (text)
+// - image_urls (jsonb)  -> ["...","..."]
+// - blog_url (text)
+// - title (text)
+async function pushSocialToSupabase({ copy, imageUrls, blogUrl }) {
+  if (!supabase) {
+    console.log("Supabase not configured (SUPABASE_URL / SUPABASE_SERVICE_KEY missing). Skipping DB insert.");
+    return;
+  }
+
+  const rows = [
+    {
+      status: "pending",
+      platform: "instagram",
+      lang: "en",
+      content: copy.igEn,
+      hashtags: copy.hashtags,
+      image_urls: imageUrls,
+      blog_url: blogUrl,
+      title: copy.titleEn,
+    },
+    {
+      status: "pending",
+      platform: "instagram",
+      lang: "es",
+      content: copy.igEs,
+      hashtags: copy.hashtags,
+      image_urls: imageUrls,
+      blog_url: blogUrl,
+      title: copy.titleEs || copy.titleEn,
+    },
+    {
+      status: "pending",
+      platform: "tiktok",
+      lang: "en",
+      content: copy.tiktokEn,
+      hashtags: copy.hashtags,
+      image_urls: imageUrls,
+      blog_url: blogUrl,
+      title: copy.titleEn,
+    },
+    {
+      status: "pending",
+      platform: "tiktok",
+      lang: "es",
+      content: copy.tiktokEs,
+      hashtags: copy.hashtags,
+      image_urls: imageUrls,
+      blog_url: blogUrl,
+      title: copy.titleEs || copy.titleEn,
+    },
   ];
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(u => `  <url><loc>${u}</loc></url>`).join("\n")}
-</urlset>`;
-
-  writeFile(path.join(process.cwd(), "sitemap.xml"), xml);
+  const { error } = await supabase.from("social_posts").insert(rows);
+  if (error) throw new Error(`Supabase insert failed: ${error.message}`);
 }
 
+// ===== Main =====
 async function run() {
   ensureDirs();
 
@@ -279,7 +390,7 @@ async function run() {
   const categories = [...new Set(allImages.map(categoryFromPath))];
   const category = categories[Math.floor(Math.random() * categories.length)];
 
-  const categoryImages = allImages.filter(f => categoryFromPath(f) === category);
+  const categoryImages = allImages.filter((f) => categoryFromPath(f) === category);
   const pickedFiles = shuffle(categoryImages).slice(0, Math.min(IMAGES_PER_POST, categoryImages.length));
   const imageUrls = pickedFiles.map(toPublicUrl);
 
@@ -289,24 +400,16 @@ async function run() {
   const slug = `${category}-${hashSlug((copy.titleEn || category) + "-" + dateISO)}`;
 
   const postHtml = renderPostHtml({ slug, dateISO, category, imageUrls, copy });
-  writeFile(path.join(POSTS_DIR, `${slug}.html`), postHtml);
+  const postPath = path.join(POSTS_DIR, `${slug}.html`);
+  writeFile(postPath, postHtml);
 
-  const feedPath = path.join(BLOG_DIR, "posts.json");
-  const feed = readJsonSafe(feedPath, []);
-  feed.unshift({
-    slug,
-    date: dateISO.slice(0, 10),
-    category,
-    titleEn: copy.titleEn || `Caro Flower Art · ${category}`,
-    excerptEn: copy.excerptEn || "",
-    heroImage: imageUrls[0] || ""
-  });
-  writeFile(feedPath, JSON.stringify(feed, null, 2));
+  const postUrl = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
+  updateSitemapAddPost({ postUrl });
 
-  updateBlogIndex(feed);
-  updateSitemap(feed);
+  // Enviar captions a Supabase (pendientes)
+  await pushSocialToSupabase({ copy, imageUrls, blogUrl: postUrl });
 
-  console.log("OK:", { slug, category, images: imageUrls.length });
+  console.log("OK:", { slug, category, images: imageUrls.length, postUrl });
 }
 
 run().catch((e) => {
