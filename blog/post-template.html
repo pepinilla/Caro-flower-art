@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>{{TITLE}} | Caro Flower Art</title>
+  <meta name="description" content="{{DESCRIPTION}}" />
+  <link rel="canonical" href="{{CANONICAL}}" />
+
+  <meta property="og:title" content="{{TITLE}}" />
+  <meta property="og:description" content="{{DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="{{OG_IMAGE}}" />
+
+  <link rel="stylesheet" href="/site.css?v=20260126b" />
+</head>
+
+<body>
+
+<div id="site-header"></div>
+
+<section class="hero hero-small">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>{{TITLE}}</h1>
+    <p class="post-meta">
+      {{DATE}} · {{TAG}}
+    </p>
+  </div>
+</section>
+
+<main class="post-wrap">
+  {{#if COVER_IMAGE}}
+  <img class="post-cover" src="{{COVER_IMAGE}}" alt="{{TITLE}}" loading="lazy"/>
+  {{/if}}
+
+  <section class="post-section">
+    <h2>English</h2>
+    <div class="post-body">
+      {{EN_HTML}}
+    </div>
+  </section>
+
+  <section class="post-divider"></section>
+
+  <section class="post-section">
+    <h2>Español</h2>
+    <div class="post-body">
+      {{ES_HTML}}
+    </div>
+  </section>
+
+  <div class="post-cta">
+    <a class="btn-primary" href="/index.html#contact">
+      Request a quote <span class="es">Pedir cotización</span>
+    </a>
+    <a class="btn-secondary" href="/blog/">
+      Back to Blog <span class="es">Volver al Blog</span>
+    </a>
+  </div>
+</main>
+
+<script src="/site.js?v=20260126b"></script>
+
+</body>
+</html>
