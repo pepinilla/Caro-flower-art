@@ -181,9 +181,11 @@ CTA_ES: ...
 }
 
 // ===== Post HTML (bonito + tu CSS) =====
+
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
-  const desc = copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
+  const desc =
+    copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
   const canonical = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
 
   const heroImage = imageUrls[0] || "";
@@ -200,13 +202,13 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const enParagraphs = escapeHtml(copy.blogEn)
     .split("\n")
     .filter(Boolean)
-    .map(p => `<p class="post-p">${p}</p>`)
+    .map((p) => `<p class="post-p">${p}</p>`)
     .join("");
 
   const esParagraphs = escapeHtml(copy.blogEs)
     .split("\n")
     .filter(Boolean)
-    .map(p => `<p class="post-p">${p}</p>`)
+    .map((p) => `<p class="post-p">${p}</p>`)
     .join("");
 
   return `<!doctype html>
@@ -228,9 +230,9 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 
   <style>
     .post-wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
-    .post-top{display:flex;gap:14px;align-items:center;margin:10px 0 16px}
-    .post-back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600}
-    .post-meta{opacity:.75;font-size:14px;margin-top:6px}
+    .post-top{display:flex;justify-content:center;margin:10px 0 16px}
+    .post-back{text-decoration:none;font-weight:600}
+    .post-meta{text-align:center;opacity:.75;font-size:14px;margin-top:10px}
     .post-hero{border-radius:18px;overflow:hidden;margin:14px 0 22px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
     .post-hero img{width:100%;height:auto;display:block}
 
@@ -240,10 +242,10 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
     .post-figure{margin:0}
     .post-figure img{width:100%;display:block;border-radius:16px;border:1px solid rgba(0,0,0,.06)}
 
-    /* Aquí el “justificado” */
+    /* ✅ Justificado bonito */
     .post-p{margin:0 0 12px;line-height:1.85;text-align:justify;text-justify:inter-word}
 
-    /* Separador suave entre EN y ES */
+    /* separador suave EN -> ES */
     .divider{height:1px;background:rgba(0,0,0,.10);margin:18px 0}
   </style>
 </head>
@@ -256,8 +258,8 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
       <a class="post-back" href="/blog/">← Back to Blog</a>
     </div>
 
-    <h1 style="margin:0">${escapeHtml(copy.titleEn)}</h1>
-    <div class="post-meta">${escapeHtml(new Date(dateISO).toDateString())} · Caro Flower Art</div>
+    <h1 style="margin:0;text-align:center">${escapeHtml(copy.titleEn)}</h1>
+    <div class="post-meta">${escapeHtml(new Date(dateISO).toDateString())}</div>
 
     ${heroImage ? `<div class="post-hero"><img src="${heroImage}" alt="${escapeHtml(copy.titleEn)}" loading="lazy"/></div>` : ""}
 
@@ -281,7 +283,6 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 </body>
 </html>`;
 }
-
 // ===== Sitemap add-only (para que /blog detecte nuevos posts) =====
 function updateSitemapAddPost({ postUrl }) {
   const sitemapPath = path.join(process.cwd(), "sitemap.xml");
