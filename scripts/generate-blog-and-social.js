@@ -8,6 +8,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SITE_BASE_URL = process.env.SITE_BASE_URL || "https://caroflower.com";
 
+// Supabase (opcional)
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -82,8 +83,7 @@ function escapeHtml(s) {
 function formatPrettyDate(dateISO) {
   try {
     const d = new Date(dateISO);
-    // ejemplo: "Mar 02, 2026"
-    return d.toLocaleDateString("en-US", {
+    return d.toLocaleDateString("en-CA", {
       year: "numeric",
       month: "short",
       day: "2-digit",
@@ -99,8 +99,8 @@ async function generateBilingualCopy({ category, imageUrls }) {
 You are the brand copywriter for "Caro Flower Art" (handmade paper flowers).
 
 Generate bilingual content (EN first, then ES):
-- Titles: short, elegant
-- Excerpts: 1 sentence per language
+- Titles: short, elegant (max 60 chars each)
+- Excerpts: 1 sentence each language (max 140 chars)
 - Blog post: 220–320 words per language
 - Tone: warm, human storytelling about process, handmade details, dedication
 - No emojis
@@ -147,12 +147,15 @@ CTA_ES: ...
   };
 
   const getBlock = (key) => {
-    const keys =
-      "TITLE_EN|TITLE_ES|EXCERPT_EN|EXCERPT_ES|BLOG_EN|BLOG_ES|IG_EN|IG_ES|TIKTOK_EN|TIKTOK_ES|HASHTAGS|CTA_EN|CTA_ES";
-    const re = new RegExp(`^${key}:\\s*([\\s\\S]*?)(^(${keys}):\\s)`, "m");
+    // Captura hasta el siguiente KEY:
+    const re = new RegExp(
+      `^${key}:\\s*([\\s\\S]*?)(^TITLE_EN:|^TITLE_ES:|^EXCERPT_EN:|^EXCERPT_ES:|^BLOG_EN:|^BLOG_ES:|^IG_EN:|^IG_ES:|^TIKTOK_EN:|^TIKTOK_ES:|^HASHTAGS:|^CTA_EN:|^CTA_ES:)`,
+      "m"
+    );
     const m = text.match(re);
     if (m) return m[1].trim();
 
+    // fallback
     const re2 = new RegExp(`^${key}:\\s*([\\s\\S]*)$`, "m");
     const m2 = text.match(re2);
     return m2 ? m2[1].trim() : "";
@@ -173,17 +176,19 @@ CTA_ES: ...
     ctaEn: getLine("CTA_EN"),
     ctaEs: getLine("CTA_ES"),
     raw: text,
+    promptUsed: prompt,
   };
 }
 
 // ===== Post HTML (bonito + tu CSS) =====
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
-  const desc = copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
+  const desc =
+    copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
   const canonical = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
   const datePretty = formatPrettyDate(dateISO);
-
   const heroImage = imageUrls[0] || "";
+
   const gallery = imageUrls
     .map(
       (u) => `
@@ -198,7 +203,6 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <title>${escapeHtml(title)} | Caro Flower Art</title>
   <meta name="description" content="${escapeHtml(desc)}" />
   <link rel="canonical" href="${canonical}" />
@@ -257,24 +261,14 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
     <div class="post-grid" style="margin-top:16px">
       <section class="post-card">
         <h2>English</h2>
-        ${escapeHtml(copy.blogEn)
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean)
-          .map((p) => `<p>${p}</p>`)
-          .join("")}
+        ${escapeHtml(copy.blogEn).split("\n").filter(Boolean).map(p => `<p>${p}</p>`).join("")}
         <div class="divider"></div>
         <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEn)}</p>
       </section>
 
       <section class="post-card">
         <h2>Español</h2>
-        ${escapeHtml(copy.blogEs)
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean)
-          .map((p) => `<p>${p}</p>`)
-          .join("")}
+        ${escapeHtml(copy.blogEs).split("\n").filter(Boolean).map(p => `<p>${p}</p>`).join("")}
         <div class="divider"></div>
         <p><strong>CTA:</strong> ${escapeHtml(copy.ctaEs)}</p>
       </section>
@@ -302,7 +296,7 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 </html>`;
 }
 
-// ===== Sitemap: agrega el post para que tu /blog lo “descubra” =====
+// ===== Sitemap add-only (para que /blog detecte nuevos posts) =====
 function updateSitemapAddPost({ postUrl }) {
   const sitemapPath = path.join(process.cwd(), "sitemap.xml");
 
@@ -322,56 +316,54 @@ function updateSitemapAddPost({ postUrl }) {
   writeFile(sitemapPath, xml);
 }
 
-// ===== Supabase insert: 4 captions pending (IG/TikTok x EN/ES) =====
-async function pushSocialToSupabase({ copy, imageUrls, blogUrl, runKey }) {
+// ===== Supabase insert (ajustado a TU tabla social_posts) =====
+async function pushSocialToSupabase({ copy, imageUrls, postUrl, runKey }) {
   if (!supabase) {
-    console.log("Supabase not configured. Skipping DB insert.");
+    console.log("Supabase not configured (SUPABASE_URL / SUPABASE_SERVICE_KEY missing). Skipping DB insert.");
     return;
   }
+
+  // Guardamos hashtags dentro del contenido (porque tu tabla no tiene columna hashtags/lang/title)
+  const igEn = `${copy.igEn}\n\n${copy.hashtags}`.trim();
+  const igEs = `${copy.igEs}\n\n${copy.hashtags}`.trim();
+  const ttEn = `${copy.tiktokEn}\n\n${copy.hashtags}`.trim();
+  const ttEs = `${copy.tiktokEs}\n\n${copy.hashtags}`.trim();
 
   const rows = [
     {
       platform: "instagram",
-      lang: "en",
       status: "pending",
-      title: copy.titleEn,
-      content: copy.igEn,
-      hashtags: copy.hashtags,
+      prompt: copy.promptUsed,
+      content: igEn,
       image_urls: imageUrls,
-      blog_url: blogUrl,
+      post_url: postUrl,
       run_key: runKey,
     },
     {
       platform: "instagram",
-      lang: "es",
       status: "pending",
-      title: copy.titleEs || copy.titleEn,
-      content: copy.igEs,
-      hashtags: copy.hashtags,
+      prompt: copy.promptUsed,
+      content: igEs,
       image_urls: imageUrls,
-      blog_url: blogUrl,
+      post_url: postUrl,
       run_key: runKey,
     },
     {
       platform: "tiktok",
-      lang: "en",
       status: "pending",
-      title: copy.titleEn,
-      content: copy.tiktokEn,
-      hashtags: copy.hashtags,
+      prompt: copy.promptUsed,
+      content: ttEn,
       image_urls: imageUrls,
-      blog_url: blogUrl,
+      post_url: postUrl,
       run_key: runKey,
     },
     {
       platform: "tiktok",
-      lang: "es",
       status: "pending",
-      title: copy.titleEs || copy.titleEn,
-      content: copy.tiktokEs,
-      hashtags: copy.hashtags,
+      prompt: copy.promptUsed,
+      content: ttEs,
       image_urls: imageUrls,
-      blog_url: blogUrl,
+      post_url: postUrl,
       run_key: runKey,
     },
   ];
@@ -397,21 +389,18 @@ async function run() {
   const copy = await generateBilingualCopy({ category, imageUrls });
 
   const dateISO = new Date().toISOString();
+  const runKey = `${dateISO.slice(0, 10)}-${hashSlug(dateISO)}`; // para agrupar la corrida
   const slug = `${category}-${hashSlug((copy.titleEn || category) + "-" + dateISO)}`;
 
   const postHtml = renderPostHtml({ slug, dateISO, category, imageUrls, copy });
-  const postPath = path.join(POSTS_DIR, `${slug}.html`);
-  writeFile(postPath, postHtml);
+  writeFile(path.join(POSTS_DIR, `${slug}.html`), postHtml);
 
   const postUrl = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
   updateSitemapAddPost({ postUrl });
 
-  // run_key para agrupar lo generado en esa corrida
-  const runKey = `${dateISO.slice(0, 10)}-${slug}`;
+  await pushSocialToSupabase({ copy, imageUrls, postUrl, runKey });
 
-  await pushSocialToSupabase({ copy, imageUrls, blogUrl: postUrl, runKey });
-
-  console.log("OK:", { slug, category, images: imageUrls.length, postUrl });
+  console.log("OK:", { slug, category, images: imageUrls.length, postUrl, runKey });
 }
 
 run().catch((e) => {
