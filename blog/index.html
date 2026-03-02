@@ -1,45 +1,115 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blog | Caro Flower Art</title>
-  <meta name="description" content="Behind-the-scenes stories and process of handmade paper flowers. New posts every 3 days." />
-  <link rel="canonical" href="https://caroflower.com/blog/" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Blog | Caro Flower Art</title>
+
+<meta name="description" content="Behind the scenes of handmade paper flowers."/>
+<link rel="canonical" href="https://caroflower.com/blog/"/>
+
+<link rel="stylesheet" href="/site.css?v=20260126b"/>
+
 </head>
-<body style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;max-width:980px;margin:0 auto;padding:20px;line-height:1.6">
-  <div id="siteHeader"></div>
 
-  <main class="page" style="max-width: 980px; margin: 0 auto; padding: 20px;">
-    <h1>Blog</h1>
-    <p>English first · Español después. New post every 3 days.</p>
-    
-    <article style="padding:14px 0;border-bottom:1px solid #eee">
-      <h2 style="margin:0 0 6px 0">
-        <a href="/blog/posts/process-43de934d9c.html">The Art of Creating Handmade Paper Flowers</a>
-      </h2>
-      <div style="opacity:.7;font-size:14px">2026-03-02 · process</div>
-      <img src="https://caroflower.com/images/process/Process-3.webp" style="max-width:100%;border-radius:12px;margin-top:10px" loading="lazy">
-      <p style="margin-top:10px">Discover the intricate process behind Caro Flower Art, where each handmade paper flower tells a story of dedication and craftsmanship.</p>
-    </article>
-  
 
-    <article style="padding:14px 0;border-bottom:1px solid #eee">
-      <h2 style="margin:0 0 6px 0">
-        <a href="/blog/posts/carnations-41cf226562.html">The Timeless Elegance of Handmade Carnations</a>
-      </h2>
-      <div style="opacity:.7;font-size:14px">2026-03-02 · carnations</div>
-      <img src="https://caroflower.com/images/carnations/Flower-carnation-bouquet-2.webp" style="max-width:100%;border-radius:12px;margin-top:10px" loading="lazy">
-      <p style="margin-top:10px">Discover the delicate artistry behind our handmade carnations, where passion and creativity bloom into every unique flower.</p>
-    </article>
-  
-  </main>
+<body>
 
-  <script>
-    fetch("/header.html")
-      .then(r => r.text())
-      .then(html => { document.getElementById("siteHeader").innerHTML = html; })
-      .catch(() => {});
-  </script>
+<div id="site-header"></div>
+
+<section class="hero hero-small">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+
+    <h1>
+      Blog
+      <span class="es">Historias</span>
+    </h1>
+
+    <p>
+      English first · Español después
+      <span class="es">Inglés primero · Español después</span>
+    </p>
+
+  </div>
+</section>
+
+
+
+<section class="gallery">
+
+<h2>
+Latest Stories
+<span class="es">Historias recientes</span>
+</h2>
+
+<div id="blog-grid" class="blog-grid"></div>
+
+</section>
+
+
+
+<script src="/site.js"></script>
+
+<script>
+
+async function loadPosts(){
+
+const res = await fetch("/sitemap.xml")
+const xml = await res.text()
+
+const parser = new DOMParser()
+const data = parser.parseFromString(xml,"text/xml")
+
+const urls = [...data.querySelectorAll("loc")]
+.filter(el=>el.textContent.includes("/blog/posts/"))
+
+const container = document.getElementById("blog-grid")
+
+urls.reverse().forEach(url=>{
+
+const link = url.textContent
+
+const slug = link.split("/").pop().replace(".html","")
+
+const title = slug
+.replaceAll("-"," ")
+.replace(/\b\w/g,l=>l.toUpperCase())
+
+const card = document.createElement("a")
+
+card.href = link
+card.className = "blog-card"
+
+card.innerHTML = `
+
+<div class="blog-card-inner">
+
+<h3>${title}</h3>
+
+<p>
+Read the story behind this handmade flower.
+<span class="es">Lee la historia detrás de esta flor hecha a mano.</span>
+</p>
+
+</div>
+
+`
+
+container.appendChild(card)
+
+})
+
+}
+
+loadPosts()
+
+</script>
+
+
+
 </body>
 </html>
