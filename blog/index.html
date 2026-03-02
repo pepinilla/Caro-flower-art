@@ -5,10 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
   <title>Blog | Caro Flower Art</title>
-  <meta name="description" content="Behind the scenes of handmade paper flowers. English first · Español después."/>
+  <meta name="description" content="Behind the scenes of handmade paper flowers."/>
   <link rel="canonical" href="https://caroflower.com/blog/"/>
 
   <link rel="stylesheet" href="/site.css?v=20260126b"/>
+
+  <style>
+    /* Centrado general */
+    .hero-content, .section-head { text-align: center; }
+    .blog-grid { justify-items: center; }
+    .blog-card { text-align: center; }
+    .blog-card-body { text-align: center; }
+
+    /* Botón Read centrado */
+    .blog-card-cta { display:flex; justify-content:center; gap:10px; }
+
+    /* Si tu CSS ya tiene estos, no pasa nada: esto solo refuerza */
+    .section-subtitle { margin-left:auto; margin-right:auto; max-width: 720px; }
+  </style>
 </head>
 
 <body>
@@ -19,28 +33,18 @@
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
-    <h1>
-      Blog
-      <span class="es">Historias</span>
-    </h1>
+    <h1>Blog</h1>
 
-    <p>
-      English first · Español después
-      <span class="es">Inglés primero · Español después</span>
-    </p>
+    <!-- (Quitado “English first… / Español después”) -->
   </div>
 </section>
 
 <section class="gallery">
   <div class="section-head">
-    <h2>
-      Latest Stories
-      <span class="es">Historias recientes</span>
-    </h2>
+    <h2>Latest Stories</h2>
 
     <p class="section-subtitle">
       Short behind-the-scenes stories, materials, and process.
-      <span class="es">Historias cortas del proceso, materiales y detalles.</span>
     </p>
   </div>
 
@@ -67,13 +71,16 @@
     const container = document.getElementById("blog-grid");
     container.innerHTML = "";
 
-    // limit to last 24 (cambia si quieres)
+    // limit (cambia si quieres)
     const limited = urls.slice(0, 24);
 
-    // Get real title + cover image from each post (fast enough for 24)
     for (const link of limited) {
       try {
-        const html = await (await fetch(link, { cache: "no-store" })).text();
+        // Importante: si el post fue borrado (404), lo saltamos
+        const postRes = await fetch(link, { cache: "no-store" });
+        if (!postRes.ok) continue;
+
+        const html = await postRes.text();
         const doc = parser.parseFromString(html, "text/html");
 
         const title =
@@ -86,8 +93,9 @@
           doc.querySelector("img")?.src ||
           "";
 
-        const date =
-          (doc.querySelector("meta[name='article:published_time']")?.content || "").slice(0,10);
+        // intenta sacar fecha del contenido si existe
+        const dateText =
+          (doc.querySelector(".post-meta")?.textContent || "").trim();
 
         const card = document.createElement("a");
         card.href = link;
@@ -100,7 +108,7 @@
 
           <div class="blog-card-body">
             <div class="blog-card-meta">
-              ${date ? `<span>${date}</span>` : `<span>New</span>`}
+              <span>${dateText || "New"}</span>
               <span class="dot">•</span>
               <span>Caro Flower Art</span>
             </div>
@@ -109,12 +117,10 @@
 
             <p class="blog-card-desc">
               Read the story behind this handmade flower.
-              <span class="es">Lee la historia detrás de esta flor hecha a mano.</span>
             </p>
 
             <div class="blog-card-cta">
               <span class="blog-read">Read</span>
-              <span class="es blog-read">Leer</span>
             </div>
           </div>
         `;
