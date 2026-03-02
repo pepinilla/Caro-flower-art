@@ -18,13 +18,15 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm install openai
+      - run: npm install openai @supabase/supabase-js
 
-      - name: Generate blog posts (EN+ES)
+      - name: Generate blog posts (EN+ES) + Social to Supabase
         run: node scripts/generate-blog-and-social.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SITE_BASE_URL: "https://caroflower.com"
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: Commit & push changes
         run: |
