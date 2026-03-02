@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog | Caro Flower Art</title>
+  <meta name="description" content="Behind-the-scenes stories and process of handmade paper flowers. New posts every 3 days." />
+  <link rel="canonical" href="https://caroflower.com/blog/" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div id="siteHeader"></div>
+
+  <main class="page" style="max-width: 980px; margin: 0 auto; padding: 20px;">
+    <h1>Blog</h1>
+    <p>English first · Español después. New post every 3 days.</p>
+
+    <div id="posts"></div>
+  </main>
+
+  <script>
+    // Load header.html into the page (static site friendly)
+    fetch("/header.html")
+      .then(r => r.text())
+      .then(html => { document.getElementById("siteHeader").innerHTML = html; })
+      .catch(() => { /* ignore */ });
+
+    // This content will be replaced by the automation script
+    document.getElementById("posts").innerHTML = "<p>Coming soon…</p>";
+  </script>
+</body>
+</html>
