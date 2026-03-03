@@ -67,11 +67,16 @@
       box-shadow:0 14px 34px rgba(0,0,0,.10);
     }
 
+    /* ✅ evita “imagenes raras” en cards */
+    .blog-card-media{
+      background:rgba(0,0,0,.03);
+    }
     .blog-card-media img{
       width:100%;
       display:block;
       aspect-ratio: 4 / 3;
       object-fit:cover;
+      object-position:center;
     }
 
     .blog-card-body{
@@ -153,11 +158,16 @@
     async function loadPosts(){
       const container = document.getElementById("blog-grid");
       const empty = document.getElementById("blog-empty");
-
       container.innerHTML = "";
 
-      const res = await fetch("/sitemap.xml", { cache: "no-store" });
-      const xml = await res.text();
+      let xml = "";
+      try{
+        const res = await fetch("/sitemap.xml", { cache: "no-store" });
+        xml = await res.text();
+      }catch(e){
+        empty.style.display = "block";
+        return;
+      }
 
       const parser = new DOMParser();
       const data = parser.parseFromString(xml, "text/xml");
@@ -169,7 +179,7 @@
       // newest first
       urls.reverse();
 
-      // limit (cambia si quieres)
+      // limit
       urls = urls.slice(0, 24);
 
       if (!urls.length){
@@ -177,7 +187,6 @@
         return;
       }
 
-      // fetch each post and extract real title + cover + date
       for (const link of urls){
         try{
           const html = await (await fetch(link, { cache: "no-store" })).text();
@@ -202,7 +211,7 @@
 
           card.innerHTML = `
             <div class="blog-card-media">
-              ${cover ? `<img src="${cover}" alt="${title}" loading="lazy"/>` : ``}
+              ${cover ? `<img src="${cover}" alt="${title}" loading="lazy" decoding="async"/>` : ``}
             </div>
 
             <div class="blog-card-body">
@@ -224,7 +233,7 @@
 
           container.appendChild(card);
         }catch(e){
-          // Si el post no existe o da error, lo saltamos (evita que aparezca "Page not found")
+          // skip broken post (evita “Page not found”)
         }
       }
 
