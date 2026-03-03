@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://caroflower.com/sitemap.xml
+Sitemap: https://caroflower.com/feed.xml
