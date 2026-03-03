@@ -8,12 +8,9 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SITE_BASE_URL = process.env.SITE_BASE_URL || "https://caroflower.com";
 
-// ===== Pinterest =====
+// Pinterest
 const PINTEREST_ACCESS_TOKEN = process.env.PINTEREST_ACCESS_TOKEN || "";
 const PINTEREST_BOARD_ID = process.env.PINTEREST_BOARD_ID || "";
-const PINTEREST_ENV = (process.env.PINTEREST_ENV || "production").toLowerCase(); // "production" | "sandbox"
-const PINTEREST_API_BASE =
-  PINTEREST_ENV === "sandbox" ? "https://api-sandbox.pinterest.com" : "https://api.pinterest.com";
 
 // Supabase
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -25,7 +22,7 @@ const supabase =
     : null;
 
 // Modes
-const DRY_RUN = process.env.DRY_RUN === "true"; // no files, no db, no pinterest
+const DRY_RUN = process.env.DRY_RUN === "true"; // no files, no db
 const AI_MODEL = process.env.AI_MODEL || "gpt-4o-mini";
 
 // Content settings
@@ -39,6 +36,9 @@ const RECENT_IMAGE_AVOID_POSTS = Number(process.env.RECENT_IMAGE_AVOID_POSTS || 
 
 const MAX_FEED_ITEMS = Number(process.env.MAX_FEED_ITEMS || 30);
 
+// Where we store info for the Pinterest workflow
+const LAST_POST_JSON = path.join(process.cwd(), "blog", "last_post.json");
+
 // ===== Helpers =====
 function ensureDirs() {
   if (DRY_RUN) return;
@@ -51,6 +51,7 @@ function listAllImages(dir) {
   const stack = [dir];
   while (stack.length) {
     const current = stack.pop();
+    if (!current || !fs.existsSync(current)) continue;
     const entries = fs.readdirSync(current, { withFileTypes: true });
     for (const e of entries) {
       const full = path.join(current, e.name);
@@ -108,6 +109,10 @@ function isoDateOnly(dateISO) {
 
 function safeJsonLd(obj) {
   return JSON.stringify(obj).replaceAll("</", "<\\/");
+}
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
 }
 
 // ===== Supabase helpers =====
@@ -363,7 +368,7 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 </html>`;
 }
 
-// ===== Sitemap =====
+// ===== Sitemap (with lastmod) =====
 function updateSitemapAddPost({ postUrl, dateISO }) {
   const sitemapPath = path.join(process.cwd(), "sitemap.xml");
 
@@ -382,7 +387,7 @@ function updateSitemapAddPost({ postUrl, dateISO }) {
   writeFile(sitemapPath, xml);
 }
 
-// ===== RSS =====
+// ===== RSS Feed (feed.xml) =====
 async function updateFeedXml() {
   if (!supabase) return;
 
@@ -438,7 +443,9 @@ async function insertBlogTrackingRow(row) {
   if (!error) return { ok: true, error: null };
 
   const msg = String(error.message || "").toLowerCase();
-  if (msg.includes("duplicate") || msg.includes("unique")) return { ok: true, error: null };
+  if (msg.includes("duplicate") || msg.includes("unique")) {
+    return { ok: true, error: null };
+  }
   return { ok: false, error };
 }
 
@@ -476,26 +483,41 @@ async function pushBlogTrackingToSupabase({
   if (!ok) throw new Error(`Supabase insert failed: ${error.message}`);
 }
 
-// ===== Pinterest: create pin =====
-async function createPinterestPin({ title, description, link, imageUrl, boardId }) {
-  if (DRY_RUN) return { ok: true, skipped: true, reason: "DRY_RUN" };
-  if (!PINTEREST_ACCESS_TOKEN) return { ok: false, error: "Missing PINTEREST_ACCESS_TOKEN" };
-  if (!boardId) return { ok: false, error: "Missing PINTEREST_BOARD_ID" };
-  if (!imageUrl) return { ok: false, error: "Missing imageUrl" };
+// ===== Save info for Pinterest workflow =====
+function saveLastPostInfo({ slug, postUrl, title, description, imageUrl }) {
+  const payload = {
+    slug,
+    postUrl,
+    title,
+    description,
+    imageUrl,
+    createdAt: new Date().toISOString(),
+  };
+  writeFile(LAST_POST_JSON, JSON.stringify(payload, null, 2));
+}
 
-  // Pinterest Create Pin API (v5): POST /v5/pins, requires board_id + media_source.image_url 1
+// ===== Pinterest: create pin (used by 2nd workflow) =====
+async function createPinterestPin({ title, description, link, imageUrl }) {
+  if (!PINTEREST_ACCESS_TOKEN || !PINTEREST_BOARD_ID) {
+    console.log("Pinterest not configured. Missing PINTEREST_ACCESS_TOKEN or PINTEREST_BOARD_ID. Skipping.");
+    return { ok: false, skipped: true };
+  }
+
+  // IMPORTANT: imageUrl must be publicly reachable by Pinterest
+  const url = "https://api.pinterest.com/v5/pins";
+
   const body = {
-    board_id: boardId,
-    title: (title || "").slice(0, 100),
-    description: (description || "").slice(0, 500),
-    link: link,
+    board_id: PINTEREST_BOARD_ID,
+    title: title?.slice(0, 100) || "Caro Flower Art",
+    description: description?.slice(0, 490) || "",
+    link,
     media_source: {
       source_type: "image_url",
       url: imageUrl,
     },
   };
 
-  const resp = await fetch(`${PINTEREST_API_BASE}/v5/pins`, {
+  const resp = await fetch(url, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${PINTEREST_ACCESS_TOKEN}`,
@@ -504,12 +526,16 @@ async function createPinterestPin({ title, description, link, imageUrl, boardId 
     body: JSON.stringify(body),
   });
 
-  const json = await resp.json().catch(() => ({}));
+  const text = await resp.text();
   if (!resp.ok) {
-    const msg = json?.message || json?.error || JSON.stringify(json);
-    return { ok: false, status: resp.status, error: msg, response: json };
+    throw new Error(`Pinterest create pin failed (${resp.status}): ${text}`);
   }
-  return { ok: true, data: json };
+
+  try {
+    return { ok: true, data: JSON.parse(text) };
+  } catch {
+    return { ok: true, data: text };
+  }
 }
 
 // ===== Main =====
@@ -562,26 +588,33 @@ async function run() {
 
     await updateFeedXml();
 
-    // ===== Pinterest publish (1 pin per post) =====
-    const pinTitle = copy.titleEn;
-    const pinDesc = `${copy.excerptEn}\n\nRead the full post: ${postUrl}`;
-    const heroImage = imageUrls[0];
-
-    const pinRes = await createPinterestPin({
-      title: pinTitle,
-      description: pinDesc,
-      link: postUrl,
-      imageUrl: heroImage,
-      boardId: PINTEREST_BOARD_ID,
+    // Save info for Pinterest workflow (2nd workflow will use it)
+    saveLastPostInfo({
+      slug,
+      postUrl,
+      title: copy.titleEn,
+      description: copy.excerptEn,
+      imageUrl: imageUrls[0],
     });
 
-    if (!pinRes.ok) {
-      console.error("PINTEREST_FAILED:", pinRes);
-    } else {
-      console.log("PINTEREST_OK:", pinRes.data?.id || pinRes.data);
-    }
-
     console.log("OK:", { slug, category, images: imageUrls.length, postUrl, runKey, dryRun: DRY_RUN });
+
+    // OPTIONAL: If you still want to try creating pin here, uncomment.
+    // BUT it can fail if postUrl/imageUrl aren't live yet.
+    /*
+    if (!DRY_RUN) {
+      console.log("Trying Pinterest pin (may fail if site not deployed yet)...");
+      await sleep(60000); // wait 60s
+      await createPinterestPin({
+        title: copy.titleEn,
+        description: copy.excerptEn,
+        link: postUrl,
+        imageUrl: imageUrls[0],
+      });
+      console.log("Pinterest pin created.");
+    }
+    */
+
   } catch (e) {
     const errText = String(e?.message || e);
 
