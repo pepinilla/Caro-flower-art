@@ -8,10 +8,6 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SITE_BASE_URL = process.env.SITE_BASE_URL || "https://caroflower.com";
 
-// Pinterest
-const PINTEREST_ACCESS_TOKEN = process.env.PINTEREST_ACCESS_TOKEN || "";
-const PINTEREST_BOARD_ID = process.env.PINTEREST_BOARD_ID || "";
-
 // Supabase
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -36,9 +32,6 @@ const RECENT_IMAGE_AVOID_POSTS = Number(process.env.RECENT_IMAGE_AVOID_POSTS || 
 
 const MAX_FEED_ITEMS = Number(process.env.MAX_FEED_ITEMS || 30);
 
-// Where we store info for the Pinterest workflow
-const LAST_POST_JSON = path.join(process.cwd(), "blog", "last_post.json");
-
 // ===== Helpers =====
 function ensureDirs() {
   if (DRY_RUN) return;
@@ -51,7 +44,6 @@ function listAllImages(dir) {
   const stack = [dir];
   while (stack.length) {
     const current = stack.pop();
-    if (!current || !fs.existsSync(current)) continue;
     const entries = fs.readdirSync(current, { withFileTypes: true });
     for (const e of entries) {
       const full = path.join(current, e.name);
@@ -109,10 +101,6 @@ function isoDateOnly(dateISO) {
 
 function safeJsonLd(obj) {
   return JSON.stringify(obj).replaceAll("</", "<\\/");
-}
-
-function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
 }
 
 // ===== Supabase helpers =====
@@ -236,14 +224,14 @@ BLOG_ES: ...
     const { text, promptUsed } = await call();
     const parsed = parseCopyStrict(text);
     return { ...parsed, raw: text, promptUsed };
-  } catch {
+  } catch (e1) {
     const { text, promptUsed } = await call();
     const parsed = parseCopyStrict(text);
     return { ...parsed, raw: text, promptUsed };
   }
 }
 
-// ===== Post HTML =====
+// ===== Post HTML (no EN/ES headers + no stretched images) =====
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
   const desc = copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
@@ -483,61 +471,6 @@ async function pushBlogTrackingToSupabase({
   if (!ok) throw new Error(`Supabase insert failed: ${error.message}`);
 }
 
-// ===== Save info for Pinterest workflow =====
-function saveLastPostInfo({ slug, postUrl, title, description, imageUrl }) {
-  const payload = {
-    slug,
-    postUrl,
-    title,
-    description,
-    imageUrl,
-    createdAt: new Date().toISOString(),
-  };
-  writeFile(LAST_POST_JSON, JSON.stringify(payload, null, 2));
-}
-
-// ===== Pinterest: create pin (used by 2nd workflow) =====
-async function createPinterestPin({ title, description, link, imageUrl }) {
-  if (!PINTEREST_ACCESS_TOKEN || !PINTEREST_BOARD_ID) {
-    console.log("Pinterest not configured. Missing PINTEREST_ACCESS_TOKEN or PINTEREST_BOARD_ID. Skipping.");
-    return { ok: false, skipped: true };
-  }
-
-  // IMPORTANT: imageUrl must be publicly reachable by Pinterest
-  const url = "https://api.pinterest.com/v5/pins";
-
-  const body = {
-    board_id: PINTEREST_BOARD_ID,
-    title: title?.slice(0, 100) || "Caro Flower Art",
-    description: description?.slice(0, 490) || "",
-    link,
-    media_source: {
-      source_type: "image_url",
-      url: imageUrl,
-    },
-  };
-
-  const resp = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${PINTEREST_ACCESS_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const text = await resp.text();
-  if (!resp.ok) {
-    throw new Error(`Pinterest create pin failed (${resp.status}): ${text}`);
-  }
-
-  try {
-    return { ok: true, data: JSON.parse(text) };
-  } catch {
-    return { ok: true, data: text };
-  }
-}
-
 // ===== Main =====
 async function run() {
   ensureDirs();
@@ -579,7 +512,6 @@ async function run() {
 
     updateSitemapAddPost({ postUrl, dateISO });
     ensureRobotsTxt();
-
     await pushBlogTrackingToSupabase({
       slug, category, copy, imageUrls, imageKeys, postUrl, runKey,
       status: "published",
@@ -588,33 +520,7 @@ async function run() {
 
     await updateFeedXml();
 
-    // Save info for Pinterest workflow (2nd workflow will use it)
-    saveLastPostInfo({
-      slug,
-      postUrl,
-      title: copy.titleEn,
-      description: copy.excerptEn,
-      imageUrl: imageUrls[0],
-    });
-
     console.log("OK:", { slug, category, images: imageUrls.length, postUrl, runKey, dryRun: DRY_RUN });
-
-    // OPTIONAL: If you still want to try creating pin here, uncomment.
-    // BUT it can fail if postUrl/imageUrl aren't live yet.
-    /*
-    if (!DRY_RUN) {
-      console.log("Trying Pinterest pin (may fail if site not deployed yet)...");
-      await sleep(60000); // wait 60s
-      await createPinterestPin({
-        title: copy.titleEn,
-        description: copy.excerptEn,
-        link: postUrl,
-        imageUrl: imageUrls[0],
-      });
-      console.log("Pinterest pin created.");
-    }
-    */
-
   } catch (e) {
     const errText = String(e?.message || e);
 
@@ -626,7 +532,7 @@ async function run() {
         status: "failed",
         errorText: errText.slice(0, 900),
       });
-    } catch {}
+    } catch (_) {}
 
     console.error("FAILED:", { slug, category, postUrl, runKey, error: errText });
     process.exit(1);
