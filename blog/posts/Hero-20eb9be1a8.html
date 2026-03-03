@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Handcrafted Elegance in Paper | Caro Flower Art</title>
+  <meta name="description" content="Discover the art of handmade paper flowers, crafted with love and devotion." />
+  <link rel="canonical" href="https://caroflower.com/blog/posts/Hero-20eb9be1a8.html" />
+
+  <meta property="og:title" content="Handcrafted Elegance in Paper | Caro Flower Art" />
+  <meta property="og:description" content="Discover the art of handmade paper flowers, crafted with love and devotion." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://caroflower.com/blog/posts/Hero-20eb9be1a8.html" />
+  <meta property="og:image" content="https://caroflower.com/images/Hero/hero-poster.webp" />
+
+  <link rel="stylesheet" href="/site.css?v=20260126b" />
+
+  <style>
+    .post-wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+    .post-top{display:flex;justify-content:center;margin:10px 0 16px}
+    .post-back{text-decoration:none;font-weight:600}
+    .post-meta{text-align:center;opacity:.75;font-size:14px;margin-top:10px}
+    .post-hero{border-radius:18px;overflow:hidden;margin:14px 0 22px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
+    .post-hero img{width:100%;height:auto;display:block}
+
+    .post-card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.06)}
+    .post-gallery{display:grid;grid-template-columns:1fr;gap:12px;margin:10px 0 6px}
+    @media(min-width:720px){ .post-gallery{grid-template-columns:repeat(3,1fr)} }
+    .post-figure{margin:0}
+    .post-figure img{width:100%;display:block;border-radius:16px;border:1px solid rgba(0,0,0,.06)}
+
+    /* ✅ Justificado bonito */
+    .post-p{margin:0 0 12px;line-height:1.85;text-align:justify;text-justify:inter-word}
+
+    /* separador suave EN -> ES */
+    .divider{height:1px;background:rgba(0,0,0,.10);margin:18px 0}
+  </style>
+</head>
+
+<body>
+  <div id="site-header"></div>
+
+  <main class="post-wrap">
+    <div class="post-top">
+      <a class="post-back" href="/blog/">← Back to Blog</a>
+    </div>
+
+    <h1 style="margin:0;text-align:center">Handcrafted Elegance in Paper</h1>
+    <div class="post-meta">Tue Mar 03 2026</div>
+
+    <div class="post-hero"><img src="https://caroflower.com/images/Hero/hero-poster.webp" alt="Handcrafted Elegance in Paper" loading="lazy"/></div>
+
+    <section class="post-card">
+      <div class="post-gallery">
+      <figure class="post-figure">
+        <img src="https://caroflower.com/images/Hero/hero-poster.webp" alt="Hero handmade paper flowers" loading="lazy"/>
+      </figure></div>
+    </section>
+
+    <section class="post-card" style="margin-top:16px">
+      <p class="post-p">At Caro Flower Art, each paper bloom is a testament to the beauty of craftsmanship. We pour our hearts into every petal, ensuring every flower captures the delicate essence of nature. Our skilled artisans meticulously select the finest materials, transforming them into stunning floral arrangements. The process is one of patience and detail; from sketching the design to the final assembly, each step is imbued with care. These flowers not only adorn your space but tell a story of dedication and love for craft. Experience the joy of bringing nature indoors with our handcrafted creations.</p>
+      <div class="divider"></div>
+      <p class="post-p">En Caro Flower Art, cada flor de papel es un testimonio de la belleza de la artesanía. Dedicamos nuestro corazón a cada pétalo, asegurándonos de que cada flor capture la esencia delicada de la naturaleza. Nuestros hábiles artesanos seleccionan meticulosamente los mejores materiales, transformándolos en impresionantes arreglos florales. El proceso es uno de paciencia y detalle; desde el boceto del diseño hasta el ensamblaje final, cada paso está impregnado de cuidado. Estas flores no solo embellecen tu espacio, sino que cuentan una historia de dedicación y amor por el oficio. Experimenta la alegría de llevar la naturaleza al interior con nuestras creaciones artesanales.</p>
+    </section>
+  </main>
+
+  <script>
+    fetch("/header.html")
+      .then(r => r.text())
+      .then(html => { document.getElementById("site-header").innerHTML = html; })
+      .catch(() => {});
+  </script>
+</body>
+</html>
