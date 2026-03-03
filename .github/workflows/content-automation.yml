@@ -24,13 +24,17 @@ jobs:
       - name: Install dependencies
         run: npm install openai @supabase/supabase-js
 
-      - name: Generate blog post
+      - name: Generate blog post + Pinterest pin
         run: node scripts/generate-blog-and-social.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SITE_BASE_URL: "https://caroflower.com"
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+          PINTEREST_ACCESS_TOKEN: ${{ secrets.PINTEREST_ACCESS_TOKEN }}
+          PINTEREST_BOARD_ID: ${{ secrets.PINTEREST_BOARD_ID }}
+          PINTEREST_ENV: "production"  # o "sandbox"
 
       - name: Commit & push changes
         run: |
