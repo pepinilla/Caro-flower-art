@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,60 +9,109 @@
   <meta name="description" content="{{DESCRIPTION}}" />
   <link rel="canonical" href="{{CANONICAL}}" />
 
-  <meta property="og:title" content="{{TITLE}}" />
+  <meta property="og:title" content="{{TITLE}} | Caro Flower Art" />
   <meta property="og:description" content="{{DESCRIPTION}}" />
   <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{CANONICAL}}" />
   <meta property="og:image" content="{{OG_IMAGE}}" />
+  <meta name="article:published_time" content="{{DATE_ISO}}" />
 
   <link rel="stylesheet" href="/site.css?v=20260126b" />
+
+  <style>
+    .post-wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+    .post-top{display:flex;justify-content:center;margin:10px 0 16px}
+    .post-back{text-decoration:none;font-weight:600}
+    .post-meta{text-align:center;opacity:.75;font-size:14px;margin-top:10px}
+
+    /* ✅ HERO: evita estirar */
+    .post-hero{
+      border-radius:18px;
+      overflow:hidden;
+      margin:14px 0 22px;
+      box-shadow:0 10px 25px rgba(0,0,0,.08);
+      background:rgba(0,0,0,.03);
+    }
+    .post-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      aspect-ratio:16 / 9;
+      object-fit:cover;
+      object-position:center;
+    }
+
+    .post-card{
+      background:#fff;
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 25px rgba(0,0,0,.06);
+      border:1px solid rgba(0,0,0,.06)
+    }
+
+    .post-gallery{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+      margin:10px 0 6px
+    }
+    @media(min-width:720px){
+      .post-gallery{grid-template-columns:repeat(3,1fr)}
+    }
+
+    .post-figure{margin:0}
+    /* ✅ GALERÍA: evita estirar */
+    .post-figure img{
+      width:100%;
+      display:block;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.06);
+      aspect-ratio:4 / 3;
+      object-fit:cover;
+      object-position:center;
+      background:rgba(0,0,0,.03);
+    }
+
+    .post-p{margin:0 0 12px;line-height:1.85;text-align:justify;text-justify:inter-word}
+    .divider{height:1px;background:rgba(0,0,0,.10);margin:18px 0}
+  </style>
 </head>
 
 <body>
+  <div id="site-header"></div>
 
-<div id="site-header"></div>
+  <main class="post-wrap">
+    <div class="post-top">
+      <a class="post-back" href="/blog/">← Back to Blog</a>
+    </div>
 
-<section class="hero hero-small">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1>{{TITLE}}</h1>
-    <p class="post-meta">
-      {{DATE}} · {{TAG}}
-    </p>
-  </div>
-</section>
+    <h1 style="margin:0;text-align:center">{{TITLE}}</h1>
+    <div class="post-meta">{{DATE_HUMAN}}</div>
 
-<main class="post-wrap">
-  {{#if COVER_IMAGE}}
-  <img class="post-cover" src="{{COVER_IMAGE}}" alt="{{TITLE}}" loading="lazy"/>
-  {{/if}}
+    {{#if HERO_IMAGE}}
+    <div class="post-hero">
+      <img src="{{HERO_IMAGE}}" alt="{{TITLE}}" loading="lazy" decoding="async" />
+    </div>
+    {{/if}}
 
-  <section class="post-section">
-    <h2>English</h2>
-    <div class="post-body">
+    <section class="post-card">
+      <div class="post-gallery">
+        {{GALLERY_HTML}}
+      </div>
+    </section>
+
+    <section class="post-card" style="margin-top:16px">
       {{EN_HTML}}
-    </div>
-  </section>
-
-  <section class="post-divider"></section>
-
-  <section class="post-section">
-    <h2>Español</h2>
-    <div class="post-body">
+      <div class="divider"></div>
       {{ES_HTML}}
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <div class="post-cta">
-    <a class="btn-primary" href="/index.html#contact">
-      Request a quote <span class="es">Pedir cotización</span>
-    </a>
-    <a class="btn-secondary" href="/blog/">
-      Back to Blog <span class="es">Volver al Blog</span>
-    </a>
-  </div>
-</main>
-
-<script src="/site.js?v=20260126b"></script>
-
+  <script>
+    fetch("/header.html")
+      .then(r => r.text())
+      .then(html => { document.getElementById("site-header").innerHTML = html; })
+      .catch(() => {});
+  </script>
 </body>
 </html>
