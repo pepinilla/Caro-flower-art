@@ -8,7 +8,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SITE_BASE_URL = process.env.SITE_BASE_URL || "https://caroflower.com";
 
-// Supabase (opcional)
+// Supabase
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -66,7 +66,6 @@ function toPublicUrl(filePath) {
 }
 
 function toImageKey(filePath) {
-  // stable key for tracking: roses/a.webp
   return path.relative(IMAGES_ROOT, filePath).replaceAll("\\", "/");
 }
 
@@ -101,7 +100,6 @@ function isoDateOnly(dateISO) {
 }
 
 function safeJsonLd(obj) {
-  // JSON-LD should be raw JSON, not HTML-escaped
   return JSON.stringify(obj).replaceAll("</", "<\\/");
 }
 
@@ -148,7 +146,7 @@ async function getLatestPostsForFeed(limit = 30) {
   return data || [];
 }
 
-// ===== OpenAI generation (with 1 retry) =====
+// ===== OpenAI generation (strict + retry) =====
 function parseCopyStrict(text) {
   const getLine = (key) => {
     const m = text.match(new RegExp(`^${key}:\\s*(.*)$`, "m"));
@@ -177,7 +175,6 @@ function parseCopyStrict(text) {
     blogEs: getBlock("BLOG_ES"),
   };
 
-  // minimal validation
   if (!copy.titleEn || !copy.blogEn || !copy.blogEs) {
     throw new Error("AI output missing required fields (TITLE_EN/BLOG_EN/BLOG_ES).");
   }
@@ -223,24 +220,21 @@ BLOG_ES: ...
     return { text, promptUsed: prompt };
   };
 
-  // 1st try
   try {
     const { text, promptUsed } = await call();
     const parsed = parseCopyStrict(text);
     return { ...parsed, raw: text, promptUsed };
   } catch (e1) {
-    // retry once
     const { text, promptUsed } = await call();
     const parsed = parseCopyStrict(text);
     return { ...parsed, raw: text, promptUsed };
   }
 }
 
-// ===== Post HTML (mega pro: JSON-LD + perf) =====
+// ===== Post HTML (no EN/ES headers + no stretched images) =====
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
-  const desc =
-    copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
+  const desc = copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
   const canonical = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
 
   const heroImage = imageUrls[0] || "";
@@ -260,16 +254,13 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 
   const gallery = imageUrls
     .map(
-      (u, idx) => `
+      (u) => `
       <figure class="post-figure">
         <img
           src="${u}"
           alt="${escapeHtml(category)} handmade paper flowers"
           loading="lazy"
           decoding="async"
-          width="1200"
-          height="1200"
-          ${idx === 0 ? 'fetchpriority="high"' : ""}
         />
       </figure>`
     )
@@ -303,6 +294,8 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   <meta property="og:url" content="${canonical}" />
   ${heroImage ? `<meta property="og:image" content="${heroImage}" />` : ""}
 
+  <meta name="article:published_time" content="${dateISO}" />
+
   <script type="application/ld+json">${safeJsonLd(jsonLd)}</script>
 
   <link rel="stylesheet" href="/site.css?v=20260126b" />
@@ -312,14 +305,15 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
     .post-top{display:flex;justify-content:center;margin:10px 0 16px}
     .post-back{text-decoration:none;font-weight:600}
     .post-meta{text-align:center;opacity:.75;font-size:14px;margin-top:10px}
-    .post-hero{border-radius:18px;overflow:hidden;margin:14px 0 22px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
-    .post-hero img{width:100%;height:auto;display:block}
+
+    .post-hero{border-radius:18px;overflow:hidden;margin:14px 0 22px;box-shadow:0 10px 25px rgba(0,0,0,.08);background:rgba(0,0,0,.03)}
+    .post-hero img{width:100%;height:auto;display:block;aspect-ratio:16/9;object-fit:cover;object-position:center}
 
     .post-card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.06)}
     .post-gallery{display:grid;grid-template-columns:1fr;gap:12px;margin:10px 0 6px}
     @media(min-width:720px){ .post-gallery{grid-template-columns:repeat(3,1fr)} }
     .post-figure{margin:0}
-    .post-figure img{width:100%;display:block;border-radius:16px;border:1px solid rgba(0,0,0,.06)}
+    .post-figure img{width:100%;display:block;border-radius:16px;border:1px solid rgba(0,0,0,.06);aspect-ratio:4/3;object-fit:cover;object-position:center;background:rgba(0,0,0,.03)}
 
     .post-p{margin:0 0 12px;line-height:1.85;text-align:justify;text-justify:inter-word}
     .divider{height:1px;background:rgba(0,0,0,.10);margin:18px 0}
@@ -338,7 +332,7 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
     <div class="post-meta">${escapeHtml(new Date(dateISO).toDateString())}</div>
 
     ${heroImage ? `<div class="post-hero">
-      <img src="${heroImage}" alt="${escapeHtml(copy.titleEn)}" loading="lazy" decoding="async" width="1600" height="900" fetchpriority="high"/>
+      <img src="${heroImage}" alt="${escapeHtml(copy.titleEn)}" loading="lazy" decoding="async"/>
     </div>` : ""}
 
     <section class="post-card">
@@ -362,7 +356,7 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 </html>`;
 }
 
-// ===== Sitemap pro (with lastmod) =====
+// ===== Sitemap (with lastmod) =====
 function updateSitemapAddPost({ postUrl, dateISO }) {
   const sitemapPath = path.join(process.cwd(), "sitemap.xml");
 
@@ -383,7 +377,6 @@ function updateSitemapAddPost({ postUrl, dateISO }) {
 
 // ===== RSS Feed (feed.xml) =====
 async function updateFeedXml() {
-  // If no Supabase, skip (still okay)
   if (!supabase) return;
 
   const posts = await getLatestPostsForFeed(MAX_FEED_ITEMS);
@@ -418,20 +411,18 @@ async function updateFeedXml() {
   writeFile(path.join(process.cwd(), "feed.xml"), xml);
 }
 
-// ===== robots.txt (ensure sitemap + feed) =====
+// ===== robots.txt =====
 function ensureRobotsTxt() {
-  const robotsPath = path.join(process.cwd(), "robots.txt");
   const target = `User-agent: *
 Allow: /
 
 Sitemap: ${SITE_BASE_URL}/sitemap.xml
 Sitemap: ${SITE_BASE_URL}/feed.xml
 `;
-  if (DRY_RUN) return;
-  writeFile(robotsPath, target);
+  writeFile(path.join(process.cwd(), "robots.txt"), target);
 }
 
-// ===== Supabase BLOG tracking (published/failed) =====
+// ===== Supabase BLOG tracking =====
 async function insertBlogTrackingRow(row) {
   if (!supabase) return { ok: false, error: null };
   if (DRY_RUN) return { ok: true, error: null };
@@ -447,15 +438,7 @@ async function insertBlogTrackingRow(row) {
 }
 
 async function pushBlogTrackingToSupabase({
-  slug,
-  category,
-  copy,
-  imageUrls,
-  imageKeys,
-  postUrl,
-  runKey,
-  status,
-  errorText,
+  slug, category, copy, imageUrls, imageKeys, postUrl, runKey, status, errorText,
 }) {
   if (!supabase) {
     console.log("Supabase not configured. Skipping tracking.");
@@ -497,21 +480,18 @@ async function run() {
 
   const categories = [...new Set(allImages.map(categoryFromPath))];
 
-  // ✅ Rotate categories (avoid recent)
+  // Rotate categories
   const recentCats = await getRecentCategories(RECENT_CATEGORY_AVOID);
   const catPool = categories.filter((c) => !recentCats.includes(c));
   const chosenCategoryPool = catPool.length ? catPool : categories;
   const category = chosenCategoryPool[Math.floor(Math.random() * chosenCategoryPool.length)];
 
-  // ✅ Avoid repeating images (avoid recent keys)
+  // Avoid repeating images
   const recentKeys = await getRecentImageKeys(RECENT_IMAGE_AVOID_POSTS);
   const categoryImages = allImages.filter((f) => categoryFromPath(f) === category);
 
   let candidates = shuffle(categoryImages).filter((f) => !recentKeys.has(toImageKey(f)));
-  if (candidates.length < IMAGES_PER_POST) {
-    // fallback if too strict
-    candidates = shuffle(categoryImages);
-  }
+  if (candidates.length < IMAGES_PER_POST) candidates = shuffle(categoryImages);
 
   const pickedFiles = candidates.slice(0, Math.min(IMAGES_PER_POST, candidates.length));
   const imageUrls = pickedFiles.map(toPublicUrl);
@@ -520,11 +500,10 @@ async function run() {
   const dateISO = new Date().toISOString();
   const runKey = `${isoDateOnly(dateISO)}-${hash10(dateISO)}`;
   const slug = `${category}-${hash10((category + "-" + dateISO + "-" + imageKeys.join(",")))}`;
-
   const postUrl = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
 
-  // Generate copy + write files (failsafe)
   let copy = null;
+
   try {
     copy = await generateBilingualCopy({ category, imageUrls });
 
@@ -533,41 +512,27 @@ async function run() {
 
     updateSitemapAddPost({ postUrl, dateISO });
     ensureRobotsTxt();
-
     await pushBlogTrackingToSupabase({
-      slug,
-      category,
-      copy,
-      imageUrls,
-      imageKeys,
-      postUrl,
-      runKey,
+      slug, category, copy, imageUrls, imageKeys, postUrl, runKey,
       status: "published",
       errorText: null,
     });
 
-    // Update RSS after insert (so feed includes the new post)
     await updateFeedXml();
 
     console.log("OK:", { slug, category, images: imageUrls.length, postUrl, runKey, dryRun: DRY_RUN });
   } catch (e) {
-    // record failure in Supabase (if possible)
     const errText = String(e?.message || e);
+
     try {
       await pushBlogTrackingToSupabase({
-        slug,
-        category,
+        slug, category,
         copy: copy || { titleEn: null, titleEs: null, excerptEn: null, excerptEs: null },
-        imageUrls,
-        imageKeys,
-        postUrl,
-        runKey,
+        imageUrls, imageKeys, postUrl, runKey,
         status: "failed",
         errorText: errText.slice(0, 900),
       });
-    } catch (_) {
-      // ignore secondary failure
-    }
+    } catch (_) {}
 
     console.error("FAILED:", { slug, category, postUrl, runKey, error: errText });
     process.exit(1);
