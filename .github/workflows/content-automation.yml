@@ -2,7 +2,7 @@ name: CaroFlower Content Automation
 
 on:
   schedule:
-    - cron: "0 3 */3 * *"
+    - cron: "0 3 */2 * *"   # cada 2 días
   workflow_dispatch:
 
 permissions:
@@ -11,16 +11,20 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - run: npm install openai @supabase/supabase-js
+      - name: Install dependencies
+        run: npm install openai @supabase/supabase-js
 
-      - name: Generate blog posts (EN+ES) + Social to Supabase
+      - name: Generate blog post
         run: node scripts/generate-blog-and-social.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -32,6 +36,9 @@ jobs:
         run: |
           git config user.name "caroflower-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add blog sitemap.xml robots.txt header.html
-          git diff --staged --quiet || git commit -m "Auto: new blog post"
+
+          git add blog/posts sitemap.xml robots.txt feed.xml
+
+          git diff --staged --quiet || git commit -m "Auto blog post"
+
           git push
