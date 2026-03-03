@@ -80,19 +80,6 @@ function escapeHtml(s) {
     .replaceAll(">", "&gt;");
 }
 
-function formatPrettyDate(dateISO) {
-  try {
-    const d = new Date(dateISO);
-    return d.toLocaleDateString("en-CA", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
-  } catch {
-    return dateISO.slice(0, 10);
-  }
-}
-
 // ===== OpenAI generation =====
 async function generateBilingualCopy({ category, imageUrls }) {
   const prompt = `
@@ -104,10 +91,7 @@ Generate bilingual content (EN first, then ES):
 - Blog post: 220–320 words per language
 - Tone: warm, human storytelling about process, handmade details, dedication
 - No emojis
-- Add a short CTA in each language (1 line)
-- Create IG copy: 120–180 characters per language
-- Create TikTok copy: 1–2 lines per language
-- Provide 6 hashtags (neutral/bilingual is fine)
+- Provide clean paragraphs (use line breaks between paragraphs)
 
 Category: ${category}
 Image URLs:
@@ -121,13 +105,6 @@ EXCERPT_EN: ...
 EXCERPT_ES: ...
 BLOG_EN: ...
 BLOG_ES: ...
-IG_EN: ...
-IG_ES: ...
-TIKTOK_EN: ...
-TIKTOK_ES: ...
-HASHTAGS: ...
-CTA_EN: ...
-CTA_ES: ...
 `.trim();
 
   const resp = await openai.chat.completions.create({
@@ -147,15 +124,13 @@ CTA_ES: ...
   };
 
   const getBlock = (key) => {
-    // Captura hasta el siguiente KEY:
     const re = new RegExp(
-      `^${key}:\\s*([\\s\\S]*?)(^TITLE_EN:|^TITLE_ES:|^EXCERPT_EN:|^EXCERPT_ES:|^BLOG_EN:|^BLOG_ES:|^IG_EN:|^IG_ES:|^TIKTOK_EN:|^TIKTOK_ES:|^HASHTAGS:|^CTA_EN:|^CTA_ES:)`,
+      `^${key}:\\s*([\\s\\S]*?)(^TITLE_EN:|^TITLE_ES:|^EXCERPT_EN:|^EXCERPT_ES:|^BLOG_EN:|^BLOG_ES:)`,
       "m"
     );
     const m = text.match(re);
     if (m) return m[1].trim();
 
-    // fallback
     const re2 = new RegExp(`^${key}:\\s*([\\s\\S]*)$`, "m");
     const m2 = text.match(re2);
     return m2 ? m2[1].trim() : "";
@@ -168,20 +143,12 @@ CTA_ES: ...
     excerptEs: getLine("EXCERPT_ES"),
     blogEn: getBlock("BLOG_EN"),
     blogEs: getBlock("BLOG_ES"),
-    igEn: getLine("IG_EN"),
-    igEs: getLine("IG_ES"),
-    tiktokEn: getLine("TIKTOK_EN"),
-    tiktokEs: getLine("TIKTOK_ES"),
-    hashtags: getLine("HASHTAGS"),
-    ctaEn: getLine("CTA_EN"),
-    ctaEs: getLine("CTA_ES"),
     raw: text,
     promptUsed: prompt,
   };
 }
 
-// ===== Post HTML (bonito + tu CSS) =====
-
+// ===== Post HTML (tu versión bonita, sin headers EN/ES) =====
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
   const desc =
@@ -242,10 +209,7 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
     .post-figure{margin:0}
     .post-figure img{width:100%;display:block;border-radius:16px;border:1px solid rgba(0,0,0,.06)}
 
-    /* ✅ Justificado bonito */
     .post-p{margin:0 0 12px;line-height:1.85;text-align:justify;text-justify:inter-word}
-
-    /* separador suave EN -> ES */
     .divider{height:1px;background:rgba(0,0,0,.10);margin:18px 0}
   </style>
 </head>
@@ -283,7 +247,8 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 </body>
 </html>`;
 }
-// ===== Sitemap add-only (para que /blog detecte nuevos posts) =====
+
+// ===== Sitemap add-only =====
 function updateSitemapAddPost({ postUrl }) {
   const sitemapPath = path.join(process.cwd(), "sitemap.xml");
 
@@ -303,60 +268,55 @@ function updateSitemapAddPost({ postUrl }) {
   writeFile(sitemapPath, xml);
 }
 
-// ===== Supabase insert (ajustado a TU tabla social_posts) =====
-async function pushSocialToSupabase({ copy, imageUrls, postUrl, runKey }) {
+// ===== Supabase BLOG tracking =====
+async function pushBlogTrackingToSupabase({ slug, category, copy, imageUrls, postUrl, runKey }) {
   if (!supabase) {
-    console.log("Supabase not configured (SUPABASE_URL / SUPABASE_SERVICE_KEY missing). Skipping DB insert.");
+    console.log("Supabase not configured. Skipping blog tracking insert.");
     return;
   }
 
-  // Guardamos hashtags dentro del contenido (porque tu tabla no tiene columna hashtags/lang/title)
-  const igEn = `${copy.igEn}\n\n${copy.hashtags}`.trim();
-  const igEs = `${copy.igEs}\n\n${copy.hashtags}`.trim();
-  const ttEn = `${copy.tiktokEn}\n\n${copy.hashtags}`.trim();
-  const ttEs = `${copy.tiktokEs}\n\n${copy.hashtags}`.trim();
+  const contentHash = crypto
+    .createHash("sha1")
+    .update([slug, copy.titleEn, copy.titleEs, ...imageUrls].join("|"))
+    .digest("hex");
 
-  const rows = [
-    {
-      platform: "instagram",
-      status: "pending",
-      prompt: copy.promptUsed,
-      content: igEn,
-      image_urls: imageUrls,
-      post_url: postUrl,
-      run_key: runKey,
-    },
-    {
-      platform: "instagram",
-      status: "pending",
-      prompt: copy.promptUsed,
-      content: igEs,
-      image_urls: imageUrls,
-      post_url: postUrl,
-      run_key: runKey,
-    },
-    {
-      platform: "tiktok",
-      status: "pending",
-      prompt: copy.promptUsed,
-      content: ttEn,
-      image_urls: imageUrls,
-      post_url: postUrl,
-      run_key: runKey,
-    },
-    {
-      platform: "tiktok",
-      status: "pending",
-      prompt: copy.promptUsed,
-      content: ttEs,
-      image_urls: imageUrls,
-      post_url: postUrl,
-      run_key: runKey,
-    },
-  ];
+  const row = {
+    status: "published",
+    slug,
+    category,
+    title_en: copy.titleEn || null,
+    title_es: copy.titleEs || null,
+    excerpt_en: copy.excerptEn || null,
+    excerpt_es: copy.excerptEs || null,
+    post_url: postUrl,
+    image_urls: imageUrls,
+    content_hash: contentHash,
+    run_key: runKey || null,
+  };
 
-  const { error } = await supabase.from("social_posts").insert(rows);
-  if (error) throw new Error(`Supabase insert failed: ${error.message}`);
+  const { error } = await supabase.from("blog_posts").insert(row);
+
+  if (error) {
+    const msg = String(error.message || "").toLowerCase();
+    if (msg.includes("duplicate") || msg.includes("unique")) {
+      console.log("Already tracked in Supabase (duplicate).");
+      return;
+    }
+    throw new Error(`Supabase blog_posts insert failed: ${error.message}`);
+  }
+}
+
+// ===== Optional: avoid repeating recent categories =====
+async function getRecentCategories(limit = 10) {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("category")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) return [];
+  return (data || []).map((r) => r.category).filter(Boolean);
 }
 
 // ===== Main =====
@@ -367,7 +327,12 @@ async function run() {
   if (!allImages.length) throw new Error("No images found in /images");
 
   const categories = [...new Set(allImages.map(categoryFromPath))];
-  const category = categories[Math.floor(Math.random() * categories.length)];
+
+  // ✅ Rotate categories (tries to avoid last 10)
+  const recent = await getRecentCategories(10);
+  const pool = categories.filter((c) => !recent.includes(c));
+  const categoryPool = pool.length ? pool : categories;
+  const category = categoryPool[Math.floor(Math.random() * categoryPool.length)];
 
   const categoryImages = allImages.filter((f) => categoryFromPath(f) === category);
   const pickedFiles = shuffle(categoryImages).slice(0, Math.min(IMAGES_PER_POST, categoryImages.length));
@@ -376,7 +341,7 @@ async function run() {
   const copy = await generateBilingualCopy({ category, imageUrls });
 
   const dateISO = new Date().toISOString();
-  const runKey = `${dateISO.slice(0, 10)}-${hashSlug(dateISO)}`; // para agrupar la corrida
+  const runKey = `${dateISO.slice(0, 10)}-${hashSlug(dateISO)}`;
   const slug = `${category}-${hashSlug((copy.titleEn || category) + "-" + dateISO)}`;
 
   const postHtml = renderPostHtml({ slug, dateISO, category, imageUrls, copy });
@@ -385,7 +350,7 @@ async function run() {
   const postUrl = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
   updateSitemapAddPost({ postUrl });
 
-  await pushSocialToSupabase({ copy, imageUrls, postUrl, runKey });
+  await pushBlogTrackingToSupabase({ slug, category, copy, imageUrls, postUrl, runKey });
 
   console.log("OK:", { slug, category, images: imageUrls.length, postUrl, runKey });
 }
