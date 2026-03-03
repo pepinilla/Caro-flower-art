@@ -4,10 +4,16 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
-// ===== Config =====
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SITE_BASE_URL = process.env.SITE_BASE_URL || "https://caroflower.com";
+
+// ===== Pinterest =====
+const PINTEREST_ACCESS_TOKEN = process.env.PINTEREST_ACCESS_TOKEN || "";
+const PINTEREST_BOARD_ID = process.env.PINTEREST_BOARD_ID || "";
+const PINTEREST_ENV = (process.env.PINTEREST_ENV || "production").toLowerCase(); // "production" | "sandbox"
+const PINTEREST_API_BASE =
+  PINTEREST_ENV === "sandbox" ? "https://api-sandbox.pinterest.com" : "https://api.pinterest.com";
 
 // Supabase
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -20,13 +26,7 @@ const supabase =
 
 // Modes
 const DRY_RUN = process.env.DRY_RUN === "true"; // no files, no db, no pinterest
-const PINTEREST_DRY_RUN = process.env.PINTEREST_DRY_RUN === "true"; // skip pinterest only
 const AI_MODEL = process.env.AI_MODEL || "gpt-4o-mini";
-
-// Pinterest
-const PINTEREST_ACCESS_TOKEN = process.env.PINTEREST_ACCESS_TOKEN || "";
-const PINTEREST_BOARD_ID = process.env.PINTEREST_BOARD_ID || "";
-const PINTEREST_API_BASE = process.env.PINTEREST_API_BASE || "https://api.pinterest.com/v5"; // or https://api-sandbox.pinterest.com/v5
 
 // Content settings
 const IMAGES_ROOT = path.join(process.cwd(), "images");
@@ -51,7 +51,6 @@ function listAllImages(dir) {
   const stack = [dir];
   while (stack.length) {
     const current = stack.pop();
-    if (!current) break;
     const entries = fs.readdirSync(current, { withFileTypes: true });
     for (const e of entries) {
       const full = path.join(current, e.name);
@@ -109,18 +108,6 @@ function isoDateOnly(dateISO) {
 
 function safeJsonLd(obj) {
   return JSON.stringify(obj).replaceAll("</", "<\\/");
-}
-
-function clamp(str, max) {
-  const s = String(str || "");
-  return s.length <= max ? s : s.slice(0, max - 1).trimEnd() + "…";
-}
-
-function safePinterestDescription({ category, excerptEn, postUrl }) {
-  // Pinterest descriptions can be long, but keep it clean.
-  const base = excerptEn ? excerptEn.trim() : `Handmade paper flowers from Caro Flower Art.`;
-  const extra = `\n\nSee the full post: ${postUrl}\n\n#handmade #paperflowers #floralart #DIY #crafts #CaroFlowerArt`;
-  return clamp(`${base}${extra}`, 490);
 }
 
 // ===== Supabase helpers =====
@@ -376,7 +363,7 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
 </html>`;
 }
 
-// ===== Sitemap (with lastmod) =====
+// ===== Sitemap =====
 function updateSitemapAddPost({ postUrl, dateISO }) {
   const sitemapPath = path.join(process.cwd(), "sitemap.xml");
 
@@ -395,7 +382,7 @@ function updateSitemapAddPost({ postUrl, dateISO }) {
   writeFile(sitemapPath, xml);
 }
 
-// ===== RSS Feed (feed.xml) =====
+// ===== RSS =====
 async function updateFeedXml() {
   if (!supabase) return;
 
@@ -451,9 +438,7 @@ async function insertBlogTrackingRow(row) {
   if (!error) return { ok: true, error: null };
 
   const msg = String(error.message || "").toLowerCase();
-  if (msg.includes("duplicate") || msg.includes("unique")) {
-    return { ok: true, error: null };
-  }
+  if (msg.includes("duplicate") || msg.includes("unique")) return { ok: true, error: null };
   return { ok: false, error };
 }
 
@@ -491,49 +476,40 @@ async function pushBlogTrackingToSupabase({
   if (!ok) throw new Error(`Supabase insert failed: ${error.message}`);
 }
 
-// ===== Pinterest: create a Pin =====
-async function createPinterestPin({ title, description, boardId, imageUrl, linkUrl }) {
-  if (DRY_RUN || PINTEREST_DRY_RUN) {
-    console.log("PINTEREST SKIP (dry run):", { boardId, title, imageUrl, linkUrl });
-    return { skipped: true };
-  }
+// ===== Pinterest: create pin =====
+async function createPinterestPin({ title, description, link, imageUrl, boardId }) {
+  if (DRY_RUN) return { ok: true, skipped: true, reason: "DRY_RUN" };
+  if (!PINTEREST_ACCESS_TOKEN) return { ok: false, error: "Missing PINTEREST_ACCESS_TOKEN" };
+  if (!boardId) return { ok: false, error: "Missing PINTEREST_BOARD_ID" };
+  if (!imageUrl) return { ok: false, error: "Missing imageUrl" };
 
-  if (!PINTEREST_ACCESS_TOKEN) throw new Error("Missing PINTEREST_ACCESS_TOKEN");
-  if (!boardId) throw new Error("Missing PINTEREST_BOARD_ID/boardId");
-  if (!imageUrl) throw new Error("Missing imageUrl");
-
-  const url = `${PINTEREST_API_BASE}/pins`;
-
-  const payload = {
-    board_id: String(boardId),
-    title: clamp(title, 100),
-    description: clamp(description, 500),
-    link: linkUrl,
+  // Pinterest Create Pin API (v5): POST /v5/pins, requires board_id + media_source.image_url 1
+  const body = {
+    board_id: boardId,
+    title: (title || "").slice(0, 100),
+    description: (description || "").slice(0, 500),
+    link: link,
     media_source: {
       source_type: "image_url",
       url: imageUrl,
     },
   };
 
-  const res = await fetch(url, {
+  const resp = await fetch(`${PINTEREST_API_BASE}/v5/pins`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${PINTEREST_ACCESS_TOKEN}`,
       "Content-Type": "application/json",
-      Accept: "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   });
 
-  const text = await res.text();
-  let json = null;
-  try { json = JSON.parse(text); } catch {}
-
-  if (!res.ok) {
-    throw new Error(`Pinterest create pin failed (${res.status}): ${text}`);
+  const json = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    const msg = json?.message || json?.error || JSON.stringify(json);
+    return { ok: false, status: resp.status, error: msg, response: json };
   }
-
-  return json || { ok: true };
+  return { ok: true, data: json };
 }
 
 // ===== Main =====
@@ -577,6 +553,7 @@ async function run() {
 
     updateSitemapAddPost({ postUrl, dateISO });
     ensureRobotsTxt();
+
     await pushBlogTrackingToSupabase({
       slug, category, copy, imageUrls, imageKeys, postUrl, runKey,
       status: "published",
@@ -585,35 +562,26 @@ async function run() {
 
     await updateFeedXml();
 
-    // ===== Pinterest publish =====
-    const heroImage = imageUrls[0];
+    // ===== Pinterest publish (1 pin per post) =====
     const pinTitle = copy.titleEn;
-    const pinDesc = safePinterestDescription({
-      category,
-      excerptEn: copy.excerptEn,
-      postUrl,
-    });
+    const pinDesc = `${copy.excerptEn}\n\nRead the full post: ${postUrl}`;
+    const heroImage = imageUrls[0];
 
-    // Prefer the env var board id, but allow overriding
-    const boardId = PINTEREST_BOARD_ID;
-
-    const pinResp = await createPinterestPin({
+    const pinRes = await createPinterestPin({
       title: pinTitle,
       description: pinDesc,
-      boardId,
+      link: postUrl,
       imageUrl: heroImage,
-      linkUrl: postUrl,
+      boardId: PINTEREST_BOARD_ID,
     });
 
-    console.log("OK:", {
-      slug,
-      category,
-      images: imageUrls.length,
-      postUrl,
-      runKey,
-      pinterest: PINTEREST_DRY_RUN || DRY_RUN ? "skipped" : pinResp?.id || "created",
-      dryRun: DRY_RUN,
-    });
+    if (!pinRes.ok) {
+      console.error("PINTEREST_FAILED:", pinRes);
+    } else {
+      console.log("PINTEREST_OK:", pinRes.data?.id || pinRes.data);
+    }
+
+    console.log("OK:", { slug, category, images: imageUrls.length, postUrl, runKey, dryRun: DRY_RUN });
   } catch (e) {
     const errText = String(e?.message || e);
 
@@ -625,7 +593,7 @@ async function run() {
         status: "failed",
         errorText: errText.slice(0, 900),
       });
-    } catch (_) {}
+    } catch {}
 
     console.error("FAILED:", { slug, category, postUrl, runKey, error: errText });
     process.exit(1);
