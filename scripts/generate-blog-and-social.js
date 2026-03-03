@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
+// ===== Config =====
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SITE_BASE_URL = process.env.SITE_BASE_URL || "https://caroflower.com";
@@ -18,8 +19,14 @@ const supabase =
     : null;
 
 // Modes
-const DRY_RUN = process.env.DRY_RUN === "true"; // no files, no db
+const DRY_RUN = process.env.DRY_RUN === "true"; // no files, no db, no pinterest
+const PINTEREST_DRY_RUN = process.env.PINTEREST_DRY_RUN === "true"; // skip pinterest only
 const AI_MODEL = process.env.AI_MODEL || "gpt-4o-mini";
+
+// Pinterest
+const PINTEREST_ACCESS_TOKEN = process.env.PINTEREST_ACCESS_TOKEN || "";
+const PINTEREST_BOARD_ID = process.env.PINTEREST_BOARD_ID || "";
+const PINTEREST_API_BASE = process.env.PINTEREST_API_BASE || "https://api.pinterest.com/v5"; // or https://api-sandbox.pinterest.com/v5
 
 // Content settings
 const IMAGES_ROOT = path.join(process.cwd(), "images");
@@ -44,6 +51,7 @@ function listAllImages(dir) {
   const stack = [dir];
   while (stack.length) {
     const current = stack.pop();
+    if (!current) break;
     const entries = fs.readdirSync(current, { withFileTypes: true });
     for (const e of entries) {
       const full = path.join(current, e.name);
@@ -101,6 +109,18 @@ function isoDateOnly(dateISO) {
 
 function safeJsonLd(obj) {
   return JSON.stringify(obj).replaceAll("</", "<\\/");
+}
+
+function clamp(str, max) {
+  const s = String(str || "");
+  return s.length <= max ? s : s.slice(0, max - 1).trimEnd() + "…";
+}
+
+function safePinterestDescription({ category, excerptEn, postUrl }) {
+  // Pinterest descriptions can be long, but keep it clean.
+  const base = excerptEn ? excerptEn.trim() : `Handmade paper flowers from Caro Flower Art.`;
+  const extra = `\n\nSee the full post: ${postUrl}\n\n#handmade #paperflowers #floralart #DIY #crafts #CaroFlowerArt`;
+  return clamp(`${base}${extra}`, 490);
 }
 
 // ===== Supabase helpers =====
@@ -224,14 +244,14 @@ BLOG_ES: ...
     const { text, promptUsed } = await call();
     const parsed = parseCopyStrict(text);
     return { ...parsed, raw: text, promptUsed };
-  } catch (e1) {
+  } catch {
     const { text, promptUsed } = await call();
     const parsed = parseCopyStrict(text);
     return { ...parsed, raw: text, promptUsed };
   }
 }
 
-// ===== Post HTML (no EN/ES headers + no stretched images) =====
+// ===== Post HTML =====
 function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
   const title = copy.titleEn || "Caro Flower Art";
   const desc = copy.excerptEn || "Behind-the-scenes stories and process of handmade paper flowers.";
@@ -471,6 +491,51 @@ async function pushBlogTrackingToSupabase({
   if (!ok) throw new Error(`Supabase insert failed: ${error.message}`);
 }
 
+// ===== Pinterest: create a Pin =====
+async function createPinterestPin({ title, description, boardId, imageUrl, linkUrl }) {
+  if (DRY_RUN || PINTEREST_DRY_RUN) {
+    console.log("PINTEREST SKIP (dry run):", { boardId, title, imageUrl, linkUrl });
+    return { skipped: true };
+  }
+
+  if (!PINTEREST_ACCESS_TOKEN) throw new Error("Missing PINTEREST_ACCESS_TOKEN");
+  if (!boardId) throw new Error("Missing PINTEREST_BOARD_ID/boardId");
+  if (!imageUrl) throw new Error("Missing imageUrl");
+
+  const url = `${PINTEREST_API_BASE}/pins`;
+
+  const payload = {
+    board_id: String(boardId),
+    title: clamp(title, 100),
+    description: clamp(description, 500),
+    link: linkUrl,
+    media_source: {
+      source_type: "image_url",
+      url: imageUrl,
+    },
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${PINTEREST_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const text = await res.text();
+  let json = null;
+  try { json = JSON.parse(text); } catch {}
+
+  if (!res.ok) {
+    throw new Error(`Pinterest create pin failed (${res.status}): ${text}`);
+  }
+
+  return json || { ok: true };
+}
+
 // ===== Main =====
 async function run() {
   ensureDirs();
@@ -520,7 +585,35 @@ async function run() {
 
     await updateFeedXml();
 
-    console.log("OK:", { slug, category, images: imageUrls.length, postUrl, runKey, dryRun: DRY_RUN });
+    // ===== Pinterest publish =====
+    const heroImage = imageUrls[0];
+    const pinTitle = copy.titleEn;
+    const pinDesc = safePinterestDescription({
+      category,
+      excerptEn: copy.excerptEn,
+      postUrl,
+    });
+
+    // Prefer the env var board id, but allow overriding
+    const boardId = PINTEREST_BOARD_ID;
+
+    const pinResp = await createPinterestPin({
+      title: pinTitle,
+      description: pinDesc,
+      boardId,
+      imageUrl: heroImage,
+      linkUrl: postUrl,
+    });
+
+    console.log("OK:", {
+      slug,
+      category,
+      images: imageUrls.length,
+      postUrl,
+      runKey,
+      pinterest: PINTEREST_DRY_RUN || DRY_RUN ? "skipped" : pinResp?.id || "created",
+      dryRun: DRY_RUN,
+    });
   } catch (e) {
     const errText = String(e?.message || e);
 
