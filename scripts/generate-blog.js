@@ -400,6 +400,9 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
       .then(html => { document.getElementById("site-header").innerHTML = html; })
       .catch(() => {});
   </script>
+  <!-- WhatsApp Float Button -->
+  <a href="https://wa.me/12368189725?text=Hola%20Caro!%20Vi%20tu%20blog%20y%20me%20encant%C3%B3%20%F0%9F%8C%B8%20Quisiera%20cotizar%20una%20pieza." target="_blank" rel="noopener" style="position:fixed;bottom:24px;right:24px;background:#25d366;color:#fff;border-radius:999px;padding:13px 22px;font-size:14px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(37,211,102,.4);z-index:1000;">💬 Cotizar pieza</a>
+
 </body>
 </html>`;
 }
