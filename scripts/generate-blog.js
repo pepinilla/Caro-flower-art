@@ -233,10 +233,10 @@ async function generateBilingualCopy({ category, imageUrls }) {
   const prompt = `
 You are the brand copywriter for "Caro Flower Art" (handmade paper flowers).
 
-Generate bilingual content (EN first, then ES):
-- Titles: short, elegant (max 60 chars each)
-- Excerpts: 1 sentence each language (max 140 chars)
-- Blog post: 220–320 words per language
+Generate content in English only:
+- Title: short, elegant (max 60 chars)
+- Excerpt: 1 sentence (max 140 chars)
+- Blog post: 400–500 words
 - Tone: warm, human storytelling about process, handmade details, dedication
 - No emojis
 - Provide clean paragraphs (use line breaks between paragraphs)
@@ -390,7 +390,6 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
     <section class="post-card" style="margin-top:16px">
       ${enParagraphs}
       <div class="divider"></div>
-      ${esParagraphs}
     </section>
   </main>
 
@@ -401,7 +400,7 @@ function renderPostHtml({ slug, dateISO, category, imageUrls, copy }) {
       .catch(() => {});
   </script>
   <!-- WhatsApp Float Button -->
-  <a href="https://wa.me/12368189725?text=Hola%20Caro!%20Vi%20tu%20blog%20y%20me%20encant%C3%B3%20%F0%9F%8C%B8%20Quisiera%20cotizar%20una%20pieza." target="_blank" rel="noopener" style="position:fixed;bottom:24px;right:24px;background:#25d366;color:#fff;border-radius:999px;padding:13px 22px;font-size:14px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(37,211,102,.4);z-index:1000;">💬 Cotizar pieza</a>
+  <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%20saw%20your%20blog%20and%20loved%20it%20%F0%9F%8C%B8%20I%27d%20love%20to%20get%20a%20quote." target="_blank" rel="noopener" style="position:fixed;bottom:24px;right:24px;background:#25d366;color:#fff;border-radius:999px;padding:13px 22px;font-size:14px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(37,211,102,.4);z-index:1000;">💬 Get a quote</a>
 
 </body>
 </html>`;
