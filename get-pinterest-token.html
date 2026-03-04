@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Get Pinterest Token | CaroFlowerArt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #fff5f7; }
+    h1 { color: #c0395a; }
+    .box { background: white; border-radius: 12px; padding: 24px; margin: 20px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    input { width: 100%; padding: 10px; margin: 8px 0 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+    button { background: #e60023; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; }
+    button:hover { background: #c0001e; }
+    .token-box { background: #f0fff4; border: 2px solid #22c55e; border-radius: 8px; padding: 16px; word-break: break-all; font-family: monospace; font-size: 13px; margin-top: 16px; }
+    .step { background: #fff; border-left: 4px solid #e60023; padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+    label { font-weight: bold; color: #333; }
+    .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<h1>🌸 Pinterest Token para CaroFlowerArt</h1>
+<p>Esta página te ayuda a obtener el token con permisos de escritura (<code>pins:write</code>) que necesita tu automatización.</p>
+
+<div class="box">
+  <h2>Paso 1 — Ingresa tus datos de Pinterest</h2>
+  <div class="step">Ve a <a href="https://developers.pinterest.com/apps/1550136" target="_blank">developers.pinterest.com/apps/1550136</a> → <strong>Manage</strong> y copia el App ID y App Secret</div>
+
+  <label>App ID (de Pinterest)</label>
+  <input type="text" id="appId" placeholder="1550136" value="1550136">
+
+  <label>App Secret</label>
+  <input type="password" id="appSecret" placeholder="Pega tu App Secret aquí">
+
+  <button onclick="startOAuth()">🔗 Conectar con Pinterest</button>
+</div>
+
+<div class="box" id="step2" style="display:none">
+  <h2>Paso 2 — Pega el código de la URL</h2>
+  <p>Pinterest te redirigió de vuelta. Copia el valor de <code>?code=</code> de la URL y pégalo aquí:</p>
+  <input type="text" id="authCode" placeholder="Pega el código aquí...">
+  <button onclick="exchangeToken()">✅ Obtener Token</button>
+</div>
+
+<div class="box" id="step3" style="display:none">
+  <h2>✅ ¡Tu token con pins:write!</h2>
+  <p>Copia este token y agrégalo como secret <code>PINTEREST_ACCESS_TOKEN</code> en GitHub:</p>
+  <div class="token-box" id="tokenOutput"></div>
+  <div class="warning">
+    ⚠️ <strong>Cópialo ahora</strong> — este token no expira (es de larga duración con OAuth).
+    <br><br>
+    Luego ve a GitHub → Settings → Secrets → <strong>PINTEREST_ACCESS_TOKEN</strong> → Update
+  </div>
+</div>
+
+<script>
+  let savedAppId = '';
+  let savedAppSecret = '';
+  const REDIRECT_URI = window.location.href.split('?')[0]; // esta misma página
+
+  function startOAuth() {
+    savedAppId = document.getElementById('appId').value.trim();
+    savedAppSecret = document.getElementById('appSecret').value.trim();
+
+    if (!savedAppId || !savedAppSecret) {
+      alert('Necesitas poner el App ID y el App Secret');
+      return;
+    }
+
+    // Guardar en localStorage para después del redirect
+    localStorage.setItem('pinterest_app_id', savedAppId);
+    localStorage.setItem('pinterest_app_secret', savedAppSecret);
+
+    const scopes = 'boards:read,boards:write,pins:read,pins:write';
+    const state = 'caroflower' + Math.random().toString(36).substring(2);
+    localStorage.setItem('pinterest_state', state);
+
+    const authUrl = `https://www.pinterest.com/oauth/?client_id=${savedAppId}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${scopes}&state=${state}`;
+
+    window.location.href = authUrl;
+  }
+
+  async function exchangeToken() {
+    const code = document.getElementById('authCode').value.trim();
+    const appId = localStorage.getItem('pinterest_app_id');
+    const appSecret = localStorage.getItem('pinterest_app_secret');
+
+    if (!code || !appId || !appSecret) {
+      alert('Faltan datos. Empieza desde el Paso 1.');
+      return;
+    }
+
+    const credentials = btoa(`${appId}:${appSecret}`);
+
+    try {
+      const res = await fetch('https://api.pinterest.com/v5/oauth/token', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${credentials}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `grant_type=authorization_code&code=${encodeURIComponent(code)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`
+      });
+
+      const data = await res.json();
+
+      if (data.access_token) {
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'block';
+        document.getElementById('tokenOutput').textContent = data.access_token;
+      } else {
+        alert('Error: ' + JSON.stringify(data));
+      }
+    } catch (e) {
+      alert('Error de red: ' + e.message);
+    }
+  }
+
+  // Al cargar, detectar si venimos de redirect de Pinterest
+  window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+
+    if (code) {
+      document.getElementById('step2').style.display = 'block';
+      document.getElementById('authCode').value = code;
+      window.scrollTo(0, document.getElementById('step2').offsetTop);
+    }
+  };
+</script>
+
+</body>
+</html>
