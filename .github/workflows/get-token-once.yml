@@ -1,0 +1,21 @@
+name: Get Pinterest Token (run once)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exchange code for Pinterest access token
+        run: |
+          RESPONSE=$(curl -s -X POST "https://api.pinterest.com/v5/oauth/token" \
+            -H "Authorization: Basic $(echo -n '${{ secrets.PINTEREST_APP_ID }}:${{ secrets.PINTEREST_APP_SECRET }}' | base64 -w 0)" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=authorization_code&code=77b0eaf39e6b44880398ce49815a7f9fc878a583&redirect_uri=https://caroflower.com/get-pinterest-token.html")
+          
+          echo "Response: $RESPONSE"
+          
+          ACCESS_TOKEN=$(echo $RESPONSE | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('access_token','ERROR: '+str(d)))")
+          
+          echo "::notice::ACCESS TOKEN = $ACCESS_TOKEN"
