@@ -26,29 +26,50 @@ const IMAGES_ROOT = path.join(process.cwd(), "images");
 const BLOG_DIR = path.join(process.cwd(), "blog");
 const POSTS_DIR = path.join(BLOG_DIR, "posts");
 
-const IMAGES_PER_POST = Number(process.env.IMAGES_PER_POST || 3);
-const RECENT_CATEGORY_AVOID = Number(process.env.RECENT_CATEGORY_AVOID || 10);
-const RECENT_IMAGE_AVOID_POSTS = Number(process.env.RECENT_IMAGE_AVOID_POSTS || 30);
+// GitHub settings - fetch real images from repo
+const GITHUB_REPO = process.env.GITHUB_REPO || "pepinilla/Caro-flower-art";
+const GITHUB_BRANCH = process.env.GITHUB_BRANCH || "main";
+const GITHUB_IMAGES_BASE = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/images`;
+const GITHUB_API_BASE = `https://api.github.com/repos/${GITHUB_REPO}/contents/images`;
 
-const MAX_FEED_ITEMS = Number(process.env.MAX_FEED_ITEMS || 30);
-
-// ===== Helpers =====
-function ensureDirs() {
-  if (DRY_RUN) return;
-  if (!fs.existsSync(BLOG_DIR)) fs.mkdirSync(BLOG_DIR);
-  if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR, { recursive: true });
-}
-
-function listAllImages(dir) {
+// Fetch all images from GitHub repo via API (random mix from all folders)
+async function listAllImagesFromGitHub() {
   const out = [];
-  const stack = [dir];
-  while (stack.length) {
-    const current = stack.pop();
-    const entries = fs.readdirSync(current, { withFileTypes: true });
-    for (const e of entries) {
-      const full = path.join(current, e.name);
-      if (e.isDirectory()) stack.push(full);
-      else if (/\.(png|jpe?g|webp)$/i.test(e.name)) out.push(full);
+  // Get all folders first
+  const rootRes = await fetch(GITHUB_API_BASE, { headers: { Accept: "application/vnd.github.v3+json" } });
+  const rootItems = await rootRes.json();
+  
+  for (const item of rootItems) {
+    if (item.type === "dir" && !["Hero", "about", "process"].includes(item.name)) {
+      try {
+        const folderRes = await fetch(`${GITHUB_API_BASE}/${item.name}`, { headers: { Accept: "application/vnd.github.v3+json" } });
+        const files = await folderRes.json();
+        if (Array.isArray(files)) {
+          for (const f of files) {
+            if (f.type === "file" && /\.(webp|jpe?g|png)$/i.test(f.name)) {
+              out.push({ url: `${GITHUB_IMAGES_BASE}/${item.name}/${f.name}`, category: item.name, key: `${item.name}/${f.name}` });
+            }
+          }
+        }
+        // Check subfolders (like installations/botanical-arch)
+        if (Array.isArray(files)) {
+          for (const sub of files) {
+            if (sub.type === "dir") {
+              const subRes = await fetch(`${GITHUB_API_BASE}/${item.name}/${sub.name}`, { headers: { Accept: "application/vnd.github.v3+json" } });
+              const subFiles = await subRes.json();
+              if (Array.isArray(subFiles)) {
+                for (const f of subFiles) {
+                  if (f.type === "file" && /\.(webp|jpe?g|png)$/i.test(f.name)) {
+                    out.push({ url: `${GITHUB_IMAGES_BASE}/${item.name}/${sub.name}/${f.name}`, category: item.name, key: `${item.name}/${sub.name}/${f.name}` });
+                  }
+                }
+              }
+            }
+          }
+        }
+      } catch(e) {
+        console.warn(`Could not read folder ${item.name}:`, e.message);
+      }
     }
   }
   return out;
@@ -472,35 +493,62 @@ async function pushBlogTrackingToSupabase({
 }
 
 // ===== Main =====
+// Save to social_posts in Supabase
+async function saveSocialPost({ category, imageUrls, copy, runKey }) {
+  if (!supabase) return;
+  const platforms = ["instagram", "tiktok", "pinterest"];
+  for (const platform of platforms) {
+    try {
+      await supabase.from("social_posts").insert({
+        platform,
+        status: "pending",
+        prompt: `${category} - ${copy?.titleEs || copy?.titleEn}`,
+        content: `${copy?.titleEs || copy?.titleEn}\n\n${copy?.excerptEs || copy?.excerptEn}`,
+        image_urls: imageUrls,
+        run_key: runKey,
+      });
+    } catch(e) {
+      console.warn(`Could not save social post for ${platform}:`, e.message);
+    }
+  }
+}
+
 async function run() {
   ensureDirs();
 
-  const allImages = listAllImages(IMAGES_ROOT);
-  if (!allImages.length) throw new Error("No images found in /images");
+  // 🌸 Fetch real images from GitHub repo
+  console.log("Fetching images from GitHub...");
+  const allGithubImages = await listAllImagesFromGitHub();
+  if (!allGithubImages.length) throw new Error("No images found on GitHub");
+  console.log(`Found ${allGithubImages.length} images across ${[...new Set(allGithubImages.map(i => i.category))].length} categories`);
 
-  const categories = [...new Set(allImages.map(categoryFromPath))];
+  const categories = [...new Set(allGithubImages.map(i => i.category))];
 
-  // Rotate categories
+  // Rotate categories avoiding recent ones
   const recentCats = await getRecentCategories(RECENT_CATEGORY_AVOID);
   const catPool = categories.filter((c) => !recentCats.includes(c));
   const chosenCategoryPool = catPool.length ? catPool : categories;
   const category = chosenCategoryPool[Math.floor(Math.random() * chosenCategoryPool.length)];
 
+  console.log(`Chosen category: ${category}`);
+
   // Avoid repeating images
   const recentKeys = await getRecentImageKeys(RECENT_IMAGE_AVOID_POSTS);
-  const categoryImages = allImages.filter((f) => categoryFromPath(f) === category);
+  const categoryImages = allGithubImages.filter(i => i.category === category);
 
-  let candidates = shuffle(categoryImages).filter((f) => !recentKeys.has(toImageKey(f)));
+  let candidates = shuffle(categoryImages).filter(i => !recentKeys.has(i.key));
   if (candidates.length < IMAGES_PER_POST) candidates = shuffle(categoryImages);
 
-  const pickedFiles = candidates.slice(0, Math.min(IMAGES_PER_POST, candidates.length));
-  const imageUrls = pickedFiles.map(toPublicUrl);
-  const imageKeys = pickedFiles.map(toImageKey);
+  const picked = candidates.slice(0, Math.min(IMAGES_PER_POST, candidates.length));
+  const imageUrls = picked.map(i => i.url);
+  const imageKeys = picked.map(i => i.key);
 
   const dateISO = new Date().toISOString();
   const runKey = `${isoDateOnly(dateISO)}-${hash10(dateISO)}`;
   const slug = `${category}-${hash10((category + "-" + dateISO + "-" + imageKeys.join(",")))}`;
   const postUrl = `${SITE_BASE_URL}/blog/posts/${slug}.html`;
+
+  console.log(`Images: ${imageUrls.join(", ")}`);
 
   let copy = null;
 
@@ -512,11 +560,15 @@ async function run() {
 
     updateSitemapAddPost({ postUrl, dateISO });
     ensureRobotsTxt();
+
     await pushBlogTrackingToSupabase({
       slug, category, copy, imageUrls, imageKeys, postUrl, runKey,
       status: "published",
       errorText: null,
     });
+
+    // 🌸 Save social posts (instagram, tiktok, pinterest) to Supabase
+    await saveSocialPost({ category, imageUrls, copy, runKey });
 
     await updateFeedXml();
 
