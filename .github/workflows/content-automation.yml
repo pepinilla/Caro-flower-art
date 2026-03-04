@@ -2,7 +2,7 @@ name: CaroFlower Content Automation
 
 on:
   schedule:
-    - cron: "0 3 */2 * *"   # cada 2 días (UTC)
+    - cron: "0 14 */2 * *"   # cada 2 días a las 9am Colombia (UTC-5)
   workflow_dispatch:
 
 permissions:
@@ -23,13 +23,15 @@ jobs:
       - name: Install dependencies
         run: npm install openai @supabase/supabase-js
 
-      - name: Generate blog post
+      - name: Generate blog post + social posts
         run: node scripts/generate-blog.js
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SITE_BASE_URL: "https://caroflower.com"
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GITHUB_REPO: "pepinilla/Caro-flower-art"
+          GITHUB_BRANCH: "main"
 
       - name: Commit & push changes
         run: |
@@ -38,5 +40,5 @@ jobs:
 
           git add blog/posts sitemap.xml robots.txt feed.xml
 
-          git diff --staged --quiet || git commit -m "Auto blog post"
+          git diff --staged --quiet || git commit -m "🌸 Auto blog post $(date '+%Y-%m-%d')"
           git push
