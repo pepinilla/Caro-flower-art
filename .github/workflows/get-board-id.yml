@@ -1,0 +1,16 @@
+name: Get Pinterest Board ID (run once)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-board:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List all boards
+        run: |
+          RESPONSE=$(curl -s "https://api.pinterest.com/v5/boards?page_size=25" \
+            -H "Authorization: Bearer ${{ secrets.PINTEREST_ACCESS_TOKEN }}" \
+            -H "Accept: application/json")
+          
+          echo "::notice::BOARDS = $RESPONSE"
