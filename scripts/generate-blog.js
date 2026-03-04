@@ -75,6 +75,28 @@ async function listAllImagesFromGitHub() {
   return out;
 }
 
+function ensureDirs() {
+  if (DRY_RUN) return;
+  if (!fs.existsSync(BLOG_DIR)) fs.mkdirSync(BLOG_DIR);
+  if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR, { recursive: true });
+}
+
+function listAllImages(dir) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  const stack = [dir];
+  while (stack.length) {
+    const current = stack.pop();
+    const entries = fs.readdirSync(current, { withFileTypes: true });
+    for (const e of entries) {
+      const full = path.join(current, e.name);
+      if (e.isDirectory()) stack.push(full);
+      else if (/\.(png|jpe?g|webp)$/i.test(e.name)) out.push(full);
+    }
+  }
+  return out;
+}
+
 function categoryFromPath(filePath) {
   const rel = path.relative(IMAGES_ROOT, filePath).replaceAll("\\", "/");
   const parts = rel.split("/");
