@@ -1,0 +1,19 @@
+name: Get Pinterest Board ID (run once)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-board:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get board ID
+        run: |
+          RESPONSE=$(curl -s "https://api.pinterest.com/v5/boards/thrivingwomanandmom%2Fhandmade-paper-flowers-caro-flower-art" \
+            -H "Authorization: Bearer ${{ secrets.PINTEREST_ACCESS_TOKEN }}")
+          
+          echo "Response: $RESPONSE"
+          
+          BOARD_ID=$(echo $RESPONSE | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id','ERROR: '+str(d)))")
+          
+          echo "::notice::BOARD ID = $BOARD_ID"
