@@ -21,6 +21,11 @@ const supabase =
 const DRY_RUN = process.env.DRY_RUN === "true"; // no files, no db
 const AI_MODEL = process.env.AI_MODEL || "gpt-4o-mini";
 
+const IMAGES_PER_POST = Number(process.env.IMAGES_PER_POST || 3);
+const RECENT_CATEGORY_AVOID = Number(process.env.RECENT_CATEGORY_AVOID || 10);
+const RECENT_IMAGE_AVOID_POSTS = Number(process.env.RECENT_IMAGE_AVOID_POSTS || 30);
+const MAX_FEED_ITEMS = Number(process.env.MAX_FEED_ITEMS || 30);
+
 // Content settings
 const IMAGES_ROOT = path.join(process.cwd(), "images");
 const BLOG_DIR = path.join(process.cwd(), "blog");
