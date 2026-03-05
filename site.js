@@ -145,10 +145,10 @@
       // ── LANGUAGE SWITCHER ──
       function applyLang(lang) {
         localStorage.setItem("caroLang", lang);
+        // Update buttons
         qsa(".lang-btn", host).forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
-        document.querySelectorAll(".es").forEach(el => {
-          el.style.display = lang === "es" ? "block" : "none";
-        });
+        // Set data-lang on <html> — CSS handles show/hide of .en and .es
+        document.documentElement.setAttribute("data-lang", lang);
       }
       qsa(".lang-btn", host).forEach(btn => {
         btn.addEventListener("click", () => applyLang(btn.dataset.lang));
