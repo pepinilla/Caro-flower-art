@@ -1757,15 +1757,57 @@ font-family: var(--font-title);
 .nav-hamburger span{ display:block;width:24px;height:2px;background:var(--dark-color);border-radius:2px; }
 
 @media(max-width:900px){
-  .nav{ display:none;flex-direction:column;gap:0; }
-  .nav.open{ display:flex;position:absolute;top:100%;left:0;right:0;background:#fff;padding:12px 20px 20px;box-shadow:0 10px 30px rgba(0,0,0,.1);z-index:100; }
-  .nav .nav-link,.nav-dropdown-btn{ padding:10px 0;border-bottom:1px solid var(--border-color);width:100%;text-align:left; }
-  .nav-dropdown-menu{ position:static;transform:none;box-shadow:none;padding:0 0 0 14px; }
-  .nav-dropdown.open .nav-dropdown-menu{ display:flex; }
+  .nav{ display:none;flex-direction:column;gap:0;width:100%; }
+  .nav.open{
+    display:flex;
+    position:fixed;
+    top:64px;
+    left:0;right:0;
+    background:#fff;
+    padding:16px 24px 28px;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+    z-index:9998;
+    border-top:2px solid var(--secondary-color);
+  }
+  .nav .nav-link,.nav-dropdown-btn{
+    padding:13px 0;
+    border-bottom:1px solid rgba(232,154,166,.15);
+    width:100%;
+    text-align:left;
+    font-size:15px;
+    border-radius:0;
+    background:none;
+  }
+  .nav-cta{
+    margin-top:10px !important;
+    background:var(--primary-color) !important;
+    color:#fff !important;
+    text-align:center !important;
+    border-radius:999px !important;
+    padding:13px 0 !important;
+    border-bottom:none !important;
+    display:block;
+  }
+  .nav-dropdown-menu{
+    position:static;transform:none;
+    box-shadow:none;padding:4px 0 4px 16px;
+    background:transparent;
+  }
+  .nav-dropdown-menu a{ padding:8px 0;font-size:14px;color:var(--text-color); }
   .nav-hamburger{ display:flex; }
   .header-controls{ gap:6px; }
-  .lang-buttons{ display:none; }
+  .lang-buttons{ display:flex; }
 }
 
 /* ── PINK BADGES ── */
 .card-badge{ background:var(--primary-color) !important;color:#fff !important;border:none !important; }
+
+/* ======================================================
+   LANGUAGE SWITCHING
+   ====================================================== */
+[data-lang="es"] .en { display: none !important; }
+[data-lang="es"] span.en { display: none !important; }
+[data-lang="en"] .es,
+html:not([data-lang="es"]) .es { display: none !important; }
+[data-lang="es"] .es { display: block !important; }
+[data-lang="es"] span.es { display: inline !important; }
