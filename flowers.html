@@ -4,8 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flowers | Caro Flower Art</title>
-  <link rel="stylesheet" href="/site.css?v=20260115a" />
+  <link rel="stylesheet" href="/site.css?v=20260126b" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .hero-kicker{
+      display:inline-block;
+      background:rgba(255,255,255,.25);
+      backdrop-filter:blur(8px);
+      color:#fff;
+      font-size:11px;font-weight:600;
+      letter-spacing:.12em;text-transform:uppercase;
+      padding:5px 16px;border-radius:999px;
+      margin-bottom:16px;
+      border:1px solid rgba(255,255,255,.3);
+    }
+  </style>
 </head>
 <body>
 
@@ -14,12 +27,12 @@
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="hero-content">
+    <div class="hero-kicker">🌸 Individual Pieces</div>
     <h1>Flowers <span class="es">Flores</span></h1>
     <p>
       Explore handmade flower pieces and request a quote.
       <span class="es">Explora flores hechas a mano y pide cotización.</span>
     </p>
-
     <div class="hero-buttons">
       <a href="/index.html#contact" class="btn-primary">
         Request a quote <span class="es">Pedir cotización</span>
@@ -34,22 +47,17 @@
 <!-- 🌹 ROSES FEATURE CARD -->
 <section class="gallery gallery-tight-top">
   <div class="grid">
-    <a href="/roses.html" class="card card-link" aria-label="View Roses / Ver rosas">
+    <a href="/roses.html" class="card card-link" aria-label="View Roses">
       <div class="card-image-wrapper">
         <img src="images/roses/Paper_roses_bouquet.webp" alt="Roses Bouquet" loading="lazy" />
         <span class="card-badge">Roses</span>
       </div>
-
       <div class="card-content">
-        <div class="category">
-          Roses <span class="es">Rosas</span>
-        </div>
-
+        <div class="category">Roses <span class="es">Rosas</span></div>
         <p class="card-desc">
           View rose colors and bouquets in one place
           <span class="es">Ver colores de rosas y ramos en un solo lugar</span>
         </p>
-
         <div class="card-footer card-footer-center">
           <span class="card-btn card-btn-wide">
             View Roses <span class="es">Ver rosas</span>
@@ -60,22 +68,20 @@
   </div>
 </section>
 
-<!-- ✅ REAL FLOWERS GRID -->
+<!-- FLOWERS GRID -->
 <section class="gallery" id="gallery">
   <div class="gallery-grid" id="galleryGrid"></div>
 </section>
 
-<a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank" rel="noopener">
+<a href="https://wa.me/12368189725" class="whatsapp-button" target="_blank" rel="noopener">
   <i class="fab fa-whatsapp"></i>
 </a>
 
-<script src="/config.js?v=20260115a"></script>
-<script src="/products.js?v=20260115a"></script>
-<script src="/site.js?v=20260115a"></script>
-
+<script src="/config.js?v=20260126b"></script>
+<script src="/products.js?v=20260126b"></script>
+<script src="/site.js?v=20260126b"></script>
 <script>
   window.CARO_PAGE = { gridId: "galleryGrid", mode: "category", category: "flowers" };
 </script>
-
 </body>
 </html>
