@@ -4,179 +4,112 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installations | Caro Flower Art</title>
-  <meta name="description" content="Large-scale handmade paper flower installations — botanical arches, walls, and statement pieces for weddings and events." />
+  <meta name="description" content="Large-scale handmade paper flower installations — botanical arches for weddings and events." />
   <link rel="stylesheet" href="/site.css?v=20260126b" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    .page-hero{
-      text-align:center;
-      padding:60px 20px 40px;
-      position:relative;
-    }
-    .page-hero::before{
-      content:'';
-      position:absolute;inset:0;
-      background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(232,154,166,.22) 0%,transparent 70%);
-      pointer-events:none;
-    }
-    .page-hero .kicker{
-      display:inline-block;
-      background:var(--secondary-color);
-      color:var(--primary-dark);
-      font-size:11px;font-weight:600;
-      letter-spacing:.12em;text-transform:uppercase;
-      padding:5px 16px;border-radius:999px;margin-bottom:16px;
-    }
-    .page-hero h1{ margin:0 0 14px; }
-    .page-hero p{ max-width:600px;margin:0 auto;opacity:.75;font-size:1.05rem;line-height:1.7; }
-
-    /* ── GALLERY ── */
-    .install-section{ max-width:1100px;margin:0 auto;padding:20px 20px 60px; }
-
-    .install-featured{
-      display:grid;
-      grid-template-columns:1.2fr 1fr;
-      gap:24px;
-      margin-bottom:24px;
-      align-items:stretch;
-    }
-    @media(max-width:720px){ .install-featured{ grid-template-columns:1fr; } }
-
-    .install-featured img{
-      width:100%;
-      border-radius:20px;
-      box-shadow:0 12px 32px rgba(0,0,0,.1);
-      object-fit:cover;
-      height:100%;
-      min-height:320px;
-    }
-
-    .install-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-      gap:20px;
-    }
-
-    .install-card{
-      border-radius:20px;
-      overflow:hidden;
-      box-shadow:0 8px 24px rgba(0,0,0,.08);
-      background:#fff;
-      border:1px solid rgba(0,0,0,.05);
-      transition:transform .25s,box-shadow .25s;
-    }
-    .install-card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 16px 40px rgba(232,154,166,.2);
-    }
-    .install-card img{
-      width:100%;
-      aspect-ratio:4/3;
-      object-fit:cover;
-      display:block;
-    }
-    .install-card-body{
-      padding:18px 20px 20px;
-    }
-    .install-card-body h3{ margin:0 0 6px;font-size:1.1rem; }
-    .install-card-body p{ margin:0;opacity:.7;font-size:.88rem;line-height:1.6; }
-
-    /* ── INFO SECTION ── */
-    .install-info{
-      background:linear-gradient(135deg,var(--secondary-color),#fdf0ea);
-      border-radius:24px;
-      padding:48px 32px;
-      text-align:center;
-      max-width:750px;
-      margin:40px auto 60px;
-    }
-    .install-info h2{ margin:0 0 12px;font-size:2rem; }
-    .install-info p{ opacity:.75;margin:0 0 12px;font-size:1rem;line-height:1.7; }
-    .install-tags{
-      display:flex;flex-wrap:wrap;gap:8px;
-      justify-content:center;margin:20px 0 28px;
-    }
-    .install-tag{
-      background:#fff;
-      border:1.5px solid var(--primary-color);
-      color:var(--primary-dark);
-      padding:6px 16px;border-radius:999px;
-      font-size:13px;font-weight:500;
-    }
-    .cta-buttons{ display:flex;gap:12px;justify-content:center;flex-wrap:wrap; }
+    .hero-kicker{display:inline-block;background:rgba(255,255,255,.25);backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 16px;border-radius:999px;margin-bottom:16px;border:1px solid rgba(255,255,255,.3);}
+    .carousel-section{max-width:900px;margin:0 auto;padding:40px 20px 20px;}
+    .carousel-wrap{position:relative;}
+    .carousel{overflow:hidden;border-radius:24px;box-shadow:0 16px 40px rgba(0,0,0,.12);}
+    .carousel-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1);}
+    .carousel-track img{min-width:100%;width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:none;border-radius:50%;width:44px;height:44px;font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;z-index:2;}
+    .carousel-btn.prev{left:14px;} .carousel-btn.next{right:14px;}
+    .carousel-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;}
+    .carousel-dot{width:8px;height:8px;border-radius:50%;background:var(--border-color);cursor:pointer;transition:background .2s;}
+    .carousel-dot.active{background:var(--primary-color);}
+    .install-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;max-width:900px;margin:32px auto 0;padding:0 20px;}
+    .install-card{background:#fff;border-radius:16px;padding:22px 18px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.05);}
+    .install-card .icon{font-size:1.8rem;margin-bottom:10px;}
+    .install-card h3{margin:0 0 6px;font-size:1rem;}
+    .install-card p{margin:0;font-size:.85rem;opacity:.7;line-height:1.5;}
+    .install-cta{background:linear-gradient(135deg,var(--secondary-color),#fdf0ea);border-radius:24px;padding:48px 32px;text-align:center;max-width:700px;margin:40px auto 60px;}
+    .install-cta h2{margin:0 0 12px;font-size:2rem;}
+    .install-cta p{opacity:.75;margin:0 0 10px;font-size:1rem;line-height:1.7;}
+    .install-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0 24px;}
+    .install-tag{background:#fff;border:1.5px solid var(--primary-color);color:var(--primary-dark);padding:6px 14px;border-radius:999px;font-size:12px;font-weight:500;}
+    .cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
   </style>
 </head>
 <body>
-
 <div id="site-header"></div>
 
-<!-- HERO -->
-<div class="page-hero">
-  <div class="kicker">🌿 Large Scale Art</div>
-  <h1>Installations</h1>
-  <p>Statement pieces for weddings, events, and special spaces. Each installation is designed and handcrafted from scratch.</p>
-</div>
-
-<!-- GALLERY -->
-<div class="install-section">
-
-  <!-- Featured -->
-  <div class="install-featured">
-    <img src="/images/installations/botanical-arch/arch-full-01.webp" alt="Botanical paper flower arch" loading="lazy"/>
-    <img src="/images/installations/botanical-arch/arch-full-02.webp" alt="Botanical paper flower arch detail" loading="lazy"/>
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-kicker">🌿 Large Scale Art</div>
+    <h1>Installations</h1>
+    <p>Statement pieces for weddings, events, and special spaces. Each installation is designed and handcrafted from scratch.</p>
+    <div class="hero-buttons">
+      <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%27m%20interested%20in%20a%20custom%20installation%20%F0%9F%8C%B8" target="_blank" class="btn-primary">Ask about installations</a>
+      <a href="/index.html" class="btn-secondary">Back home</a>
+    </div>
   </div>
+</section>
 
-  <!-- Grid -->
-  <div class="install-grid">
-    <div class="install-card">
-      <img src="/images/installations/botanical-arch/arch-full-03.webp" alt="Botanical arch full view" loading="lazy"/>
-      <div class="install-card-body">
-        <h3>Botanical Arch</h3>
-        <p>Full standing arch covered in handmade paper flowers. Perfect for wedding ceremonies and photo backdrops.</p>
+<div class="carousel-section">
+  <div class="carousel-wrap">
+    <div class="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <img src="/images/installations/botanical-arch/arch-full-01.webp" alt="Botanical arch" loading="lazy"/>
+        <img src="/images/installations/botanical-arch/arch-full-02.webp" alt="Botanical arch detail" loading="lazy"/>
+        <img src="/images/installations/botanical-arch/arch-full-03.webp" alt="Botanical arch full view" loading="lazy"/>
       </div>
     </div>
-    <div class="install-card">
-      <img src="/images/installations/botanical-arch/arch-full-01.webp" alt="Custom floral installation" loading="lazy"/>
-      <div class="install-card-body">
-        <h3>Custom Installations</h3>
-        <p>Every installation is designed to fit your space and vision. Available in any color palette.</p>
-      </div>
-    </div>
-    <div class="install-card">
-      <img src="/images/installations/botanical-arch/arch-full-02.webp" alt="Event installation" loading="lazy"/>
-      <div class="install-card-body">
-        <h3>Event Pieces</h3>
-        <p>From intimate gatherings to large-scale events — bring a wow factor that lasts forever.</p>
-      </div>
-    </div>
+    <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
+    <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
+    <div class="carousel-dots" id="carouselDots"></div>
   </div>
 </div>
 
-<!-- INFO + CTA -->
+<div class="install-cards">
+  <div class="install-card"><div class="icon">🌿</div><h3>Botanical Arches</h3><p>Full standing arches for wedding ceremonies and photo backdrops</p></div>
+  <div class="install-card"><div class="icon">🌸</div><h3>Flower Walls</h3><p>Custom walls and panels for events and permanent installations</p></div>
+  <div class="install-card"><div class="icon">🎨</div><h3>Any Color Palette</h3><p>Every piece designed around your colors and vision</p></div>
+  <div class="install-card"><div class="icon">♾️</div><h3>Lasts Forever</h3><p>Unlike real flowers — your installation stays beautiful permanently</p></div>
+</div>
+
 <div style="padding:0 20px">
-  <div class="install-info">
+  <div class="install-cta">
     <h2>Planning an event?</h2>
-    <p>Installations are fully custom — every flower handmade for your specific space and color palette. Available for weddings, quinceañeras, corporate events, and more.</p>
+    <p>Every installation is fully custom — designed for your space and color palette.</p>
     <div class="install-tags">
-      <span class="install-tag">🌿 Botanical Arches</span>
-      <span class="install-tag">🌸 Flower Walls</span>
-      <span class="install-tag">💐 Table Centerpieces</span>
-      <span class="install-tag">🎉 Event Backdrops</span>
-      <span class="install-tag">💍 Wedding Décor</span>
+      <span class="install-tag">💍 Weddings</span>
+      <span class="install-tag">🎉 Quinceañeras</span>
+      <span class="install-tag">🏢 Corporate Events</span>
+      <span class="install-tag">📸 Photo Backdrops</span>
+      <span class="install-tag">🏠 Home Decor</span>
     </div>
-    <p>Contact me to discuss your vision and get a custom quote.</p>
     <div class="cta-buttons">
-      <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%27m%20interested%20in%20a%20custom%20installation%20%F0%9F%8C%B8%20Can%20we%20talk%20about%20options?" target="_blank" class="btn-primary">💬 Ask about installations</a>
-      <a href="/index.html#contact" class="btn-secondary">Request a quote</a>
+      <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%27m%20interested%20in%20a%20custom%20installation%20%F0%9F%8C%B8" target="_blank" class="btn-primary">💬 Get a quote</a>
+      <a href="/index.html#collections" class="btn-secondary">See all collections</a>
     </div>
   </div>
 </div>
 
-<!-- WHATSAPP FLOAT -->
-<a href="https://wa.me/12368189725" class="whatsapp-button" target="_blank" rel="noopener">
-  <i class="fab fa-whatsapp"></i>
-</a>
+<a href="https://wa.me/12368189725" class="whatsapp-button" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
 
 <script src="/site.js?v=20260126b"></script>
+<script>
+  let current = 0;
+  const track = document.getElementById('carouselTrack');
+  const imgs = track.querySelectorAll('img');
+  const total = imgs.length;
+  const dotsEl = document.getElementById('carouselDots');
+  imgs.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+  function goTo(n) {
+    current = (n + total) % total;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+  function moveCarousel(dir) { goTo(current + dir); }
+  setInterval(() => moveCarousel(1), 4000);
+</script>
 </body>
 </html>
