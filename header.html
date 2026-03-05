@@ -1,203 +1,45 @@
 <header class="site-header">
   <div class="header-inner">
 
-    <!-- Logo -->
     <a class="brand" href="/index.html" aria-label="Caro Flower Art">
       <img class="brand-logo" src="/logo.svg" alt="Caro Flower Art logo" loading="eager" />
     </a>
 
-    <!-- Navigation -->
     <nav class="nav" aria-label="Main navigation">
-      <a class="nav-link" href="/index.html#collections" data-en="Gallery" data-es="Galería">Gallery</a>
-      <a class="nav-link" href="/flowers.html" data-en="Flowers" data-es="Flores">Flowers</a>
-      <a class="nav-link" href="/bouquets.html" data-en="Bouquets" data-es="Ramos">Bouquets</a>
+      <a class="nav-link" href="/index.html#collections">Gallery</a>
+      <a class="nav-link" href="/flowers.html">Flowers</a>
+      <a class="nav-link" href="/bouquets.html">Bouquets</a>
 
-      <!-- More dropdown -->
       <div class="nav-dropdown">
-        <button class="nav-link nav-dropdown-btn" data-en="More ▾" data-es="Más ▾">More ▾</button>
+        <button class="nav-link nav-dropdown-btn">More ▾</button>
         <div class="nav-dropdown-menu">
-          <a href="/installations.html" data-en="Installations" data-es="Instalaciones">Installations</a>
-          <a href="/studio.html" data-en="Studio" data-es="Estudio">Studio</a>
-          <a href="/about.html" data-en="About" data-es="Sobre mí">About</a>
-          <a href="/blog/" data-en="Blog" data-es="Blog">Blog</a>
+          <a href="/installations.html">Installations</a>
+          <a href="/studio.html">Studio</a>
+          <a href="/about.html">About</a>
+          <a href="/blog/">Blog</a>
         </div>
       </div>
 
-      <a class="nav-link nav-cta" href="/index.html#contact" data-en="Get a quote" data-es="Cotizar">Get a quote</a>
+      <a class="nav-link nav-cta" href="/index.html#contact">Get a quote</a>
     </nav>
 
-    <!-- Language + Currency controls -->
     <div class="header-controls">
-
-      <!-- Language switch -->
       <div class="lang-buttons">
         <button class="lang-btn active" data-lang="en">EN</button>
         <button class="lang-btn" data-lang="es">ES</button>
       </div>
-
-      <!-- Currency switch -->
-      <div class="currency-wrap" id="currencyWrap" aria-label="Currency selector">
+      <div class="currency-wrap" id="currencyWrap">
         <div id="currencyHint" class="currency-hint"></div>
         <div class="currency-buttons">
           <button class="currency-btn" type="button" data-currency="CAD">CAD</button>
           <button class="currency-btn" type="button" data-currency="COP">COP</button>
         </div>
       </div>
-
     </div>
 
-    <!-- Hamburger for mobile -->
     <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
 
   </div>
 </header>
-
-<style>
-  /* ── DROPDOWN ── */
-  .nav-dropdown{ position:relative; }
-  .nav-dropdown-btn{
-    background:none;border:none;cursor:pointer;
-    font-family:var(--font-body);font-size:inherit;
-    color:var(--text-color);padding:0;font-weight:500;
-  }
-  .nav-dropdown-menu{
-    display:none;
-    position:absolute;top:calc(100% + 10px);left:50%;
-    transform:translateX(-50%);
-    background:#fff;border-radius:14px;
-    box-shadow:0 12px 32px rgba(0,0,0,.12);
-    min-width:160px;padding:8px;
-    z-index:200;
-  }
-  .nav-dropdown:hover .nav-dropdown-menu,
-  .nav-dropdown:focus-within .nav-dropdown-menu{ display:flex;flex-direction:column; }
-  .nav-dropdown-menu a{
-    padding:9px 14px;border-radius:8px;
-    text-decoration:none;color:var(--text-color);
-    font-size:.9rem;font-weight:500;
-    transition:background .15s;
-  }
-  .nav-dropdown-menu a:hover{ background:var(--secondary-color); }
-
-  /* ── HEADER CONTROLS ── */
-  .header-controls{ display:flex;align-items:center;gap:10px; }
-
-  /* ── LANG BUTTONS ── */
-  .lang-buttons{
-    display:flex;
-    background:rgba(0,0,0,.06);
-    border-radius:999px;
-    padding:3px;
-    gap:2px;
-  }
-  .lang-btn{
-    border:none;background:none;cursor:pointer;
-    padding:4px 10px;border-radius:999px;
-    font-size:12px;font-weight:600;
-    color:var(--text-color);transition:all .2s;
-  }
-  .lang-btn.active{
-    background:#fff;
-    color:var(--primary-dark);
-    box-shadow:0 1px 4px rgba(0,0,0,.1);
-  }
-
-  /* ── HAMBURGER ── */
-  .nav-hamburger{
-    display:none;
-    flex-direction:column;gap:5px;
-    background:none;border:none;cursor:pointer;padding:4px;
-  }
-  .nav-hamburger span{
-    display:block;width:24px;height:2px;
-    background:var(--dark-color);border-radius:2px;
-    transition:all .3s;
-  }
-
-  @media(max-width:900px){
-    .nav{ display:none;flex-direction:column;gap:0; }
-    .nav.open{
-      display:flex;position:absolute;top:100%;left:0;right:0;
-      background:#fff;padding:12px 20px 20px;
-      box-shadow:0 10px 30px rgba(0,0,0,.1);z-index:100;
-    }
-    .nav .nav-link,.nav-dropdown-btn{ padding:10px 0;border-bottom:1px solid var(--border-color); }
-    .nav-dropdown-menu{
-      position:static;transform:none;box-shadow:none;
-      padding:0 0 0 14px;
-    }
-    .nav-dropdown:hover .nav-dropdown-menu{ display:flex; }
-    .nav-hamburger{ display:flex; }
-    .header-controls{ gap:6px; }
-  }
-</style>
-
-<script>
-  // Hamburger
-  document.getElementById('navHamburger').addEventListener('click', () => {
-    document.querySelector('.nav').classList.toggle('open');
-  });
-
-  // Language switcher
-  const translations = {
-    en: {
-      // Index
-      'hero-subtitle': 'Welcome to Caro Flower Art',
-      'hero-h1': 'Handmade Paper Flowers',
-      'hero-p': 'Timeless floral pieces for gifts, weddings, and meaningful moments.',
-      'collections-h2': 'Collections',
-      'collections-sub': 'Choose what you want to explore',
-      'contact-h2': 'Request a quote',
-      'contact-sub': "Tell me what you need and I'll help you choose the best option.",
-    },
-    es: {
-      'hero-subtitle': 'Bienvenidos a Caro Flower Art',
-      'hero-h1': 'Flores de papel hechas a mano',
-      'hero-p': 'Piezas florales para regalos, bodas y momentos especiales.',
-      'collections-h2': 'Colecciones',
-      'collections-sub': 'Elige qué quieres explorar',
-      'contact-h2': 'Pedir cotización',
-      'contact-sub': 'Cuéntame qué necesitas y te ayudo a elegir la mejor opción.',
-    }
-  };
-
-  let currentLang = localStorage.getItem('caroLang') || 'en';
-
-  function applyLang(lang) {
-    currentLang = lang;
-    localStorage.setItem('caroLang', lang);
-
-    // Update buttons
-    document.querySelectorAll('.lang-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.lang === lang);
-    });
-
-    // Update nav links with data-en/data-es
-    document.querySelectorAll('[data-en]').forEach(el => {
-      el.textContent = el.dataset[lang] || el.dataset.en;
-    });
-
-    // Show/hide .es spans
-    document.querySelectorAll('.es').forEach(el => {
-      el.style.display = lang === 'es' ? 'block' : 'none';
-    });
-
-    // Hide/show English text nodes via data-key
-    const t = translations[lang] || translations.en;
-    Object.entries(t).forEach(([key, val]) => {
-      const el = document.querySelector(`[data-key="${key}"]`);
-      if (el) el.textContent = val;
-    });
-  }
-
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
-  });
-
-  // Apply on load
-  document.addEventListener('DOMContentLoaded', () => applyLang(currentLang));
-  // Also apply after header loads
-  setTimeout(() => applyLang(currentLang), 300);
-</script>
