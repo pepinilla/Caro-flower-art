@@ -100,17 +100,19 @@
       if (!res.ok) throw new Error("header.html not found");
       host.innerHTML = await res.text();
 
-       // ✅ Highlight active page
-    
-const currentPath = window.location.pathname.replace(/\/index\.html$/, "/");
+      // ✅ Highlight active page
+      const currentPath = window.location.pathname.replace(/\/index\.html$/, "/");
 
-qsa(".nav-link", host).forEach(link => {
-  const linkPath = new URL(link.href).pathname.replace(/\/index\.html$/, "/");
-
-  if (linkPath === currentPath) {
-    link.classList.add("active");
-  }
-});
+      qsa(".nav-link", host).forEach(link => {
+        try {
+          const linkPath = new URL(link.href).pathname.replace(/\/index\.html$/, "/");
+          if (linkPath === currentPath) {
+            link.classList.add("active");
+          }
+        } catch (e) {
+          // Ignore URL parsing errors
+        }
+      });
       const onIndex =
         location.pathname === "/" ||
         location.pathname.endsWith("/index.html");
@@ -124,6 +126,9 @@ qsa(".nav-link", host).forEach(link => {
           a.setAttribute("href", "/index.html" + hash);
         }
       });
+
+      // Log success for debugging
+      console.log("✅ Header injected successfully");
 
       // Currency buttons
       qsa("[data-currency]", host).forEach(btn => {
@@ -152,6 +157,7 @@ qsa(".nav-link", host).forEach(link => {
 
       updateCurrencyUI();
     } catch (err) {
+      console.error("❌ Error loading header:", err);
       host.innerHTML = `
         <header class="site-header">
           <div class="header-inner">
