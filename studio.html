@@ -4,116 +4,61 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Studio | Caro Flower Art</title>
-  <meta name="description" content="A peek inside Caro's studio — the creative space where every handmade paper flower is born." />
+  <meta name="description" content="A peek inside Caro's studio — where every handmade paper flower is born." />
   <link rel="stylesheet" href="/site.css?v=20260126b" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    .page-hero{
-      text-align:center;
-      padding:60px 20px 40px;
-      position:relative;
-    }
-    .page-hero::before{
-      content:'';
-      position:absolute;inset:0;
-      background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(232,154,166,.22) 0%,transparent 70%);
-      pointer-events:none;
-    }
-    .page-hero .kicker{
-      display:inline-block;
-      background:var(--secondary-color);
-      color:var(--primary-dark);
-      font-size:11px;font-weight:600;
-      letter-spacing:.12em;text-transform:uppercase;
-      padding:5px 16px;border-radius:999px;margin-bottom:16px;
-    }
-    .page-hero h1{ margin:0 0 14px; }
-    .page-hero p{ max-width:600px;margin:0 auto;opacity:.75;font-size:1.05rem;line-height:1.7; }
-
-    /* ── STUDIO GRID ── */
-    .studio-section{ max-width:1100px;margin:0 auto;padding:20px 20px 60px; }
-
-    .studio-featured{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
-      margin-bottom:20px;
-    }
-    @media(max-width:640px){ .studio-featured{ grid-template-columns:1fr; } }
-
-    .studio-featured img{
-      width:100%;
-      border-radius:20px;
-      box-shadow:0 12px 32px rgba(0,0,0,.1);
-      object-fit:cover;
-      aspect-ratio:4/3;
-      display:block;
-    }
-
-    /* ── STORY ── */
-    .studio-story{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:40px;
-      align-items:center;
-      max-width:1100px;
-      margin:0 auto;
-      padding:0 20px 60px;
-    }
-    @media(max-width:720px){ .studio-story{ grid-template-columns:1fr; } }
-
-    .studio-story-text h2{ margin:0 0 16px; }
-    .studio-story-text p{
-      opacity:.78;line-height:1.8;font-size:1rem;margin:0 0 14px;
-    }
-    .studio-story-text .quote{
-      border-left:3px solid var(--primary-color);
-      padding:14px 18px;
-      background:var(--secondary-color);
-      border-radius:0 12px 12px 0;
-      font-style:italic;
-      font-size:1.05rem;
-      margin:20px 0 28px;
-      line-height:1.7;
-    }
-    .studio-story img{
-      width:100%;
-      border-radius:20px;
-      box-shadow:0 16px 40px rgba(232,154,166,.25);
-      aspect-ratio:3/4;
-      object-fit:cover;
-    }
-
-    /* ── CTA ── */
-    .studio-cta{
-      background:linear-gradient(135deg,var(--secondary-color),#fdf0ea);
-      border-radius:24px;
-      padding:48px 32px;
-      text-align:center;
-      max-width:700px;
-      margin:0 auto 60px;
-    }
-    .studio-cta h2{ margin:0 0 12px;font-size:2rem; }
-    .studio-cta p{ opacity:.75;margin:0 0 28px;font-size:1rem;line-height:1.7; }
-    .cta-buttons{ display:flex;gap:12px;justify-content:center;flex-wrap:wrap; }
+    .hero-kicker{display:inline-block;background:rgba(255,255,255,.25);backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 16px;border-radius:999px;margin-bottom:16px;border:1px solid rgba(255,255,255,.3);}
+    .carousel-section{max-width:900px;margin:0 auto;padding:40px 20px 20px;}
+    .carousel-wrap{position:relative;}
+    .carousel{overflow:hidden;border-radius:24px;box-shadow:0 16px 40px rgba(0,0,0,.12);}
+    .carousel-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1);}
+    .carousel-track img{min-width:100%;width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:none;border-radius:50%;width:44px;height:44px;font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;z-index:2;}
+    .carousel-btn.prev{left:14px;} .carousel-btn.next{right:14px;}
+    .carousel-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;}
+    .carousel-dot{width:8px;height:8px;border-radius:50%;background:var(--border-color);cursor:pointer;transition:background .2s;}
+    .carousel-dot.active{background:var(--primary-color);}
+    .studio-story{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:900px;margin:40px auto 0;padding:0 20px;}
+    @media(max-width:720px){.studio-story{grid-template-columns:1fr;}}
+    .studio-story-text h2{margin:0 0 16px;}
+    .studio-story-text p{opacity:.78;line-height:1.8;font-size:1rem;margin:0 0 14px;}
+    .studio-quote{border-left:3px solid var(--primary-color);padding:14px 18px;background:var(--secondary-color);border-radius:0 12px 12px 0;font-style:italic;font-size:1.05rem;margin:20px 0 28px;line-height:1.7;}
+    .studio-story img{width:100%;border-radius:20px;box-shadow:0 16px 40px rgba(232,154,166,.25);aspect-ratio:3/4;object-fit:cover;}
+    .studio-cta{background:linear-gradient(135deg,var(--secondary-color),#fdf0ea);border-radius:24px;padding:48px 32px;text-align:center;max-width:700px;margin:40px auto 60px;}
+    .studio-cta h2{margin:0 0 12px;font-size:2rem;}
+    .studio-cta p{opacity:.75;margin:0 0 28px;font-size:1rem;line-height:1.7;}
+    .cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
   </style>
 </head>
 <body>
-
 <div id="site-header"></div>
 
-<!-- HERO -->
-<div class="page-hero">
-  <div class="kicker">🎨 Behind the Art</div>
-  <h1>The Studio</h1>
-  <p>Where every petal begins. A peek into the creative space where paper becomes art.</p>
-</div>
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-kicker">🎨 Behind the Art</div>
+    <h1>The Studio</h1>
+    <p>Where every petal begins. A peek into the creative space — and the family that makes it all worthwhile.</p>
+    <div class="hero-buttons">
+      <a href="/about.html" class="btn-primary">Meet Carolina</a>
+      <a href="/index.html" class="btn-secondary">Back home</a>
+    </div>
+  </div>
+</section>
 
-<!-- STUDIO PHOTOS -->
-<div class="studio-section">
-  <div class="studio-featured">
-    <img src="/images/about/studio-life/studio-life-01.webp" alt="Caro Flower Art studio" loading="lazy"/>
-    <img src="/images/about/studio-life/studio-life-02.webp" alt="Studio workspace" loading="lazy"/>
+<!-- CAROUSEL -->
+<div class="carousel-section">
+  <div class="carousel-wrap">
+    <div class="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <img src="/images/about/studio-life/studio-life-01.webp" alt="Caro Flower Art studio" loading="lazy"/>
+        <img src="/images/about/studio-life/studio-life-02.webp" alt="Studio life" loading="lazy"/>
+      </div>
+    </div>
+    <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
+    <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
+    <div class="carousel-dots" id="carouselDots"></div>
   </div>
 </div>
 
@@ -121,36 +66,53 @@
 <div class="studio-story">
   <div class="studio-story-text">
     <h2>Where the magic happens</h2>
-    <p>The studio is where ideas come to life. It's a space filled with paper, color, and the quiet focus of handcraft — where every flower is made slowly, intentionally, and with care.</p>
-    <p>From selecting the right paper weight to shaping each petal by hand, every step happens here. No assembly lines, no shortcuts — just an artist and her craft.</p>
-    <div class="quote">
+    <p>The studio is where ideas come to life. A space filled with paper, color, and the quiet joy of making something beautiful by hand.</p>
+    <p>And sometimes — the best moments happen when my kids decide to pose with the arches 🌸 Family is part of everything I create.</p>
+    <div class="studio-quote">
       "I believe that things made by hand carry a different kind of energy. You can feel the time and love in every piece."
     </div>
     <div class="cta-buttons">
-      <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%20love%20your%20studio%20%F0%9F%8C%B8%20I%27d%20love%20to%20get%20a%20custom%20piece." target="_blank" class="btn-primary">💬 Get a custom piece</a>
+      <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%20love%20your%20work%20%F0%9F%8C%B8%20I%27d%20love%20a%20custom%20piece." target="_blank" class="btn-primary">💬 Get a custom piece</a>
       <a href="/about.html" class="btn-secondary">About Caro</a>
     </div>
   </div>
-  <img src="/images/about/studio-life/studio-life-01.webp" alt="Carolina in her studio" loading="lazy"/>
+  <img src="/images/about/studio-life/studio-life-02.webp" alt="Carolina and family in studio" loading="lazy"/>
 </div>
 
 <!-- CTA -->
 <div style="padding:0 20px">
   <div class="studio-cta">
     <h2>Want something made for you?</h2>
-    <p>Every piece starts with a conversation. Tell me your vision and I'll bring it to life from this studio — petal by petal.</p>
+    <p>Every piece starts with a conversation. Tell me your vision and I'll bring it to life — petal by petal.</p>
     <div class="cta-buttons">
-      <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%27d%20love%20a%20custom%20piece%20made%20in%20your%20studio%20%F0%9F%8C%B8" target="_blank" class="btn-primary">💬 Start a conversation</a>
+      <a href="https://wa.me/12368189725?text=Hi%20Caro!%20I%27d%20love%20a%20custom%20piece%20%F0%9F%8C%B8" target="_blank" class="btn-primary">💬 Start a conversation</a>
       <a href="/index.html#collections" class="btn-secondary">See all collections</a>
     </div>
   </div>
 </div>
 
-<!-- WHATSAPP FLOAT -->
-<a href="https://wa.me/12368189725" class="whatsapp-button" target="_blank" rel="noopener">
-  <i class="fab fa-whatsapp"></i>
-</a>
+<a href="https://wa.me/12368189725" class="whatsapp-button" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
 
 <script src="/site.js?v=20260126b"></script>
+<script>
+  let current = 0;
+  const track = document.getElementById('carouselTrack');
+  const imgs = track.querySelectorAll('img');
+  const total = imgs.length;
+  const dotsEl = document.getElementById('carouselDots');
+  imgs.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+  function goTo(n) {
+    current = (n + total) % total;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+  function moveCarousel(dir) { goTo(current + dir); }
+  setInterval(() => moveCarousel(1), 3500);
+</script>
 </body>
 </html>
