@@ -71,7 +71,7 @@
     <span class="es">Elige qué quieres explorar</span>
   </p>
 
-  <div class="grid">
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr));max-width:1280px;margin:0 auto;justify-items:center;">
 
     <!-- FLOWERS CARD (VIDEO + fallback image) -->
     <div class="card">
@@ -96,7 +96,7 @@
           <source src="videos/Flowers.mp4" type="video/mp4" />
         </video>
 
-        <span class="card-badge">Flowers</span>
+        <span class="card-badge" style="background:var(--primary-color);color:#fff;border:none;">Flowers</span>
       </a>
 
       <div class="card-content">
@@ -140,7 +140,7 @@
           <source src="videos/Bouquets.mp4" type="video/mp4" />
         </video>
 
-        <span class="card-badge">Bouquets</span>
+        <span class="card-badge" style="background:var(--primary-color);color:#fff;border:none;">Bouquets</span>
       </a>
 
       <div class="card-content">
@@ -170,7 +170,7 @@
           alt="Paper flower installations"
           loading="lazy"
         >
-        <span class="card-badge">Installations</span>
+        <span class="card-badge" style="background:var(--primary-color);color:#fff;border:none;">Installations</span>
       </a>
       <div class="card-content">
         <div class="category">Installations</div>
@@ -181,6 +181,25 @@
       </div>
     </div>
 
+    <!-- STUDIO CARD -->
+    <div class="card">
+      <a href="/studio.html" class="card-image-wrapper">
+        <img
+          class="card-fallback"
+          src="images/about/studio-life/studio-life-01.webp"
+          alt="Caro Flower Art studio"
+          loading="lazy"
+        >
+        <span class="card-badge" style="background:var(--primary-color);color:#fff;border:none;">Studio</span>
+      </a>
+      <div class="card-content">
+        <div class="category">Studio</div>
+        <p>A peek inside the creative space where every handmade flower is born</p>
+        <div class="card-footer">
+          <a href="/studio.html" class="card-btn">Visit the Studio</a>
+        </div>
+      </div>
+    </div>
 
   </div>
 </section>
@@ -203,7 +222,7 @@
         <i class="fab fa-whatsapp"></i>
         <div>
           <strong>WhatsApp</strong>
-          <a href="https://wa.me/573209781661" target="_blank" rel="noopener">
+          <a href="https://wa.me/12368189725" target="_blank" rel="noopener">
             Open chat <span class="es">Abrir chat</span>
           </a>
         </div>
@@ -287,7 +306,7 @@
 </footer>
 
 <!-- WHATSAPP FLOAT -->
-<a href="https://wa.me/573209781661" class="whatsapp-button" target="_blank" rel="noopener">
+<a href="https://wa.me/12368189725" class="whatsapp-button" target="_blank" rel="noopener">
   <i class="fab fa-whatsapp"></i>
 </a>
 <script src="./config.js"></script>
