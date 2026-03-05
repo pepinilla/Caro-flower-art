@@ -1,44 +1,45 @@
 <header class="site-header">
-  <div class="header-inner">
-
-    <a class="brand" href="/index.html" aria-label="Caro Flower Art">
-      <img class="brand-logo" src="/logo.svg" alt="Caro Flower Art logo" loading="eager" />
+  <nav class="nav">
+    <a class="brand" href="/index.html" aria-label="Caro Flower Art home">
+      <img src="/logo.svg" alt="Caro Flower Art logo" />
+      <span>Caro Flower Art</span>
     </a>
 
-    <nav class="nav" aria-label="Main navigation">
-      <a class="nav-link" href="/index.html#collections">Gallery</a>
-      <a class="nav-link" href="/flowers.html">Flowers</a>
-      <a class="nav-link" href="/bouquets.html">Bouquets</a>
-
-      <div class="nav-dropdown">
-        <button class="nav-link nav-dropdown-btn">More ▾</button>
-        <div class="nav-dropdown-menu">
-          <a href="/installations.html">Installations</a>
-          <a href="/studio.html">Studio</a>
-          <a href="/about.html">About</a>
-          <a href="/blog/">Blog</a>
-        </div>
-      </div>
-
-      <a class="nav-link nav-cta" href="/index.html#contact">Get a quote</a>
-    </nav>
-
-    <div class="header-controls">
-      <div class="lang-buttons">
-        <button class="lang-btn active" data-lang="en" title="English">EN</button>
-        <button class="lang-btn" data-lang="es" title="Español">ES</button>
-      </div>
-      <div class="currency-wrap" id="currencyWrap" title="Select currency / Selecciona moneda">
-        <div class="currency-buttons">
-          <button class="currency-btn" type="button" data-currency="CAD" title="Canadian Dollar">CAD</button>
-          <button class="currency-btn" type="button" data-currency="COP" title="Colombian Peso">COP</button>
-        </div>
-      </div>
-    </div>
-
-    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
+    <button class="hamburger" type="button" aria-label="Open menu">
+      <i class="fa-solid fa-bars"></i>
     </button>
 
-  </div>
+    <ul class="nav-menu">
+      <li><a href="/index.html#collections"><span class="en">Gallery</span><span class="es">Galería</span></a></li>
+      <li><a href="/flowers.html"><span class="en">Flowers</span><span class="es">Flores</span></a></li>
+      <li><a href="/bouquets.html"><span class="en">Bouquets</span><span class="es">Ramos</span></a></li>
+
+      <!-- More dropdown -->
+      <li class="nav-more">
+        <button class="nav-more-btn"><span class="en">More ▾</span><span class="es">Más ▾</span></button>
+        <ul class="nav-more-menu">
+          <li><a href="/installations.html"><span class="en">Installations</span><span class="es">Instalaciones</span></a></li>
+          <li><a href="/studio.html"><span class="en">Studio</span><span class="es">Estudio</span></a></li>
+          <li><a href="/about.html"><span class="en">About</span><span class="es">Sobre mí</span></a></li>
+          <li><a href="/blog/"><span class="en">Blog</span><span class="es">Blog</span></a></li>
+        </ul>
+      </li>
+
+      <li><a href="/index.html#contact" class="nav-cta"><span class="en">Get a quote</span><span class="es">Cotizar</span></a></li>
+
+      <li style="margin-left:auto;border-left:1px solid rgba(0,0,0,.1);padding-left:20px;">
+        <button data-lang-switch="en" style="background:none;border:none;cursor:pointer;padding:5px 10px;font-weight:600;font-size:12px;">EN</button>
+        <button data-lang-switch="es" style="background:none;border:none;cursor:pointer;padding:5px 10px;font-weight:600;font-size:12px;">ES</button>
+      </li>
+    </ul>
+  </nav>
 </header>
+
+<style>
+.nav-more{ position:relative; }
+.nav-more-btn{ background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;color:inherit;padding:0;font-weight:500; }
+.nav-more-menu{ display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:160px;padding:8px;z-index:200;list-style:none;margin:0; }
+.nav-more:hover .nav-more-menu,.nav-more:focus-within .nav-more-menu{ display:flex;flex-direction:column; }
+.nav-more-menu li a{ display:block;padding:9px 14px;border-radius:8px;text-decoration:none;color:#4f3f3f;font-size:.9rem;font-weight:500; }
+.nav-more-menu li a:hover{ background:#f5d5dc; }
+</style>
