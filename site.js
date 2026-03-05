@@ -60,22 +60,6 @@
   }
   window.CARO_setCurrency = setCurrency;
 
-  // Auto-detect currency based on location for Canada
-  function detectCurrencyByLocation() {
-    const saved = localStorage.getItem("CARO_CURRENCY");
-    if (saved) return saved;
-
-    // Try to detect country via timezone
-    const tz = String(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
-    const isCanada = tz.includes("Vancouver") || tz.includes("Toronto") || tz.includes("Edmonton") || 
-                     tz.includes("Winnipeg") || tz.includes("Halifax") || tz.includes("Montreal") ||
-                     tz.includes("Calgary") || tz.includes("Regina") || tz.includes("St_Johns");
-    
-    const cur = isCanada ? "CAD" : "COP";
-    localStorage.setItem("CARO_CURRENCY", cur);
-    return cur;
-  }
-
   function updateCurrencyUI() {
     qsa("[data-currency]").forEach(btn => {
       const isActive = btn.dataset.currency === window.CARO_CURRENCY;
@@ -162,30 +146,14 @@
       function applyLang(lang) {
         localStorage.setItem("caroLang", lang);
         qsa(".lang-btn", host).forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
-        
-        // Aplicar idioma a toda la página
-        document.documentElement.lang = lang;
-        document.documentElement.setAttribute("data-lang", lang);
-        
-        // Ocultar/mostrar textos en español
         document.querySelectorAll(".es").forEach(el => {
-          el.style.display = lang === "es" ? "inline" : "none";
-        });
-        
-        // Ocultar/mostrar textos en inglés
-        document.querySelectorAll(".en").forEach(el => {
-          el.style.display = lang === "en" ? "inline" : "none";
+          el.style.display = lang === "es" ? "block" : "none";
         });
       }
       qsa(".lang-btn", host).forEach(btn => {
         btn.addEventListener("click", () => applyLang(btn.dataset.lang));
       });
-      
-      // Detectar idioma del navegador automáticamente
-      const savedLang = localStorage.getItem("caroLang");
-      const browserLang = navigator.language.split("-")[0];
-      const defaultLang = savedLang || (browserLang === "es" ? "es" : "en");
-      applyLang(defaultLang);
+      applyLang(localStorage.getItem("caroLang") || "en");
 
       updateCurrencyUI();
     } catch (err) {
