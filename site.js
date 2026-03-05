@@ -130,6 +130,26 @@ qsa(".nav-link", host).forEach(link => {
         btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
       });
 
+      // ── HAMBURGER ──
+      const hamburger = qs("#navHamburger", host);
+      const nav = qs(".nav", host);
+      if (hamburger && nav) {
+        hamburger.addEventListener("click", () => nav.classList.toggle("open"));
+      }
+
+      // ── LANGUAGE SWITCHER ──
+      function applyLang(lang) {
+        localStorage.setItem("caroLang", lang);
+        qsa(".lang-btn", host).forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
+        document.querySelectorAll(".es").forEach(el => {
+          el.style.display = lang === "es" ? "block" : "none";
+        });
+      }
+      qsa(".lang-btn", host).forEach(btn => {
+        btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+      });
+      applyLang(localStorage.getItem("caroLang") || "en");
+
       updateCurrencyUI();
     } catch (err) {
       host.innerHTML = `
