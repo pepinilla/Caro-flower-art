@@ -1731,3 +1731,41 @@ font-family: var(--font-title);
   background: rgba(0,0,0,0.08);
   margin: 18px 0;
 }
+
+/* ======================================================
+   HEADER v2 — Dropdown + Lang + Hamburger
+   ====================================================== */
+
+/* ── DROPDOWN ── */
+.nav-dropdown{ position:relative; }
+.nav-dropdown-btn{ background:none;border:none;cursor:pointer;font-family:var(--font-body);font-size:inherit;color:var(--text-color);padding:0;font-weight:500; }
+.nav-dropdown-menu{ display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:160px;padding:8px;z-index:200; }
+.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown:focus-within .nav-dropdown-menu{ display:flex;flex-direction:column; }
+.nav-dropdown-menu a{ padding:9px 14px;border-radius:8px;text-decoration:none;color:var(--text-color);font-size:.9rem;font-weight:500;transition:background .15s; }
+.nav-dropdown-menu a:hover{ background:var(--secondary-color); }
+
+/* ── HEADER CONTROLS ── */
+.header-controls{ display:flex;align-items:center;gap:10px; }
+
+/* ── LANG BUTTONS ── */
+.lang-buttons{ display:flex;background:rgba(0,0,0,.06);border-radius:999px;padding:3px;gap:2px; }
+.lang-btn{ border:none;background:none;cursor:pointer;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;color:var(--text-color);transition:all .2s; }
+.lang-btn.active{ background:#fff;color:var(--primary-dark);box-shadow:0 1px 4px rgba(0,0,0,.1); }
+
+/* ── HAMBURGER ── */
+.nav-hamburger{ display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px; }
+.nav-hamburger span{ display:block;width:24px;height:2px;background:var(--dark-color);border-radius:2px; }
+
+@media(max-width:900px){
+  .nav{ display:none;flex-direction:column;gap:0; }
+  .nav.open{ display:flex;position:absolute;top:100%;left:0;right:0;background:#fff;padding:12px 20px 20px;box-shadow:0 10px 30px rgba(0,0,0,.1);z-index:100; }
+  .nav .nav-link,.nav-dropdown-btn{ padding:10px 0;border-bottom:1px solid var(--border-color);width:100%;text-align:left; }
+  .nav-dropdown-menu{ position:static;transform:none;box-shadow:none;padding:0 0 0 14px; }
+  .nav-dropdown.open .nav-dropdown-menu{ display:flex; }
+  .nav-hamburger{ display:flex; }
+  .header-controls{ gap:6px; }
+  .lang-buttons{ display:none; }
+}
+
+/* ── PINK BADGES ── */
+.card-badge{ background:var(--primary-color) !important;color:#fff !important;border:none !important; }
