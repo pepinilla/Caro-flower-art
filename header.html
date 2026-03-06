@@ -2,43 +2,97 @@
   <div class="header-inner">
 
     <a class="brand" href="/index.html" aria-label="Caro Flower Art">
-      <img class="brand-logo" src="/logo.svg" alt="Caro Flower Art logo" loading="eager" />
+      <img
+        class="brand-logo"
+        src="/logo.svg"
+        alt="Caro Flower Art logo"
+        loading="eager"
+      />
     </a>
 
-    <nav class="nav" aria-label="Main navigation">
-      <a class="nav-link" href="/index.html#collections">Gallery</a>
-      <a class="nav-link" href="/flowers.html">Flowers</a>
-      <a class="nav-link" href="/bouquets.html">Bouquets</a>
+    <nav class="nav" id="mainNav" aria-label="Main navigation">
+      <a class="nav-link" href="/index.html#collections">
+        <span class="en">Gallery</span>
+        <span class="es">Galería</span>
+      </a>
+
+      <a class="nav-link" href="/flowers.html">
+        <span class="en">Flowers</span>
+        <span class="es">Flores</span>
+      </a>
+
+      <a class="nav-link" href="/bouquets.html">
+        <span class="en">Bouquets</span>
+        <span class="es">Ramos</span>
+      </a>
 
       <div class="nav-dropdown">
-        <button class="nav-link nav-dropdown-btn">More ▾</button>
+        <button
+          class="nav-link nav-dropdown-btn"
+          type="button"
+          aria-label="More sections"
+        >
+          <span class="en">More</span>
+          <span class="es">Más</span>
+          <span class="nav-caret">▾</span>
+        </button>
+
         <div class="nav-dropdown-menu">
-          <a href="/installations.html">Installations</a>
-          <a href="/studio.html">Studio</a>
-          <a href="/about.html">About</a>
-          <a href="/blog/">Blog</a>
+          <a href="/installations.html">
+            <span class="en">Installations</span>
+            <span class="es">Instalaciones</span>
+          </a>
+
+          <a href="/studio.html">
+            <span class="en">Studio</span>
+            <span class="es">Estudio</span>
+          </a>
+
+          <a href="/about.html">
+            <span class="en">About</span>
+            <span class="es">Sobre mí</span>
+          </a>
+
+          <a href="/blog/">
+            <span class="en">Blog</span>
+            <span class="es">Blog</span>
+          </a>
         </div>
       </div>
 
-      <a class="nav-link nav-cta" href="/index.html#contact">Get a quote</a>
+      <a class="nav-link nav-cta" href="/index.html#contact">
+        <span class="en">Get a quote</span>
+        <span class="es">Cotiza aquí</span>
+      </a>
     </nav>
 
     <div class="header-controls">
-      <div class="lang-buttons">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="es">ES</button>
+
+      <div class="lang-buttons" aria-label="Language selector">
+        <button class="lang-btn active" type="button" data-lang="en">EN</button>
+        <button class="lang-btn" type="button" data-lang="es">ES</button>
       </div>
+
       <div class="currency-wrap" id="currencyWrap">
-        <div id="currencyHint" class="currency-hint"></div>
-        <div class="currency-buttons">
-          <button class="currency-btn" type="button" data-currency="CAD">CAD</button>
+        <div class="currency-buttons" aria-label="Currency selector">
+          <button class="currency-btn active" type="button" data-currency="CAD">CAD</button>
           <button class="currency-btn" type="button" data-currency="COP">COP</button>
         </div>
       </div>
+
     </div>
 
-    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
+    <button
+      class="nav-hamburger"
+      id="navHamburger"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mainNav"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
 
   </div>
