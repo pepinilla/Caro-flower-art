@@ -3,294 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Caro Flower Art – Handmade Paper Flowers</title>
-
-  <meta name="description" content="Caro Flower Art creates handmade paper flowers for special moments. Flores de papel hechas a mano para regalos, bodas y ocasiones especiales." />
-  <meta name="keywords" content="handmade paper flowers, flores de papel, wedding flowers, paper bouquets, custom flowers" />
-  <meta name="author" content="Caro Flower Art" />
-
-  <meta property="og:title" content="Handmade Paper Flowers" />
-  <meta property="og:description" content="Handmade paper flowers crafted with love." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="images/Hero/hero-poster.webp" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" />
-
+  <title>Bouquets | Caro Flower Art</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="/site.css?v=20260305c" />
+  <link rel="stylesheet" href="/site.css?v=20260126b" />
+  <style>
+    .hero-kicker{
+      display:inline-block;
+      background:rgba(255,255,255,.25);
+      backdrop-filter:blur(8px);
+      color:#fff;
+      font-size:11px;font-weight:600;
+      letter-spacing:.12em;text-transform:uppercase;
+      padding:5px 16px;border-radius:999px;
+      margin-bottom:16px;
+      border:1px solid rgba(255,255,255,.3);
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
 <div id="site-header"></div>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <video class="hero-bg-video" autoplay muted loop playsinline poster="images/Hero/hero-poster.webp">
-    <source src="videos/hero-flowers.mp4" type="video/mp4" />
-  </video>
+<section class="hero">
   <div class="hero-overlay"></div>
-
   <div class="hero-content">
-    <div class="hero-subtitle">
-      <span class="en">Welcome to Caro Flower Art</span>
-      <span class="es">Bienvenidos a Caro Flower Art</span>
-    </div>
-
-    <h1>
-      <span class="en">Handmade Paper Flowers</span>
-      <span class="es">Flores de papel hechas a mano</span>
-    </h1>
-
+    <div class="hero-kicker">💐 For Special Moments</div>
+    <h1>Bouquets <span class="es">Ramos</span></h1>
     <p>
-      <span class="en">Timeless floral pieces for gifts, weddings, and meaningful moments.</span>
-      <span class="es">Piezas florales para regalos y momentos especiales.</span>
+      Handmade bouquets for weddings, gifts, and special moments.
+      <span class="es">Ramos hechos a mano para bodas, regalos y momentos especiales.</span>
     </p>
-
     <div class="hero-buttons">
-      <a href="#collections" class="btn-primary">
-        Explore collections <span class="es">Ver colecciones</span>
-      </a>
-      <a href="#contact" class="btn-secondary">
-        Request a quote <span class="es">Pedir cotización</span>
-      </a>
+      <a href="/index.html#contact" class="btn-primary">Request a quote <span class="es">Pedir cotización</span></a>
+      <a href="/index.html" class="btn-secondary">Back home <span class="es">Volver</span></a>
     </div>
   </div>
 </section>
 
-<!-- COLLECTIONS -->
-<section class="gallery" id="collections">
-  <h2>Collections <span class="es">Colecciones</span></h2>
-
-  <p class="section-subtitle">
-    Choose what you want to explore
-    <span class="es">Elige qué quieres explorar</span>
-  </p>
-
-  <div class="grid collections-grid">
-
-    <!-- FLOWERS CARD (VIDEO + fallback image) -->
-    <div class="card">
-      <a href="/flowers.html" class="card-image-wrapper">
-
-        <img
-          class="card-fallback"
-          src="images/carnations/Carnations_bouquets.webp"
-          alt="Handmade paper flowers"
-          loading="lazy"
-        >
-
-        <video
-          class="card-video"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          poster="images/carnations/Carnations_bouquets.webp"
-        >
-          <source src="videos/Flowers.mp4" type="video/mp4" />
-        </video>
-
-        <span class="card-badge" style="background:var(--primary-color);color:#fff;border:none;">Flowers</span>
-      </a>
-
-      <div class="card-content">
-        <div class="category">
-          Flowers <span class="es">Flores</span>
-        </div>
-
-        <p>
-          Individual handmade paper flowers
-          <span class="es">Flores de papel hechas a mano</span>
-        </p>
-
-        <div class="card-footer">
-          <a href="/flowers.html" class="card-btn">
-            View Flowers <span class="es">Ver flores</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOUQUETS CARD (VIDEO + fallback image) -->
-    <div class="card">
-      <a href="/bouquets.html" class="card-image-wrapper">
-
-        <img
-          class="card-fallback"
-          src="images/bouquets/hand/gallery/Wedding-bouquet.webp"
-          alt="Paper flower bouquets"
-          loading="lazy"
-        >
-
-        <video
-          class="card-video"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          poster="images/bouquets/hand/gallery/Wedding-bouquet.webp"
-        >
-          <source src="videos/Bouquets.mp4" type="video/mp4" />
-        </video>
-
-        <span class="card-badge" style="background:var(--primary-color);color:#fff;border:none;">Bouquets</span>
-      </a>
-
-      <div class="card-content">
-        <div class="category">
-          Bouquets <span class="es">Ramos</span>
-        </div>
-
-        <p>
-          Handmade bouquets for special moments
-          <span class="es">Ramos hechos a mano</span>
-        </p>
-
-        <div class="card-footer">
-          <a href="/bouquets.html" class="card-btn">
-            View Bouquets <span class="es">Ver ramos</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- INSTALLATIONS CARD -->
-    <div class="card">
-      <a href="/installations.html" class="card-image-wrapper">
-        <img
-          class="card-fallback"
-          src="images/installations/botanical-arch/arch-full-01.webp"
-          alt="Paper flower installations"
-          loading="lazy"
-        >
-        <span class="card-badge" style="background:var(--primary-color);color:#fff;border:none;">Installations</span>
-      </a>
-      <div class="card-content">
-        <div class="category">Installations</div>
-        <p>Large-scale botanical arches and statement pieces for weddings and events</p>
-        <div class="card-footer">
-          <a href="/installations.html" class="card-btn">View Installations</a>
-        </div>
-      </div>
-    </div>
-
-  </div>
+<section class="gallery" id="gallery">
+  <div class="gallery-grid" id="galleryGrid"></div>
 </section>
 
-<!-- CONTACT -->
-<section class="contact" id="contact">
-  <h2>Request a quote <span class="es">Pedir cotización</span></h2>
-
-  <p class="contact-subtitle">
-    Tell me what you need and I’ll help you choose the best option.
-    <span class="es">Cuéntame qué necesitas.</span>
-  </p>
-
-  <div class="contact-wrapper">
-
-    <!-- CONTACT INFO -->
-    <div class="contact-info">
-
-      <div class="contact-item">
-        <i class="fab fa-whatsapp"></i>
-        <div>
-          <strong>WhatsApp</strong>
-          <a href="https://wa.me/12368189725" target="_blank" rel="noopener">
-            Open chat <span class="es">Abrir chat</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <i class="fa-solid fa-envelope"></i>
-        <div>
-          <strong>Email</strong>
-          <a href="mailto:thrivingwomanandmom@gmail.com">
-            Send email <span class="es">Enviar correo</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <i class="fab fa-instagram"></i>
-        <div>
-          <strong>Instagram</strong>
-          <a href="https://instagram.com/caroflowerart" target="_blank" rel="noopener">
-            @caroflowerart <span class="es">Ver perfil</span>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    
-
-<!-- FORM -->
-<form class="contact-form" id="contactForm" novalidate>
-  <h3>Message me <span class="es">Escríbeme</span></h3>
-
-  <div class="form-group">
-    <label for="quote-name">Name <span class="es">Nombre</span></label>
-    <input
-      id="quote-name"
-      name="name"
-      type="text"
-      placeholder="Your name / Tu nombre"
-      autocomplete="name"
-      required
-    />
-  </div>
-
-  <div class="form-group">
-    <label for="quote-email">Email <span class="es">Correo</span></label>
-    <input
-      id="quote-email"
-      name="email"
-      type="email"
-      placeholder="you@email.com"
-      autocomplete="email"
-      required
-    />
-  </div>
-
-  <div class="form-group">
-    <label for="quote-need">What do you need? <span class="es">¿Qué necesitas?</span></label>
-    <textarea
-      id="quote-need"
-      name="message"
-      placeholder="Product, quantity and date / Producto, cantidad y fecha"
-      rows="4"
-      required
-    ></textarea>
-  </div>
-
-  <button id="quote-submit" type="submit">
-    Request a quote <span class="es">Pedir cotización</span>
-  </button>
-
-  <p id="quote-status" role="status" aria-live="polite" style="margin-top:10px;"></p>
-</form>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <p>© 2026 Caro Flower Art. All rights reserved.</p>
-</footer>
-
-<!-- WHATSAPP FLOAT -->
 <a href="https://wa.me/12368189725" class="whatsapp-button" target="_blank" rel="noopener">
   <i class="fab fa-whatsapp"></i>
 </a>
-<script src="/config.js"></script>
-<script src="/products.js"></script>
-<script src="/site.js?v=20260305c"></script>
+
+<script src="/config.js?v=20260126b"></script>
+<script src="/products.js?v=20260126b"></script>
+<script src="/site.js?v=20260126b"></script>
+<script>
+  window.CARO_PAGE = { gridId: "galleryGrid", mode: "category", category: "bouquets" };
+</script>
 </body>
 </html>
