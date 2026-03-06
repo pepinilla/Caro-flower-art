@@ -221,7 +221,7 @@
 
       return `
         <details class="price-details">
-          <summary class="price-summary">Price</summary>
+          <summary class="price-summary"><span class="en">Price</span><span class="es">Precio</span></summary>
           <div class="price-box">${rows}</div>
         </details>
       `;
@@ -231,7 +231,7 @@
     if (from) {
       return `
         <details class="price-details">
-          <summary class="price-summary">Price</summary>
+          <summary class="price-summary"><span class="en">Price</span><span class="es">Precio</span></summary>
           <div class="price-box">
             <div class="price-line"><strong>${formatMoney(from, cur)}</strong></div>
           </div>
