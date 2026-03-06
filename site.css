@@ -1745,7 +1745,9 @@ font-family: var(--font-title);
 .nav-dropdown-menu a:hover{ background:var(--secondary-color); }
 
 /* ── HEADER CONTROLS ── */
-.header-controls{ display:flex;align-items:center;gap:10px; }
+.header-controls{ display:flex;align-items:center;gap:8px; }
+.currency-wrap{ font-size:11px; }
+.currency-btn{ font-size:11px; padding:3px 7px; }
 
 /* ── LANG BUTTONS ── */
 .lang-buttons{ display:flex;background:rgba(0,0,0,.06);border-radius:999px;padding:3px;gap:2px; }
@@ -1757,20 +1759,26 @@ font-family: var(--font-title);
 .nav-hamburger span{ display:block;width:24px;height:2px;background:var(--dark-color);border-radius:2px; }
 
 @media(max-width:900px){
-  .nav{ display:none;flex-direction:column;gap:0;width:100%; }
+  .nav{
+    display:none;
+    flex-direction:column;
+    gap:0;
+    width:100%;
+  }
   .nav.open{
     display:flex;
     position:fixed;
     top:64px;
-    left:0;right:0;
+    left:0; right:0;
     background:#fff;
-    padding:16px 24px 28px;
+    padding:12px 20px 20px;
     box-shadow:0 8px 24px rgba(0,0,0,.12);
     z-index:9998;
     border-top:2px solid var(--secondary-color);
   }
-  .nav .nav-link,.nav-dropdown-btn{
-    padding:13px 0;
+  .nav .nav-link,
+  .nav-dropdown-btn{
+    padding:11px 0;
     border-bottom:1px solid rgba(232,154,166,.15);
     width:100%;
     text-align:left;
@@ -1779,24 +1787,25 @@ font-family: var(--font-title);
     background:none;
   }
   .nav-cta{
-    margin-top:10px !important;
+    margin-top:8px;
     background:var(--primary-color) !important;
     color:#fff !important;
     text-align:center !important;
     border-radius:999px !important;
-    padding:13px 0 !important;
+    padding:12px 0 !important;
     border-bottom:none !important;
     display:block;
   }
   .nav-dropdown-menu{
-    position:static;transform:none;
-    box-shadow:none;padding:4px 0 4px 16px;
+    position:static; transform:none;
+    box-shadow:none; padding:4px 0 4px 14px;
     background:transparent;
   }
-  .nav-dropdown-menu a{ padding:8px 0;font-size:14px;color:var(--text-color); }
+  .nav-dropdown-menu a{ font-size:14px; padding:8px 0; color:var(--text-color); }
   .nav-hamburger{ display:flex; }
   .header-controls{ gap:6px; }
   .lang-buttons{ display:flex; }
+}
 }
 
 /* ── PINK BADGES ── */
@@ -1811,3 +1820,28 @@ font-family: var(--font-title);
 html:not([data-lang="es"]) .es { display: none !important; }
 [data-lang="es"] .es { display: block !important; }
 [data-lang="es"] span.es { display: inline !important; }
+
+/* ── COLLECTIONS GRID: 3 cards, last one centered on desktop ── */
+.collections-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+@media(max-width:900px){
+  .collections-grid{
+    grid-template-columns: 1fr;
+  }
+}
+@media(min-width:901px) and (max-width:1050px){
+  .collections-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .collections-grid .card:last-child{
+    grid-column: 1 / -1;
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
