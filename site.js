@@ -253,18 +253,18 @@
         </div>
 
         <div class="card-content">
-          <h3>${escapeHtml(p.name)}<span class="es">${escapeHtml(p.name_es)}</span></h3>
+          <h3><span class="en">${escapeHtml(p.name)}</span><span class="es">${escapeHtml(p.name_es)}</span></h3>
 
           ${priceHTML(p)}
 
           <div class="card-actions actions-row">
             <a href="/index.html#contact" class="btn-action btn-quote" data-prefill="${escapeHtml(p.name)}">
-              Request Quote
+              <span class="en">Request Quote</span>
               <span class="es">Pedir cotización</span>
             </a>
 
             <button class="btn-action btn-outline btn-photos" type="button" data-id="${escapeHtml(p.id)}">
-              View Photos
+              <span class="en">View Photos</span>
               <span class="es">Ver fotos</span>
             </button>
           </div>
@@ -334,19 +334,16 @@
     `);
   }
 
-  // ✅ ONLY CHANGE: smoother fade (stable)
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
 
     const src = galleryState.photos[galleryState.index];
 
-    // fade out via class (uses your CSS transition)
     img.classList.add("is-fading");
 
     const pre = new Image();
     pre.onload = () => {
-      // small delay helps the fade actually show on fast loads
       setTimeout(() => {
         img.src = src;
         requestAnimationFrame(() => img.classList.remove("is-fading"));
@@ -479,7 +476,6 @@
     galleryState.isOpen = false;
   }
 
-  // robust close: X + backdrop + any child inside them
   document.addEventListener("click", (e) => {
     const closeEl = e.target.closest && e.target.closest("[data-close]");
     if (closeEl) closeGallery();
@@ -570,7 +566,7 @@ function initContactForm() {
         currency: window.CARO_CURRENCY || "CAD",
       });
 
-      setFormStatus(form, "success", "Sent ✓ / Enviado ✓ — I’ll reply soon. / Te responderé pronto.");
+      setFormStatus(form, "success", "Sent ✓ / Enviado ✓ — I'll reply soon. / Te responderé pronto.");
       form.reset();
     } catch (err) {
       console.error("Error submitting form:", err);
