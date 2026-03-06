@@ -143,11 +143,77 @@
       }
 
       // ── LANGUAGE SWITCHER ──
+      // ── AI TRANSLATION CACHE ──
+      const translationCache = {};
+
+      async function translatePageWithAI(targetLang) {
+        // Collect all text nodes that need translation
+        const elements = document.querySelectorAll(
+          "h1, h2, h3, h4, p, a, button, label, .hero-subtitle, .section-subtitle, " +
+          ".card-content p, .category, .contact-subtitle"
+        );
+
+        // Build list of texts to translate (skip short/icon text, skip already translated)
+        const toTranslate = [];
+        const elMap = [];
+        elements.forEach(el => {
+          // Only translate direct text, not elements with children that are important
+          const text = el.childNodes.length === 1 && el.firstChild.nodeType === 3
+            ? el.textContent.trim()
+            : null;
+          if (text && text.length > 2 && !el.closest(".lang-btn") && !el.closest(".currency-btn")) {
+            toTranslate.push(text);
+            elMap.push(el);
+          }
+        });
+
+        if (toTranslate.length === 0) return;
+
+        const cacheKey = targetLang + "_" + window.location.pathname;
+        if (translationCache[cacheKey]) {
+          applyTranslations(elMap, translationCache[cacheKey]);
+          return;
+        }
+
+        try {
+          const res = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: "claude-sonnet-4-20250514",
+              max_tokens: 2000,
+              messages: [{
+                role: "user",
+                content: "Translate these website texts to " + (targetLang === "es" ? "Spanish" : "English") +
+                  ". Return ONLY a JSON array of translated strings in the same order. No explanation.
+
+" +
+                  JSON.stringify(toTranslate)
+              }]
+            })
+          });
+          const data = await res.json();
+          const raw = data.content?.[0]?.text || "[]";
+          const clean = raw.replace(/```json|```/g, "").trim();
+          const translations = JSON.parse(clean);
+          translationCache[cacheKey] = translations;
+          applyTranslations(elMap, translations);
+        } catch(e) {
+          console.log("AI translation unavailable, using CSS fallback");
+        }
+      }
+
+      function applyTranslations(elMap, translations) {
+        elMap.forEach((el, i) => {
+          if (translations[i]) el.textContent = translations[i];
+        });
+      }
+
       function applyLang(lang) {
         localStorage.setItem("caroLang", lang);
         // Update buttons
         qsa(".lang-btn", host).forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
-        // Set data-lang on <html> — CSS handles show/hide of .en and .es
+        // Set data-lang on <html> — CSS handles show/hide of .en and .es spans
         document.documentElement.setAttribute("data-lang", lang);
       }
       qsa(".lang-btn", host).forEach(btn => {
