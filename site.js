@@ -57,6 +57,7 @@
     localStorage.setItem("CARO_CURRENCY", cur);
     updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
+    setTimeout(updateCurrencyUI, 100);
   }
   window.CARO_setCurrency = setCurrency;
 
