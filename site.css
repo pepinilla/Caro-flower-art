@@ -80,9 +80,9 @@ p{font-size:1rem}
 /* idioma secundario */
 .es{
   display:block;
-  font-size:.75em;
-  opacity:.72;
-  margin-top:.25rem;
+  font-size:1em;
+  opacity:.85;
+  margin-top:.1rem;
   font-style:normal;
 }
 
@@ -1869,8 +1869,14 @@ font-family: var(--font-title);
     box-shadow: none;
     border: none;
     background: transparent;
+    padding: 0;
+    display: none;
+  }
+
+  .nav-dropdown.is-open .nav-dropdown-menu{
+    display: flex;
+    flex-direction: column;
     padding: 4px 0 4px 14px;
-    display: block;
   }
 
   .nav-dropdown-menu a{

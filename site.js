@@ -57,7 +57,6 @@
     localStorage.setItem("CARO_CURRENCY", cur);
     updateCurrencyUI();
     renderGrid(window.CARO_PAGE || {});
-    setTimeout(updateCurrencyUI, 100);
   }
   window.CARO_setCurrency = setCurrency;
 
@@ -140,16 +139,51 @@
       const hamburger = qs("#navHamburger", host);
       const nav = qs(".nav", host);
       if (hamburger && nav) {
-        hamburger.addEventListener("click", () => nav.classList.toggle("open"));
+        hamburger.addEventListener("click", () => {
+          nav.classList.toggle("open");
+          hamburger.setAttribute("aria-expanded", nav.classList.contains("open") ? "true" : "false");
+        });
+
+        // Close nav when clicking a link
+        qsa(".nav-link", nav).forEach(link => {
+          link.addEventListener("click", () => {
+            nav.classList.remove("open");
+            hamburger.setAttribute("aria-expanded", "false");
+          });
+        });
+
+        // Close nav when clicking outside
+        document.addEventListener("click", (e) => {
+          if (!host.contains(e.target)) {
+            nav.classList.remove("open");
+            hamburger.setAttribute("aria-expanded", "false");
+          }
+        });
       }
+
+      // ── DROPDOWN (More) — mobile toggle ──
+      qsa(".nav-dropdown", host).forEach(dropdown => {
+        const btn = dropdown.querySelector(".nav-dropdown-btn");
+        const menu = dropdown.querySelector(".nav-dropdown-menu");
+        if (!btn || !menu) return;
+
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const isOpen = dropdown.classList.contains("is-open");
+          // Close all other dropdowns
+          qsa(".nav-dropdown", host).forEach(d => d.classList.remove("is-open"));
+          if (!isOpen) dropdown.classList.add("is-open");
+        });
+      });
 
       // ── LANGUAGE SWITCHER ──
       function applyLang(lang) {
         localStorage.setItem("caroLang", lang);
         qsa(".lang-btn", host).forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
-        document.documentElement.setAttribute("data-lang", lang);
+        document.querySelectorAll(".es").forEach(el => {
+          el.style.display = lang === "es" ? "block" : "none";
+        });
       }
-       
       qsa(".lang-btn", host).forEach(btn => {
         btn.addEventListener("click", () => applyLang(btn.dataset.lang));
       });
@@ -221,7 +255,7 @@
 
       return `
         <details class="price-details">
-          <summary class="price-summary"><span class="en">Price</span><span class="es">Precio</span></summary>
+          <summary class="price-summary">Price</summary>
           <div class="price-box">${rows}</div>
         </details>
       `;
@@ -231,7 +265,7 @@
     if (from) {
       return `
         <details class="price-details">
-          <summary class="price-summary"><span class="en">Price</span><span class="es">Precio</span></summary>
+          <summary class="price-summary">Price</summary>
           <div class="price-box">
             <div class="price-line"><strong>${formatMoney(from, cur)}</strong></div>
           </div>
@@ -253,18 +287,18 @@
         </div>
 
         <div class="card-content">
-          <h3><span class="en">${escapeHtml(p.name)}</span><span class="es">${escapeHtml(p.name_es)}</span></h3>
+          <h3>${escapeHtml(p.name)}<span class="es">${escapeHtml(p.name_es)}</span></h3>
 
           ${priceHTML(p)}
 
           <div class="card-actions actions-row">
             <a href="/index.html#contact" class="btn-action btn-quote" data-prefill="${escapeHtml(p.name)}">
-              <span class="en">Request Quote</span>
+              Request Quote
               <span class="es">Pedir cotización</span>
             </a>
 
             <button class="btn-action btn-outline btn-photos" type="button" data-id="${escapeHtml(p.id)}">
-              <span class="en">View Photos</span>
+              View Photos
               <span class="es">Ver fotos</span>
             </button>
           </div>
@@ -334,16 +368,19 @@
     `);
   }
 
+  // ✅ ONLY CHANGE: smoother fade (stable)
   function renderGalleryImage() {
     const img = qs("#galleryImage");
     if (!img || !galleryState.photos.length) return;
 
     const src = galleryState.photos[galleryState.index];
 
+    // fade out via class (uses your CSS transition)
     img.classList.add("is-fading");
 
     const pre = new Image();
     pre.onload = () => {
+      // small delay helps the fade actually show on fast loads
       setTimeout(() => {
         img.src = src;
         requestAnimationFrame(() => img.classList.remove("is-fading"));
@@ -476,6 +513,7 @@
     galleryState.isOpen = false;
   }
 
+  // robust close: X + backdrop + any child inside them
   document.addEventListener("click", (e) => {
     const closeEl = e.target.closest && e.target.closest("[data-close]");
     if (closeEl) closeGallery();
@@ -566,7 +604,7 @@ function initContactForm() {
         currency: window.CARO_CURRENCY || "CAD",
       });
 
-      setFormStatus(form, "success", "Sent ✓ / Enviado ✓ — I'll reply soon. / Te responderé pronto.");
+      setFormStatus(form, "success", "Sent ✓ / Enviado ✓ — I’ll reply soon. / Te responderé pronto.");
       form.reset();
     } catch (err) {
       console.error("Error submitting form:", err);
