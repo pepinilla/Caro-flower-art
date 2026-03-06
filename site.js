@@ -147,10 +147,9 @@
       function applyLang(lang) {
         localStorage.setItem("caroLang", lang);
         qsa(".lang-btn", host).forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
-        document.querySelectorAll(".es").forEach(el => {
-          el.style.display = lang === "es" ? "block" : "none";
-        });
+        document.documentElement.setAttribute("data-lang", lang);
       }
+       
       qsa(".lang-btn", host).forEach(btn => {
         btn.addEventListener("click", () => applyLang(btn.dataset.lang));
       });
