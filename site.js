@@ -207,9 +207,10 @@
         if (!btn || !menu) return;
 
         btn.addEventListener("click", (e) => {
+          // On desktop (>900px) let CSS hover handle it — skip JS toggle
+          if (window.innerWidth > 900) return;
           e.stopPropagation();
           const isOpen = dropdown.classList.contains("is-open");
-          // Close all other dropdowns
           qsa(".nav-dropdown", host).forEach(d => d.classList.remove("is-open"));
           if (!isOpen) dropdown.classList.add("is-open");
         });
