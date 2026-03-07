@@ -158,6 +158,25 @@
           });
         });
 
+        // ── CURRENCY inside mobile nav ──
+        const mobileNav = nav;
+        const existingMobileCur = mobileNav.querySelector(".mobile-currency");
+        if (!existingMobileCur) {
+          const mobileCur = document.createElement("div");
+          mobileCur.className = "mobile-currency";
+          mobileCur.innerHTML = `
+            <span class="mobile-currency-label"><span class="en">Currency</span><span class="es">Moneda</span></span>
+            <div class="currency-buttons">
+              <button class="currency-btn" data-currency="CAD">CAD</button>
+              <button class="currency-btn" data-currency="COP">COP</button>
+            </div>
+          `;
+          mobileNav.appendChild(mobileCur);
+          mobileCur.querySelectorAll("[data-currency]").forEach(btn => {
+            btn.addEventListener("click", () => setCurrency(btn.dataset.currency));
+          });
+        }
+
         // Close nav when clicking outside
         document.addEventListener("click", (e) => {
           if (!host.contains(e.target)) {
@@ -253,7 +272,7 @@
       const rows = list.slice(0, 2).map(x => `
         <div class="price-line">
           <strong>${formatMoney(x.amount, cur)}</strong>
-          <span class="price-units">${escapeHtml(x.label)} – ${escapeHtml(x.label_es)}</span>
+          <span class="price-units"><span class="en">${escapeHtml(x.label)}</span><span class="es">${escapeHtml(x.label_es)}</span></span>
         </div>
       `).join("");
 
