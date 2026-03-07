@@ -505,17 +505,10 @@ p{font-size:1rem}
   align-items: stretch;
 }
 
-#galleryGrid .card-image-wrapper{
-  height: 260px;
-}
-
 @media (max-width: 520px){
   #galleryGrid,
   .gallery-grid{
     grid-template-columns: 1fr;
-  }
-  #galleryGrid .card-image-wrapper{
-    height: 320px;
   }
 }
 
@@ -625,6 +618,7 @@ p{font-size:1rem}
    UTILITIES (no inline styles)
    ========================= */
 .gallery-tight-top{ padding-top:18px; padding-bottom:0; }
+.gallery-tight-top .card-image-wrapper{ aspect-ratio: 16/9; max-height: 420px; }
 .card-link{ text-decoration:none; color:inherit; }
 .card-footer-center{ justify-content:center; }
 .card-btn-wide{ min-width:220px; text-align:center; }
@@ -1049,7 +1043,6 @@ footer{
 
 @media (max-width: 480px){
   section{padding:56px 15px}
-  .card-image-wrapper{height:280px}
   .hero-pill{width:100%;justify-content:center}
   .btn-primary,.btn-secondary{width:100%}
 }
