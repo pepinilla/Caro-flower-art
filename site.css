@@ -315,7 +315,7 @@ p{font-size:1rem}
 }
 .card-image-wrapper{
   position: relative;
-  height: 380px;
+  aspect-ratio: 3/4;
   overflow: hidden;
 }
 
@@ -324,7 +324,7 @@ p{font-size:1rem}
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 20%;
+  object-position: center center;
   transform: scale(1.01);
   transition: transform .35s ease;
   display: block;
@@ -524,9 +524,17 @@ p{font-size:1rem}
 #galleryGrid .card-actions.actions-row{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 8px;
   margin-top: 13.5px;
   width: 100%;
+}
+
+@media (max-width: 480px){
+  .actions-row,
+  #galleryGrid .card-actions.actions-row{
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
 
 /* Base */
