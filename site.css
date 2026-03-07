@@ -315,7 +315,7 @@ p{font-size:1rem}
 }
 .card-image-wrapper{
   position: relative;
-  height: 320px;
+  height: 380px;
   overflow: hidden;
 }
 
@@ -323,8 +323,8 @@ p{font-size:1rem}
 .card-image-wrapper img{
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  background: var(--secondary-color);
+  object-fit: cover;
+  object-position: center 20%;
   transform: scale(1.01);
   transition: transform .35s ease;
   display: block;
@@ -1934,8 +1934,11 @@ font-family: var(--font-title);
 .studio-cta p{opacity:.75;margin:0 0 28px;font-size:1rem;line-height:1.7;}
 
 
-/* CURRENCY inside mobile nav */
+/* CURRENCY inside mobile nav — only visible when nav is open (mobile) */
 .mobile-currency{
+  display: none;
+}
+.nav.open .mobile-currency{
   display: flex;
   align-items: center;
   gap: 12px;
