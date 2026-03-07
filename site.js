@@ -140,8 +140,13 @@
       const nav = qs(".nav", host);
       if (hamburger && nav) {
         hamburger.addEventListener("click", () => {
+          const isOpen = nav.classList.contains("open");
+          if (isOpen) {
+            // Closing: also reset all dropdowns
+            qsa(".nav-dropdown", host).forEach(d => d.classList.remove("is-open"));
+          }
           nav.classList.toggle("open");
-          hamburger.setAttribute("aria-expanded", nav.classList.contains("open") ? "true" : "false");
+          hamburger.setAttribute("aria-expanded", (!isOpen) ? "true" : "false");
         });
 
         // Close nav when clicking a link
@@ -255,7 +260,7 @@
 
       return `
         <details class="price-details">
-          <summary class="price-summary">Price</summary>
+          <summary class="price-summary"><span class="en">Price</span><span class="es">Precio</span></summary>
           <div class="price-box">${rows}</div>
         </details>
       `;
@@ -265,7 +270,7 @@
     if (from) {
       return `
         <details class="price-details">
-          <summary class="price-summary">Price</summary>
+          <summary class="price-summary"><span class="en">Price</span><span class="es">Precio</span></summary>
           <div class="price-box">
             <div class="price-line"><strong>${formatMoney(from, cur)}</strong></div>
           </div>

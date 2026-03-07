@@ -1307,62 +1307,41 @@ font-family: var(--font-title);
   }
 }
 
-/* ======================================================
-   CURRENCY SWITCH (premium pill)
-   ====================================================== */
 .currency-wrap{
   display: flex;
   align-items: center;
-  gap: 10px;
+  opacity: .55;
+  transition: opacity .2s ease;
 }
+.currency-wrap:hover{ opacity: 1; }
 
 .currency-buttons{
   display: inline-flex;
   align-items: center;
-  padding: 4px;
+  padding: 3px;
   border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.12);
-  background: rgba(255,255,255,.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  border: 1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.6);
 }
 
 .currency-btn{
   appearance: none;
   border: 0;
   background: transparent;
-  padding: 8px 12px;
+  padding: 5px 9px;
   border-radius: 999px;
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: .2px;
+  font-weight: 500;
+  font-size: 11px;
   cursor: pointer;
-  color: rgba(0,0,0,.65);
-  transition: transform .15s ease, background .15s ease, color .15s ease;
+  color: rgba(0,0,0,.55);
+  transition: background .15s ease, color .15s ease;
 }
-
-.currency-btn:hover{
-  transform: translateY(-1px);
-  background: rgba(0,0,0,.05);
-}
-
-.currency-btn.is-active{
-  background: #111;
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(0,0,0,.18);
-}
-
+.currency-btn:hover{ background: rgba(0,0,0,.05); color: rgba(0,0,0,.8); }
+.currency-btn.is-active{ background: rgba(0,0,0,.75); color: #fff; }
 .currency-btn:focus{ outline: none; }
 
-.currency-btn:focus-visible{
-  outline: 3px solid rgba(0,0,0,.18);
-  outline-offset: 2px;
-}
-
-@media (max-width: 640px){
-  .currency-btn{ padding: 7px 10px; font-size: 12px; }
-  .currency-buttons{ padding: 3px; }
+@media (max-width: 900px){
+  .currency-wrap{ display: none; }
 }
 
 /* ======================================================
@@ -1782,9 +1761,9 @@ font-family: var(--font-title);
   border: none;
   background: none;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 7px 14px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-color);
   transition: all .2s ease;
