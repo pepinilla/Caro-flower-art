@@ -139,6 +139,20 @@
       const hamburger = qs("#navHamburger", host);
       const nav = qs(".nav", host);
       if (hamburger && nav) {
+        // Inject close X button into nav (once)
+        if (!nav.querySelector(".nav-close-btn")) {
+          const closeBtn = document.createElement("button");
+          closeBtn.className = "nav-close-btn";
+          closeBtn.setAttribute("aria-label", "Close menu");
+          closeBtn.innerHTML = "✕";
+          closeBtn.addEventListener("click", () => {
+            nav.classList.remove("open");
+            qsa(".nav-dropdown", host).forEach(d => d.classList.remove("is-open"));
+            hamburger.setAttribute("aria-expanded", "false");
+          });
+          nav.insertBefore(closeBtn, nav.firstChild);
+        }
+
         hamburger.addEventListener("click", () => {
           const isOpen = nav.classList.contains("open");
           if (isOpen) {

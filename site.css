@@ -1851,10 +1851,12 @@ font-family: var(--font-title);
   z-index: 200;
 }
 
-.nav-dropdown:hover .nav-dropdown-menu,
-.nav-dropdown:focus-within .nav-dropdown-menu{
-  display: flex;
-  flex-direction: column;
+@media (min-width: 901px){
+  .nav-dropdown:hover .nav-dropdown-menu,
+  .nav-dropdown:focus-within .nav-dropdown-menu{
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .nav-dropdown-menu a{
@@ -2050,6 +2052,28 @@ font-family: var(--font-title);
 .studio-cta h2{margin:0 0 12px;font-size:2rem;}
 .studio-cta p{opacity:.75;margin:0 0 28px;font-size:1rem;line-height:1.7;}
 
+
+/* X close button inside mobile nav */
+.nav-close-btn{
+  display: none;
+}
+@media (max-width: 900px){
+  .nav-close-btn{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-color);
+    padding: 4px 4px 12px;
+    cursor: pointer;
+    opacity: .6;
+    line-height: 1;
+  }
+  .nav-close-btn:hover{ opacity: 1; }
+}
 
 /* CURRENCY inside mobile nav — only visible when nav is open (mobile) */
 .mobile-currency{
