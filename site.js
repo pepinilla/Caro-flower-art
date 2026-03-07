@@ -149,8 +149,9 @@
           hamburger.setAttribute("aria-expanded", (!isOpen) ? "true" : "false");
         });
 
-        // Close nav when clicking a link
+        // Close nav when clicking a link (but NOT the dropdown button)
         qsa(".nav-link", nav).forEach(link => {
+          if (link.classList.contains("nav-dropdown-btn")) return;
           link.addEventListener("click", () => {
             nav.classList.remove("open");
             hamburger.setAttribute("aria-expanded", "false");
@@ -185,9 +186,7 @@
       function applyLang(lang) {
         localStorage.setItem("caroLang", lang);
         qsa(".lang-btn", host).forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
-        document.querySelectorAll(".es").forEach(el => {
-          el.style.display = lang === "es" ? "block" : "none";
-        });
+        document.documentElement.setAttribute("data-lang", lang);
       }
       qsa(".lang-btn", host).forEach(btn => {
         btn.addEventListener("click", () => applyLang(btn.dataset.lang));
@@ -292,18 +291,18 @@
         </div>
 
         <div class="card-content">
-          <h3>${escapeHtml(p.name)}<span class="es">${escapeHtml(p.name_es)}</span></h3>
+          <h3><span class="en">${escapeHtml(p.name)}</span><span class="es">${escapeHtml(p.name_es)}</span></h3>
 
           ${priceHTML(p)}
 
           <div class="card-actions actions-row">
             <a href="/index.html#contact" class="btn-action btn-quote" data-prefill="${escapeHtml(p.name)}">
-              Request Quote
+              <span class="en">Request Quote</span>
               <span class="es">Pedir cotización</span>
             </a>
 
             <button class="btn-action btn-outline btn-photos" type="button" data-id="${escapeHtml(p.id)}">
-              View Photos
+              <span class="en">View Photos</span>
               <span class="es">Ver fotos</span>
             </button>
           </div>
