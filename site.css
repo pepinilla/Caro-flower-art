@@ -182,6 +182,21 @@ p{font-size:1rem}
   opacity:.85;
 }
 
+.hero-kicker{
+  display: inline-block;
+  background: rgba(255,255,255,.75);
+  backdrop-filter: blur(8px);
+  color: #c26073;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(232,154,166,.3);
+}
+
 .hero h1{
   letter-spacing: .02em;
   color:#3b2a2e;   /* marrón rosado elegante */
